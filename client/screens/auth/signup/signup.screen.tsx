@@ -245,7 +245,7 @@ export default function SignUpScreen() {
               style={[styles.input, { paddingLeft: 40 }]}
               keyboardType="default"
               value={userInfo.otp}
-              placeholder="support@becodemy.com"
+              placeholder="OTP"
               onChangeText={(value) =>
                 setUserInfo({ ...userInfo, otp: value })
               }
