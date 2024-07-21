@@ -129,7 +129,7 @@ export default function LoginScreen() {
           Welcome Back!
         </Text>
         <Text style={styles.learningText}>
-          Login to your existing account of Becodemy
+          Login to your existing account of LMS
         </Text>
         <View style={styles.inputContainer}>
           <View>
@@ -137,7 +137,7 @@ export default function LoginScreen() {
               style={[styles.input, { paddingLeft: 40 }]}
               keyboardType="email-address"
               value={userInfo.email}
-              placeholder="support@becodemy.com"
+              placeholder="support@LMS.com"
               onChangeText={(value) =>
                 setUserInfo({ ...userInfo, email: value })
               }
