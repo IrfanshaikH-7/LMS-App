@@ -16,6 +16,7 @@ import {
 import Loader from "@/components/loader/loader";
 import { LinearGradient } from "expo-linear-gradient";
 import CourseCard from "@/components/cards/course.card";
+import Header from "@/components/header/header";
 
 export default function CoursesScreen() {
   const [courses, setCourses] = useState<CoursesType[]>([]);
@@ -23,6 +24,7 @@ export default function CoursesScreen() {
   const [loading, setLoading] = useState(true);
   const [categories, setcategories] = useState([]);
   const [activeCategory, setactiveCategory] = useState("All");
+  const [forceHideLoader, setForceHideLoader] = useState(false);
 
   useEffect(() => {
     axios
@@ -75,11 +77,15 @@ export default function CoursesScreen() {
     }
   };
 
+ 
   return (
-    <>
+    <View>
+
+      <Header />
+
       {loading ? (
         <Loader />
-      ) : (
+      )  : (
         <LinearGradient
           colors={["#E5ECF9", "#F6F7F9"]}
           style={{ flex: 1, paddingTop: 65 }}
@@ -140,6 +146,6 @@ export default function CoursesScreen() {
           </View>
         </LinearGradient>
       )}
-    </>
+    </View>
   );
 }

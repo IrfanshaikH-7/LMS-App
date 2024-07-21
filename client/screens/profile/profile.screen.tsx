@@ -44,7 +44,7 @@ export default function ProfileScreen() {
   }
 
   const logoutHandler = async () => {
-    await AsyncStorage.removeItem("access_token");
+    await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("refresh_token");
     router.push("/(routes)/login");
   };
@@ -65,7 +65,7 @@ export default function ProfileScreen() {
       const base64Image = `data:image/jpeg;base64,${base64}`;
       setImage(base64Image);
 
-      const accessToken = await AsyncStorage.getItem("access_token");
+      const accessToken = await AsyncStorage.getItem("token");
       const refreshToken = await AsyncStorage.getItem("refresh_token");
 
       try {

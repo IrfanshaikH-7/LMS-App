@@ -46,7 +46,9 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <ToastProvider>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack screenOptions={{ headerShown: false,  }}
+
+      >
         <Stack.Screen name="index" />
         <Stack.Screen name="(routes)/welcome-intro/index" />
         <Stack.Screen name="(routes)/login/index" />

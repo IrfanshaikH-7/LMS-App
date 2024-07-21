@@ -51,7 +51,7 @@ export default function CourseAccessScreen() {
   }, []);
 
   const fetchCourseContent = async () => {
-    const accessToken = await AsyncStorage.getItem("access_token");
+    const accessToken = await AsyncStorage.getItem("token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");
     await axios
       .get(`${SERVER_URI}/get-course-content/${data._id}`, {
@@ -71,7 +71,7 @@ export default function CourseAccessScreen() {
   };
 
   const handleQuestionSubmit = async () => {
-    const accessToken = await AsyncStorage.getItem("access_token");
+    const accessToken = await AsyncStorage.getItem("token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");
 
     await axios
@@ -102,7 +102,7 @@ export default function CourseAccessScreen() {
   };
 
   const handleReviewSubmit = async () => {
-    const accessToken = await AsyncStorage.getItem("access_token");
+    const accessToken = await AsyncStorage.getItem("token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");
 
     await axios

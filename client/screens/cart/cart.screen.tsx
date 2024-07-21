@@ -58,7 +58,7 @@ export default function CartScreen() {
 
   const handlePayment = async () => {
     try {
-      const accessToken = await AsyncStorage.getItem("access_token");
+      const accessToken = await AsyncStorage.getItem("token");
       const refreshToken = await AsyncStorage.getItem("refresh_token");
       const amount = Math.round(
         cartItems.reduce((total, item) => total + item.price, 0) * 100
@@ -100,7 +100,7 @@ export default function CartScreen() {
   };
 
   const createOrder = async (paymentResponse: any) => {
-    const accessToken = await AsyncStorage.getItem("access_token");
+    const accessToken = await AsyncStorage.getItem("token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");
 
     await axios

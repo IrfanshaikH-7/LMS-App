@@ -8,13 +8,13 @@ import { updateAccessToken } from "../controllers/user.controller";
 // authenticated user
 export const isAutheticated = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
-    const access_token = req.headers["access-token"] as string;
-    if (!access_token) {
+    const token = req.headers["access-token"] as string;
+    if (!token) {
       return next(
         new ErrorHandler("Please login to access this resource", 400)
       );
     }
-    const decoded = jwt.decode(access_token) as JwtPayload
+    const decoded = jwt.decode(token) as JwtPayload
     if (!decoded) {
       return next(new ErrorHandler("access token is not valid", 400));
     }

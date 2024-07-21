@@ -11,25 +11,16 @@ export default function useUser() {
 
   useEffect(() => {
     const subscription = async () => {
-      const accessToken = await AsyncStorage.getItem("access_token");
-      const refreshToken = await AsyncStorage.getItem("refresh_token");
-
-      await axios
-        .get(`${SERVER_URI}/me`, {
-          headers: {
-            "access-token": accessToken,
-            "refresh-token": refreshToken,
-          },
-        })
-        .then((res: any) => {
-          setUser(res.data.user);
-          setLoading(false);
-        })
-        .catch((error: any) => {
-          setError(error?.message);
-          setLoading(false);
-        });
-    };
+      const accessToken = await AsyncStorage.getItem("token");
+      const user = await AsyncStorage.getItem("user");
+      const isUser = JSON.parse(user);
+      console.log("user", isUser);
+      if (accessToken && user ) {
+        setUser(isUser);
+        setLoading(false);
+      }
+        
+    }
     subscription();
   }, [refetch]);
 

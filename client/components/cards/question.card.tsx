@@ -30,7 +30,7 @@ export default function QuestionsCard({
   const [showReplies, setshowReplies] = useState(false);
 
   const handleReplySubmit = async () => {
-    const accessToken = await AsyncStorage.getItem("access_token");
+    const accessToken = await AsyncStorage.getItem("token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");
 
     await axios

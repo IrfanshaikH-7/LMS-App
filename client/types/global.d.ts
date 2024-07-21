@@ -18,9 +18,9 @@ type User = {
   email: string;
   avatar?: Avatar;
   password?: string;
-  courses: any;
-  createdAt: Date;
-  updatedAt: Date;
+  courses?: any;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 type BannerDataTypes = {

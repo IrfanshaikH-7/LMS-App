@@ -6,6 +6,7 @@ export default function TabsLayout() {
   const { user } = useUser();
   return (
     <Tabs
+
       screenOptions={({ route }) => {
         return {
           tabBarIcon: ({ color }) => {
@@ -31,7 +32,7 @@ export default function TabsLayout() {
         };
       }}
     >
-      <Tabs.Screen name="index" />
+      <Tabs.Screen name="index"  />
       <Tabs.Screen name="search/index" />
       <Tabs.Screen name="courses/index" />
       <Tabs.Screen name="profile/index" />

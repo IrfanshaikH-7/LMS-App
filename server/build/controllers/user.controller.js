@@ -112,7 +112,7 @@ exports.loginUser = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, nex
 // logout user
 exports.logoutUser = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, next) => {
     try {
-        res.cookie("access_token", "", { maxAge: 1 });
+        res.cookie("token", "", { maxAge: 1 });
         res.cookie("refresh_token", "", { maxAge: 1 });
         const userId = req.user?._id || "";
         redis_1.redis.del(userId);
@@ -139,14 +139,14 @@ exports.updateAccessToken = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, 
             return next(new ErrorHandler_1.default("Please login for access this resources!", 400));
         }
         const user = JSON.parse(session);
-        const accessToken = jsonwebtoken_1.default.sign({ id: user._id }, process.env.ACCESS_TOKEN, {
+        const accessToken = jsonwebtoken_1.default.sign({ id: user._id }, process.env.token, {
             expiresIn: "5m",
         });
         const refreshToken = jsonwebtoken_1.default.sign({ id: user._id }, process.env.REFRESH_TOKEN, {
             expiresIn: "3d",
         });
         req.user = user;
-        res.cookie("access_token", accessToken, jwt_1.accessTokenOptions);
+        res.cookie("token", accessToken, jwt_1.accessTokenOptions);
         res.cookie("refresh_token", refreshToken, jwt_1.refreshTokenOptions);
         await redis_1.redis.set(user._id, JSON.stringify(user), "EX", 604800); // 7days
         return next();

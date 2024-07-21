@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import useUser from "@/hooks/auth/useUser";
@@ -6,6 +6,8 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
+import { Image } from "expo-image";
 
 export default function Header() {
   const [cartItems, setCartItems] = useState([]);
@@ -32,9 +34,9 @@ export default function Header() {
       <View style={styles.headerWrapper}>
         <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
           <Image
-            source={
-              user?.avatar ? user.avatar : require("@/assets/icons/User.png")
-            }
+            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
+
+
             style={styles.image}
           />
         </TouchableOpacity>
@@ -72,6 +74,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     width: "90%",
+    zIndex: 100,
   },
 
   headerWrapper: {

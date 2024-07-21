@@ -40,8 +40,8 @@ export default function LoginScreen() {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [buttonSpinner, setButtonSpinner] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    email: "",
-    password: "",
+    email: "mister.harshkumar@gmail.com",
+    password: "password123",
   });
   const [required, setRequired] = useState("");
   const [error, setError] = useState({
@@ -96,12 +96,14 @@ export default function LoginScreen() {
 
   const handleSignIn = async () => {
     await axios
-      .post(`${SERVER_URI}/auth/signin`, {
+      .post(`${SERVER_URI}/api/v1/auth/login`, {
         email: userInfo.email,
         password: userInfo.password,
       })
       .then(async (res) => {
-        await AsyncStorage.setItem("access_token", res.data.Token);
+        console.log(res.data)
+        await AsyncStorage.setItem("token", res.data.token);
+        await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
 
         router.push("/(tabs)");
       })

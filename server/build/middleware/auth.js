@@ -11,11 +11,11 @@ const redis_1 = require("../utils/redis");
 const user_controller_1 = require("../controllers/user.controller");
 // authenticated user
 exports.isAutheticated = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, next) => {
-    const access_token = req.cookies.access_token;
-    if (!access_token) {
+    const token = req.cookies.token;
+    if (!token) {
         return next(new ErrorHandler_1.default("Please login to access this resource", 400));
     }
-    const decoded = jsonwebtoken_1.default.decode(access_token);
+    const decoded = jsonwebtoken_1.default.decode(token);
     if (!decoded) {
         return next(new ErrorHandler_1.default("access token is not valid", 400));
     }
