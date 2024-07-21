@@ -28,7 +28,7 @@ import {
   Nunito_700Bold,
   Nunito_600SemiBold,
 } from "@expo-google-fonts/nunito";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { commonStyles } from "@/styles/common/common.styles";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -52,6 +52,14 @@ export default function SignUpScreen() {
   const [error, setError] = useState({
     password: "",
   });
+
+
+  useEffect(() => {
+    if(userInfo.phoneNumber.length == 10){
+      handleOtp()
+    }
+
+  },[userInfo.phoneNumber])
 
   let [fontsLoaded, fontError] = useFonts({
     Raleway_600SemiBold,
@@ -108,11 +116,12 @@ export default function SignUpScreen() {
         password: userInfo.password,
         phoneNumber:userInfo.phoneNumber,
         otp:userInfo.otp,
+        accountType:"Student"
       })
       .then(async (res) => {
         await AsyncStorage.setItem(
           "token",
-          res.data.activationToken
+          res.data.Token
         );
         Toast.show(res.data.message, {
           type: "success",
@@ -135,6 +144,19 @@ export default function SignUpScreen() {
         });
       });
   };
+
+  const handleOtp = async () => {
+    console.log("called otp")
+    setButtonSpinner(true);
+    const res = await axios
+      .post(`${SERVER_URI}/auth/otp`, {
+        email: userInfo.email,
+      })
+
+      console.log(res)
+      setButtonSpinner(false);
+  }
+
 
   return (
     <LinearGradient
@@ -170,7 +192,13 @@ export default function SignUpScreen() {
               color={"#A1A1A1"}
             />
           </View>
-          <View>
+          <View style={{
+              flexDirection: "column",
+              justifyContent: "space-between",
+              marginHorizontal: 2,
+              gap:5
+
+          }}>
             <TextInput
               style={[styles.input, { paddingLeft: 40 }]}
               keyboardType="email-address"
@@ -191,6 +219,50 @@ export default function SignUpScreen() {
                 <Entypo name="cross" size={18} color={"red"} />
               </View>
             )}
+
+            {/* //phone number */}
+            <TextInput
+              style={[styles.input, { paddingLeft: 40 }]}
+              keyboardType="number-pad"
+              value={userInfo.phoneNumber}
+              placeholder="7991168445"
+              onChangeText={(value) =>
+                setUserInfo({ ...userInfo, phoneNumber : value })
+              }
+            />
+            <Fontisto
+              style={{ position: "absolute", left: 26, top: 17.8 }}
+              name="email"
+              size={20}
+              color={"#A1A1A1"}
+            />
+            {required && (
+              <View style={commonStyles.errorContainer}>
+                <Entypo name="cross" size={18} color={"red"} />
+              </View>
+            )}
+            <TextInput
+              style={[styles.input, { paddingLeft: 40 }]}
+              keyboardType="default"
+              value={userInfo.otp}
+              placeholder="support@becodemy.com"
+              onChangeText={(value) =>
+                setUserInfo({ ...userInfo, otp: value })
+              }
+            />
+            <Fontisto
+              style={{ position: "absolute", left: 26, top: 17.8 }}
+              name="email"
+              size={20}
+              color={"#A1A1A1"}
+            />
+            {required && (
+              <View style={commonStyles.errorContainer}>
+                <Entypo name="cross" size={18} color={"red"} />
+              </View>
+            )}
+
+            
             <View style={{ marginTop: 15 }}>
               <TextInput
                 style={commonStyles.input}
@@ -256,22 +328,7 @@ export default function SignUpScreen() {
               )}
             </TouchableOpacity>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 20,
-                gap: 10,
-              }}
-            >
-              <TouchableOpacity>
-                <FontAwesome name="google" size={30} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <FontAwesome name="github" size={30} />
-              </TouchableOpacity>
-            </View>
+        
 
             <View style={styles.signupRedirect}>
               <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>

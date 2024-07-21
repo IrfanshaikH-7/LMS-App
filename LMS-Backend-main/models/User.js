@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    firstName:{
-        type:String,
-        required:true,
-        trim:true,
-    },
-    lastName:{
+    name:{
         type:String,
         required:true,
         trim:true,
@@ -22,13 +17,12 @@ const userSchema = new mongoose.Schema({
     },
     accountType:{
         type:String,
-        enum : ["Admin", "Student", "Instructor"],
+        enum : ["Admin", "Student"],
         required:true,
     },
-    additionalDetails: {
-        type:mongoose.Schema.Types.ObjectId,
+    phoneNumber: {
+        type: Number,
         required:true,
-        ref:"Profile"
     },
     courses:[
         {
@@ -38,13 +32,12 @@ const userSchema = new mongoose.Schema({
     ],
     image:{
         type:String,
-        required:true
     },
-    token :{
+    otp: {
         type:String,
     },
-    resetPasswordExpires: {
-        type:Date,
+    token: {
+        type: String
     },
     courseProgress:[
         {

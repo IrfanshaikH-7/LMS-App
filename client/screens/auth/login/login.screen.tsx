@@ -96,12 +96,12 @@ export default function LoginScreen() {
 
   const handleSignIn = async () => {
     await axios
-      .post(`${SERVER_URI}/login`, {
+      .post(`${SERVER_URI}/auth/signin`, {
         email: userInfo.email,
         password: userInfo.password,
       })
       .then(async (res) => {
-        await AsyncStorage.setItem("access_token", res.data.accessToken);
+        await AsyncStorage.setItem("access_token", res.data.Token);
 
         router.push("/(tabs)");
       })
