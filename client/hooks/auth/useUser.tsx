@@ -19,6 +19,7 @@ export default function useUser() {
         setUser(isUser);
         setLoading(false);
       }
+      setLoading(false);
         
     }
     subscription();
