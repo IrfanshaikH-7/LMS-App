@@ -89,7 +89,9 @@ export default function SearchInput({ homeScreen }: { homeScreen?: boolean }) {
   );
 
   return (
-    <View>
+    <View style={{
+      marginTop:30,
+    }}>
       <View style={styles.filteringContainer}>
         <View style={styles.searchContainer}>
           <TextInput

@@ -1,31 +1,64 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign } from "@expo/vector-icons";
+
 import SearchInput from "@/components/common/search.input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
+import React from "react";
+import Header from "@/components/header/header";
+
 
 export default function SearchScreen() {
 
+  const [quizzes, setQuizzes] = useState([]);
+
   useEffect(() => {
-    const res = axios.get(`${SERVER_URI}/api/v1/quiz`);
+
+    const getQuizzes = async () => {
+
+      const res = await axios.post(`${SERVER_URI}/api/v1/quiz/getAllQuiz`);
+
+      console.log(res)
+    }
+    getQuizzes();
+
 
   }, []);
 
+
+
   return (
-    <LinearGradient colors={["#E5ECF9", "#F6F7F9"]} style={{ flex: 1 }}>
-      <SafeAreaView style={{ flex: 1 }}>
 
 
 
-        {/* <SearchInput /> */}
+
+    <SafeAreaView style={{
+      flex: 1,
+      paddingTop: 50,
+    }}>
+      <Header />
+      <SearchInput />
 
 
-        <View>
+      <View
+        style={{
+          marginHorizontal: 20,
+          backgroundColor: 'lightblue',
+          // flexDirection: 'row',
+          // justifyContent: 'space-between',
+          // alignItems: 'center',
+          padding: 20,
+          flex: 1,
+          height: '100%'
 
-        </View>
-      </SafeAreaView>
-    </LinearGradient>
+        }}
+      >
+
+
+
+      </View>
+    </SafeAreaView>
+
+
   );
 }

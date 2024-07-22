@@ -101,10 +101,12 @@ exports.getQuizbyId = async (req, res) => {
 } 
 exports.getAllQuiz = async (req, res) => {
     try{
-        const { } = req.body;
+        const quiz = await Quiz.find();
             return res.status(401).json({
-                success:false,
-                message:"password doesnt matched !!",
+                success:true,
+                message:"All quizz are here!!",
+                
+                data: quiz,
             });
 
     } catch(error){
