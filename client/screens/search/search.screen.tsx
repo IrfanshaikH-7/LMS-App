@@ -48,7 +48,7 @@ const renderItem = ({ item }) => {
           borderRadius: 20, // Apply borderRadius to the image itself
         }}
       >
-       <View
+        <View
           style={{
             justifyContent: "flex-start", // Aligns children vertically to the top
             alignItems: "flex-start", // Aligns children horizontally to the left
@@ -91,7 +91,6 @@ const renderItem = ({ item }) => {
               fontSize: 14,
               fontWeight: "400",
               textAlign: "left",
-
             }}
           >
             {item.name}
@@ -106,7 +105,6 @@ const renderItem = ({ item }) => {
           >
             {item.shortDescription}
           </Text>
-        
         </View>
       </ImageBackground>
     </TouchableOpacity>
