@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from "react-native";
 
 import SearchInput from "@/components/common/search.input";
@@ -112,7 +113,7 @@ const renderItem = ({ item }) => {
 };
 export default function SearchScreen() {
   const [quizzes, setQuizzes] = useState([]);
-
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     const getQuizzes = async () => {
       try {
@@ -125,7 +126,17 @@ export default function SearchScreen() {
       }
     };
     getQuizzes();
+  }, [refreshing]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    // Place your data fetching logic here
+    setTimeout(() => { // Simulate a network request
+      setRefreshing(false);
+    }, 2000);
   }, []);
+
+  
 
   return (
     <SafeAreaView
@@ -150,10 +161,17 @@ export default function SearchScreen() {
         }}
       >
         <FlatList
+
           data={quizzes}
           renderItem={renderItem}
           numColumns={2}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
         />
       </View>
     </SafeAreaView>
