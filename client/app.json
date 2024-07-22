@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "client",
-    "slug": "client",
+    "slug": "lms",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.harsh10021.lms"
     },
     "web": {
       "bundler": "metro",
@@ -39,6 +40,7 @@
       "eas": {
         "projectId": "295d8938-c7a6-49ea-872b-12ea8af7db03"
       }
-    }
+    },
+    "owner": "harsh10021"
   }
 }

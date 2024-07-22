@@ -1,5 +1,6 @@
 import useUser from "@/hooks/auth/useUser";
 import { Tabs } from "expo-router";
+import React from "react";
 import { Image } from "react-native";
 
 export default function TabsLayout() {

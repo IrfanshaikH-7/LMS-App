@@ -21,7 +21,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import useUser from "@/hooks/auth/useUser";
 
 export default function CourseAccessScreen() {
-  const [isLoading, setisLoading] = useState(true);
+  // const [false, setfalse] = useState(true);
   const { user } = useUser();
   const { courseData } = useLocalSearchParams();
   const data: CoursesType = JSON.parse(courseData as string);
@@ -61,11 +61,11 @@ export default function CourseAccessScreen() {
         },
       })
       .then((res: any) => {
-        setisLoading(false);
+        setfalse(false);
         setcourseContentData(res.data.content);
       })
       .catch((error) => {
-        setisLoading(false);
+        setfalse(false);
         router.push("/(routes)/course-details");
       });
   };
@@ -151,7 +151,7 @@ export default function CourseAccessScreen() {
 
   return (
     <>
-      {isLoading ? (
+      {false ? (
         <Loader />
       ) : (
         <ScrollView stickyHeaderIndices={[0]} style={{ flex: 1, padding: 10 }}>
