@@ -15,6 +15,7 @@ import { SERVER_URI } from "@/utils/uri";
 import { router } from "expo-router";
 import CourseCard from "../cards/course.card";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import React from "react";
 
 export default function SearchInput({ homeScreen }: { homeScreen?: boolean }) {
   const [value, setValue] = useState("");
@@ -122,7 +123,7 @@ export default function SearchInput({ homeScreen }: { homeScreen?: boolean }) {
       </View>
       {!homeScreen && (
         <>
-          {filteredCourses?.length === 0 && (
+          {/* {filteredCourses?.length === 0 && (
             <Text
               style={{
                 textAlign: "center",
@@ -133,7 +134,7 @@ export default function SearchInput({ homeScreen }: { homeScreen?: boolean }) {
             >
               No data avaialble to show!
             </Text>
-          )}
+          )} */}
         </>
       )}
     </View>

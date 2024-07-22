@@ -9,7 +9,7 @@ const router = express.Router()
 
 router.post("/createQuiz", createQuiz)
 router.post("/getQuizById/:id",getQuizbyId )
-router.get("/getAllQuiz", getAllQuiz)
+router.get("/getAllQuiz/:id", getAllQuiz)
 router.post("/editQuiz/:id",editQuizbyId )
 
 

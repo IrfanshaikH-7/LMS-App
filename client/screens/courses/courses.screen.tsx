@@ -136,13 +136,13 @@ export default function CoursesScreen() {
                 <CourseCard item={item} key={index} />
               ))}
             </ScrollView>
-            {courses?.length === 0 && (
+            {/* {courses?.length === 0 && (
               <Text
                 style={{ textAlign: "center", paddingTop: 50, fontSize: 18 }}
               >
                 No data available!
               </Text>
-            )}
+            )} */}
           </View>
         </LinearGradient>
       )}

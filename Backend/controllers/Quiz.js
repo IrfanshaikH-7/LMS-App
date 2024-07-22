@@ -102,7 +102,7 @@ exports.getQuizbyId = async (req, res) => {
 exports.getAllQuiz = async (req, res) => {
     try{
         const quiz = await Quiz.find();
-            return res.status(401).json({
+            return res.status(201).json({
                 success:true,
                 message:"All quizz are here!!",
                 
@@ -119,11 +119,25 @@ exports.getAllQuiz = async (req, res) => {
 } 
 exports.editQuizbyId = async (req, res) => {
     try{
-        const { } = req.body;
+        const { id} = req.params;
+
+        const Quiz = await Quiz.findById({_id:id });
+
+        if(Quiz){
+            return res.status(201).json({
+                success:true,
+                message:"Quiz is here!!",
+                data: Quiz,
+            });
+        }else{
+
+            
+            
             return res.status(401).json({
                 success:false,
-                message:"password doesnt matched !!",
+                message:"Not found Quiz !!",
             });
+        }
 
     } catch(error){
         console.log(error);
