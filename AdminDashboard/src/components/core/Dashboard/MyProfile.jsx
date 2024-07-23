@@ -32,7 +32,7 @@ export default function MyProfile() {
           />
           <div className="space-y-1">
             <p className="text-lg font-semibold text-richblack-5 capitalize">
-              {user?.firstName + " " + user?.lastName}
+              {user?.name}
             </p>
             <p className="text-sm text-richblack-300">{user?.email}</p>
           </div>
@@ -92,7 +92,7 @@ export default function MyProfile() {
             <div>
               <p className="mb-2 text-sm text-richblack-600">First Name</p>
               <p className="text-sm font-semibold text-richblack-5 capitalize">
-                {user?.firstName}
+                {user?.name}
               </p>
             </div>
             <div>
@@ -116,16 +116,11 @@ export default function MyProfile() {
           </div>
 
           <div className="flex flex-col gap-y-5">
-            <div>
-              <p className="mb-2 text-sm text-richblack-600">Last Name</p>
-              <p className="text-sm font-semibold text-richblack-5 capitalize">
-                {user?.lastName}
-              </p>
-            </div>
+          
             <div>
               <p className="mb-2 text-sm text-richblack-600">Phone Number</p>
               <p className="text-sm font-semibold text-richblack-5">
-                {user?.additionalDetails?.contactNumber ?? "Add Contact Number"}
+                {user?.phoneNumber ?? "Add Contact Number"}
               </p>
             </div>
             <div>

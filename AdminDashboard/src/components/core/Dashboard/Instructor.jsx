@@ -17,25 +17,13 @@ export default function Instructor() {
   const [instructorData, setInstructorData] = useState(null)
   const [courses, setCourses] = useState([])
 
-
+console.log(token, user)
   // get Instructor Data
-  useEffect(() => {
-    ; (async () => {
-      setLoading(true)
-      const instructorApiData = await getInstructorData(token)
-      const result = await fetchInstructorCourses(token)
-      // console.log('INSTRUCTOR_API_RESPONSE.....', instructorApiData)
-      if (instructorApiData.length) setInstructorData(instructorApiData)
-      if (result) {
-        setCourses(result)
-      }
-      setLoading(false)
-    })()
-  }, [])
 
-  const totalAmount = instructorData?.reduce((acc, curr) => acc + curr.totalAmountGenerated, 0)
 
-  const totalStudents = instructorData?.reduce((acc, curr) => acc + curr.totalStudentsEnrolled, 0)
+  // const totalAmount = instructorData?.reduce((acc, curr) => acc + curr.totalAmountGenerated, 0)
+
+  // const totalStudents = instructorData?.reduce((acc, curr) => acc + curr.totalStudentsEnrolled, 0)
 
 
   // skeleton loading
@@ -84,7 +72,7 @@ export default function Instructor() {
     <div>
       <div className="space-y-2">
         <h1 className="text-2xl font-bold text-richblack-5 text-center sm:text-left">
-          Hii {user?.firstName} 👋
+          Hii {user?.name} 👋
         </h1>
         <p className="font-medium text-richblack-200 text-center sm:text-left">
           Let's start something new
@@ -98,12 +86,13 @@ export default function Instructor() {
         </div>
       )
         :
-        courses.length > 0 ? (
+        user?.courses.length > 0 ? (
           <div>
             <div className="my-4 flex h-[450px] space-x-4">
               {/* Render chart / graph */}
               {totalAmount > 0 || totalStudents > 0 ? (
-                <InstructorChart courses={instructorData} />
+                // <InstructorChart courses={instructorData} />
+                null
               ) : (
                 <div className="flex-1 rounded-md bg-richblack-800 p-6">
                   <p className="text-lg font-bold text-richblack-5">Visualize</p>
@@ -121,7 +110,7 @@ export default function Instructor() {
                   <div>
                     <p className="text-lg text-richblack-200">Total Courses</p>
                     <p className="text-3xl font-semibold text-richblack-50">
-                      {courses.length}
+                      {user.courses.length}
                     </p>
                   </div>
                   <div>
@@ -150,28 +139,28 @@ export default function Instructor() {
               </div>
 
               <div className="my-4 flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0 ">
-                {courses.slice(0, 3).map((course) => (
-                  <div key={course._id} className="sm:w-1/3 flex flex-col items-center justify-center">
+                {user.courses.slice(0, 3).map((course) => (
+                  <div key={user.course._id} className="sm:w-1/3 flex flex-col items-center justify-center">
                     <Img
-                      src={course.thumbnail}
-                      alt={course.courseName}
+                      src={user.course.thumbnail}
+                      alt={user.course.courseName}
                       className="h-[201px] w-full rounded-2xl object-cover"
                     />
 
                     <div className="mt-3 w-full">
                       <p className="text-sm font-medium text-richblack-50">
-                        {course.courseName}
+                        {user.course.courseName}
                       </p>
                       <div className="mt-1 flex items-center space-x-2">
                         <p className="text-xs font-medium text-richblack-300">
-                          {course.studentsEnrolled.length} students
+                          {user.course.studentsEnrolled.length} students
                         </p>
                         <p className="text-xs font-medium text-richblack-300">
                           |
                         </p>
-                        <p className="text-xs font-medium text-richblack-300">
-                          Rs. {course.price}
-                        </p>
+                        {/* <p className="text-xs font-medium text-richblack-300">
+                          Rs. {user.course.price}
+                        </p> */}
                       </div>
                     </div>
                   </div>

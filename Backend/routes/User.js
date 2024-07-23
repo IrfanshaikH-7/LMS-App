@@ -9,6 +9,7 @@ const {
   sendotp,
   changePassword,
   getUserById,
+  updateUserById,
 } = require("../controllers/Auth")
 const {
   resetPasswordToken,
@@ -31,7 +32,8 @@ router.post("/signup", signup)
 
 // Route for sending OTP to the user's email
 router.post("/sendotp", sendotp)
-router.get("/getUserId", getUserById)
+router.get("/getUserById", getUserById)
+router.get("/updateUserById", updateUserById)
 
 // Route for Changing the password
 router.post("/changepassword", auth, changePassword)
