@@ -1,10 +1,10 @@
-const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+const BASE_URL = "https://bookish-fiesta-5pw7j94v67g3pvpw-4000.app.github.dev"
 
 // AUTH ENDPOINTS
 export const endpoints = {
-  SENDOTP_API: BASE_URL + "/auth/sendotp",
+  SENDOTP_API: BASE_URL + "api/v1/auth/sendotp",
   SIGNUP_API: BASE_URL + "/auth/signup",
-  LOGIN_API: BASE_URL + "/auth/login",
+  LOGIN_API: BASE_URL + "/api/v1/auth/login",
   RESETPASSTOKEN_API: BASE_URL + "/auth/reset-password-token",
   RESETPASSWORD_API: BASE_URL + "/auth/reset-password",
 }
@@ -13,7 +13,7 @@ export const endpoints = {
 export const profileEndpoints = {
   GET_USER_DETAILS_API: BASE_URL + "/profile/getUserDetails",
   GET_USER_ENROLLED_COURSES_API: BASE_URL + "/profile/getEnrolledCourses",
-  GET_INSTRUCTOR_DATA_API: BASE_URL + "/profile/instructorDashboard",
+  GET_INSTRUCTOR_DATA_API: BASE_URL + "/api/v1/auth/getUserById",
 }
 
 // STUDENTS ENDPOINTS

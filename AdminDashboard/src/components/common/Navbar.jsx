@@ -3,7 +3,7 @@ import { Link, matchPath, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import { NavbarLinks } from "../../../data/navbar-links"
-import studyNotionLogo from '../../assets/Logo/Logo-Full-Light.png'
+import StudyNotionLogo from '../../assets/Logo/Logo-Full-Light.png'
 import { fetchCourseCategories } from '../../services/operations/courseDetailsAPI';
 
 import ProfileDropDown from '../core/Auth/ProfileDropDown'
@@ -45,9 +45,9 @@ const Navbar = () => {
     // console.log('data of store  = ', useSelector((state)=> state))
 
 
-    useEffect(() => {
-        fetchSublinks();
-    }, [])
+    // useEffect(() => {
+    //     fetchSublinks();
+    // }, [])
 
 
     // when user click Navbar link then it will hold yellow color
@@ -89,7 +89,7 @@ const Navbar = () => {
             <div className='flex w-11/12 max-w-maxContent items-center justify-between '>
                 {/* logo */}
                 <Link to="/">
-                    <img src={studyNotionLogo} width={160} height={42} loading='lazy' />
+                    <img src={StudyNotionLogo} width={160} height={42} loading='lazy' />
                 </Link>
 
                 {/* Nav Links - visible for only large devices*/}

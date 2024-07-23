@@ -23,35 +23,35 @@ function Catalog() {
     const [loading, setLoading] = useState(false);
 
     // Fetch All Categories
-    useEffect(() => {
-        ; (async () => {
-            try {
-                const res = await fetchCourseCategories();
-                const category_id = res.filter(
-                    (ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName
-                )[0]._id
-                setCategoryId(category_id)
-            } catch (error) {
-                console.log("Could not fetch Categories.", error)
-            }
-        })()
-    }, [catalogName])
+    // useEffect(() => {
+    //     ; (async () => {
+    //         try {
+    //             const res = await fetchCourseCategories();
+    //             const category_id = res.filter(
+    //                 (ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName
+    //             )[0]._id
+    //             setCategoryId(category_id)
+    //         } catch (error) {
+    //             console.log("Could not fetch Categories.", error)
+    //         }
+    //     })()
+    // }, [catalogName])
 
 
-    useEffect(() => {
-        if (categoryId) {
-            ; (async () => {
-                setLoading(true)
-                try {
-                    const res = await getCatalogPageData(categoryId)
-                    setCatalogPageData(res)
-                } catch (error) {
-                    console.log(error)
-                }
-                setLoading(false)
-            })()
-        }
-    }, [categoryId])
+    // useEffect(() => {
+    //     if (categoryId) {
+    //         ; (async () => {
+    //             setLoading(true)
+    //             try {
+    //                 const res = await getCatalogPageData(categoryId)
+    //                 setCatalogPageData(res)
+    //             } catch (error) {
+    //                 console.log(error)
+    //             }
+    //             setLoading(false)
+    //         })()
+    //     }
+    // }, [categoryId])
 
     // console.log('======================================= ', catalogPageData)
     // console.log('categoryId ==================================== ', categoryId)

@@ -62,9 +62,9 @@ export default function MobileProfileDropDown() {
     // console.log('data of store  = ', useSelector((state)=> state))
 
 
-    useEffect(() => {
-        fetchSublinks();
-    }, [])
+    // useEffect(() => {
+    //     fetchSublinks();
+    // }, [])
 
 
     return (

@@ -26,17 +26,17 @@ function ReviewSlider() {
   const [reviews, setReviews] = useState(null)
   const truncateWords = 15
 
-  useEffect(() => {
-    ; (async () => {
-      const { data } = await apiConnector(
-        "GET",
-        ratingsEndpoints.REVIEWS_DETAILS_API
-      )
-      if (data?.success) {
-        setReviews(data?.data)
-      }
-    })()
-  }, [])
+  // useEffect(() => {
+  //   ; (async () => {
+  //     const { data } = await apiConnector(
+  //       "GET",
+  //       ratingsEndpoints.REVIEWS_DETAILS_API
+  //     )
+  //     if (data?.success) {
+  //       setReviews(data?.data)
+  //     }
+  //   })()
+  // }, [])
 
   
   // console.log('reviews= ', reviews)
