@@ -88,7 +88,7 @@ exports.getQuizbyId = async (req, res) => {
         const { id } = req.params;
 
 
-        const quiz = await Quiz.findById({_id:id});
+        const quiz = await Quiz.findById({_id:id}).populate("Questions");
 
 
 
