@@ -88,7 +88,7 @@ exports.getQuizbyId = async (req, res) => {
         const { id } = req.params;
 
 
-        const quiz = await Quiz.findById({_id:id}).populate("Questions");
+        const quiz = await Quiz.findById({_id:id}).populate("questions");
 
 
 
@@ -154,5 +154,12 @@ exports.editQuizbyId = async (req, res) => {
         }) 
     }
 } 
+
+exports.ping = async (req, res) => {
+    return res.status(200).json({
+        success:true,
+        message:"Ping is working",
+    }) 
+}
 
 
