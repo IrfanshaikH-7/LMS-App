@@ -46,6 +46,7 @@ export default function Upload({ name, label, register, setValue, errors, video 
   useEffect(() => {
     setValue(name, selectedFile)
   }, [selectedFile, setValue])
+  console.log("selectedFile = ", selectedFile)  
 
   return (
     <div className="flex flex-col space-y-2">
