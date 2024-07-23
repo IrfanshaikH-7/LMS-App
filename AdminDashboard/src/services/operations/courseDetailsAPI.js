@@ -95,10 +95,7 @@ export const addCourseDetails = async (data, token) => {
   let result = null;
 
   try {
-    const response = await apiConnector("POST", CREATE_COURSE_API, data, {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    })
+    const response = await apiConnector("POST", CREATE_COURSE_API, data)
     console.log("CREATE COURSE API RESPONSE............", response)
 
     if (!response?.data?.success) {
