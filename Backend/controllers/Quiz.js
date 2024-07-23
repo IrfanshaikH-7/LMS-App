@@ -22,10 +22,12 @@ exports.createQuiz = async (req, res) => {
       try {
         const questionData = quizData.map(question => ({
           question: question.question,
-          optionA: question.optionA,
-          optionB: question.optionB,
-          optionC: question.optionC,
-          optionD: question.optionD,
+          options: {
+            optionA: question.optionA,
+            optionB: question.optionB,
+            optionC: question.optionC,
+            optionD: question.optionD,
+          },
           correctAnswer: question.correctAnswer,
         }));
         console.log('second :', questionData);
@@ -169,26 +171,26 @@ exports.updateQuestionOptions = async (req, res)=> {
         const quizzes = await Quiz.find().populate('questions'); // Ensure you have a Questions model referenced in Quiz
     
         for (let quiz of quizzes) {
-          for (let question of quiz.questions) {
-            // Assuming each question document has optionA, optionB, optionC, and optionD fields
-            // and you want to restructure these into an options object
-            question.options = {
-              optionA: question.optionA,
-              optionB: question.optionB,
-              optionC: question.optionC,
-              optionD: question.optionD,
-            };
-    
-            // Remove old option fields
-            delete question.optionA;
-            delete question.optionB;
-            delete question.optionC;
-            delete question.optionD;
-    
-            // Since questions are referenced, they should be saved individually
-            await question.save();
+            for (let question of quiz.questions) {
+              // Update the question document directly in the database
+              await Questions.findByIdAndUpdate(question._id, {
+                $set: {
+                  options: {
+                    optionA: question.optionA,
+                    optionB: question.optionB,
+                    optionC: question.optionC,
+                    optionD: question.optionD,
+                  }
+                },
+                $unset: {
+                  optionA: "",
+                  optionB: "",
+                  optionC: "",
+                  optionD: "",
+                }
+              });
+            }
           }
-        }
     
         console.log('All questions within quizzes have been updated.');
       } catch (error) {
