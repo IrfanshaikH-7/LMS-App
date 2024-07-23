@@ -53,12 +53,32 @@ const {
 // Importing Middlewares
 const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
 
+
+
+const multer = require('multer');
+const AWS = require('aws-sdk');
+
+// Configure AWS S3 with credentials (replace with your actual values)
+AWS.config.update({
+  accessKeyId: 'YOUR_ACCESS_KEY_ID',
+  secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
+  region: 'YOUR_REGION' // Replace with your S3 bucket's region
+});
+
+const s3 = new AWS.S3();
+
+// Configure Multer for video uploads
+const upload = multer({
+  dest: 'uploads/' // Temporary directory for uploads (optional, can be removed)
+});
+
+
 // ********************************************************************************************************
 //                                      Course routes
 // ********************************************************************************************************
 
 // Courses can Only be Created by Instructors
-router.post("/createCourse", auth, isInstructor, createCourse)
+router.post("/createCourse",   createCourse)
 //Add a Section to a Course
 router.post("/addSection", auth, isInstructor, createSection)
 // Update a Section
@@ -103,5 +123,53 @@ router.post("/getCategoryPageDetails", categoryPageDetails)
 router.post("/createRating", auth, isStudent, createRating)
 router.get("/getAverageRating", getAverageRating)
 router.get("/getReviews", getAllRating)
+
+
+
+const uploadVideo = upload.single('video'); // Name of the video field in the request body
+
+const testVideo = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      // Handle no video uploaded case
+      return res.status(400).json({ message: 'No video uploaded' });
+    }
+
+    const file = req.file;
+
+    // Get file name and extension
+    const fileName = file.originalname;
+    const fileExtension = fileName.split('.').pop();
+
+    // Generate a unique filename with timestamp
+    const newFileName = `${Date.now()}.${fileExtension}`;
+
+    // Create upload parameters for S3
+    const params = {
+      Bucket: 'YOUR_BUCKET_NAME', // Replace with your S3 bucket name
+      Key: newFileName,
+      Body: file.buffer,
+      ContentType: `video/${fileExtension}` // Set appropriate content type
+    };
+
+    // Upload the video to S3
+    await s3.upload(params).promise();
+
+    // Store the uploaded video URL in a property accessible to the next middleware
+    req.uploadedVideoUrl = newFileName; // Modify property name as needed
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error uploading video' });
+  }
+};
+
+
+
+
+router.post("/testVideo", testVideo)
+
+
+
 
 module.exports = router

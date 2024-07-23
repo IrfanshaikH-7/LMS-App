@@ -15,6 +15,7 @@ import React from "react";
 import Header from "@/components/header/header";
 import Button from "@/components/button/button";
 import { ImageBackground } from "expo-image";
+import { router } from "expo-router";
 
 const renderItem = ({ item }) => {
   return (
@@ -36,6 +37,14 @@ const renderItem = ({ item }) => {
         shadowOpacity: 0.2, // Shadow opacity for iOS
         shadowRadius: 3.84, // Shadow blur radius for iOS
       }}
+
+      onPress={() => router.navigate({
+        pathname: "/(routes)/quiz/quiz.details",
+        params: { quizId: item._id}
+
+      }
+
+      )  }
     >
       <ImageBackground
         source={{ uri: "https://picsum.photos/seed/picsum/200/300" }}
@@ -114,6 +123,8 @@ const renderItem = ({ item }) => {
 export default function SearchScreen() {
   const [quizzes, setQuizzes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+
   useEffect(() => {
     const getQuizzes = async () => {
       try {
