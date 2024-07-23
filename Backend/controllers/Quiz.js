@@ -163,3 +163,35 @@ exports.ping = async (req, res) => {
 }
 
 
+exports.updateQuestionOptions = async (req, res)=> {
+    try {
+        // Fetch all quizzes
+        const quizzes = await Quiz.find().populate('questions'); // Ensure you have a Questions model referenced in Quiz
+    
+        for (let quiz of quizzes) {
+          for (let question of quiz.questions) {
+            // Assuming each question document has optionA, optionB, optionC, and optionD fields
+            // and you want to restructure these into an options object
+            question.options = {
+              optionA: question.optionA,
+              optionB: question.optionB,
+              optionC: question.optionC,
+              optionD: question.optionD,
+            };
+    
+            // Remove old option fields
+            delete question.optionA;
+            delete question.optionB;
+            delete question.optionC;
+            delete question.optionD;
+    
+            // Since questions are referenced, they should be saved individually
+            await question.save();
+          }
+        }
+    
+        console.log('All questions within quizzes have been updated.');
+      } catch (error) {
+        console.error('Failed to update questions:', error);
+      }
+  }
