@@ -85,10 +85,17 @@ exports.createQuiz = async (req, res) => {
 
 exports.getQuizbyId = async (req, res) => {
     try{
-        const { } = req.body;
-            return res.status(401).json({
-                success:false,
-                message:"password doesnt matched !!",
+        const { id } = req.params;
+
+
+        const quiz = await Quiz.findById({_id:id});
+
+
+
+            return res.status(201).json({
+                success:true,
+                data: quiz,
+                message:"Quiz is here"
             });
 
     } catch(error){
