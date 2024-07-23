@@ -131,7 +131,7 @@ export default function SearchScreen() {
         const res = await axios.get(`${SERVER_URI}/api/v1/quiz/getAllQuiz`);
         setQuizzes(res.data.data);
 
-        console.log(res.data.data);
+        // console.log(res.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -162,7 +162,7 @@ export default function SearchScreen() {
       <View
         style={{
           // marginHorizontal: 10,
-          backgroundColor: "lightblue",
+
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
@@ -175,6 +175,10 @@ export default function SearchScreen() {
 
           data={quizzes}
           renderItem={renderItem}
+          contentContainerStyle={{ width: "100%", gap: 10 }}
+          columnWrapperStyle={{ gap: 10 }}
+          showsVerticalScrollIndicator={false}
+
           numColumns={2}
           keyExtractor={(item) => item._id}
           refreshControl={
