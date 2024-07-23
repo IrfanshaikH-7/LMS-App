@@ -80,6 +80,82 @@ exports.sendotp = async (req, res) => {
     }
  
 }
+exports.getUserById = async (req, res) => {
+    try {
+		// Destructure fields from the request body
+		const {
+            id
+		} = req.body;
+		// Check if All Details are there or not
+		if (
+			!id
+		) {
+			return res.status(403).send({
+				success: false,
+				message: "Required ID",
+			});
+		}
+
+		// Check if user already exists
+		const user = await User.findOne({ _id: id });
+		if (!user) {
+			return res.status(400).json({
+				success: false,
+				message: "User not found",
+			});
+		}
+
+		return res.status(200).json({
+			success: true,
+			user,
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			success: false,
+			message: "User cannot be registered. Please try again.",
+		});
+	}
+}
+
+exports.updateUserById = async (req, res) => {
+    try {
+		const {
+            id
+            //add fields to be updated
+		} = req.body;
+		if (
+			!id
+		) {
+			return res.status(403).send({
+				success: false,
+				message: "Required ID",
+			});
+		}
+
+		// Check if user already exists
+		const updatedUser = await User.findByIdAndUpdate({ _id: id },{
+            ...req.body
+        });
+		if (!updatedUser) {
+			return res.status(400).json({
+				success: false,
+				message: "User updation failed",
+			});
+		}
+
+		return res.status(200).json({
+			success: true,
+			updatedUser,
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			success: false,
+			message: "Error while Updating user. Please try again.",
+		});
+	}
+}
 
 exports.signup = async (req, res) => {
 	try {

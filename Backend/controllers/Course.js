@@ -39,7 +39,7 @@ exports.createCourse = async (req, res) => {
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
-      // !tag.length ||
+
       !thumbnail ||
       !category ||
       !instructions.length
@@ -54,7 +54,7 @@ exports.createCourse = async (req, res) => {
     }
     // Check if the user is an instructor
     const instructorDetails = await User.findById(userId, {
-      accountType: "Instructor",
+      accountType: "Admin",
     })
 
     if (!instructorDetails) {
@@ -170,7 +170,7 @@ exports.editCourse = async (req, res) => {
       _id: courseId,
     })
       .populate({
-        path: "instructor",
+        path: "Admin",
         populate: {
           path: "additionalDetails",
         },
@@ -213,7 +213,7 @@ exports.getAllCourses = async (req, res) => {
         studentsEnrolled: true,
       }
     )
-      .populate("instructor")
+      .populate("Admin")
       .exec()
 
     return res.status(200).json({
@@ -237,7 +237,7 @@ exports.getAllCourses = async (req, res) => {
 //       _id: courseId,
 //     })
 //       .populate({
-//         path: "instructor",
+//         path: "Admin",
 //         populate: {
 //           path: "additionalDetails",
 //         },
@@ -288,7 +288,7 @@ exports.getCourseDetails = async (req, res) => {
       _id: courseId,
     })
       .populate({
-        path: "instructor",
+        path: "Admin",
         populate: {
           path: "additionalDetails",
         },
@@ -350,7 +350,7 @@ exports.getFullCourseDetails = async (req, res) => {
       _id: courseId,
     })
       .populate({
-        path: "instructor",
+        path: "Admin",
         populate: {
           path: "additionalDetails",
         },
