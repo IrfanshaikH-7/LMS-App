@@ -84,7 +84,7 @@ const quizDetails = (props: Props) => {
         <Text style={{ fontSize: 24, textAlign: "center", fontWeight: "bold" }}>
           {questions[count]?.question}
         </Text>
-      </View>
+    </View>
 
       <Text
         style={{
