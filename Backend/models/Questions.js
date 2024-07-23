@@ -5,17 +5,19 @@ const Questions = new mongoose.Schema({
     type: String,
     // required: true,
   },
-  optionA: {
-    type: String,
-  },
-  optionB: {
-    type: String,
-  },
-  optionC: {
-    type: String,
-  },
-  optionD: {
-    type: String,
+  options: {
+    optionA: {
+      type: String,
+    },
+    optionB: {
+      type: String,
+    },
+    optionC: {
+      type: String,
+    },
+    optionD: {
+      type: String,
+    },
   },
   correctAnswer: {
     type: String,
