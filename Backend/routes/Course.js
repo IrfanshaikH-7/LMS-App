@@ -70,6 +70,9 @@ const {
   isStudent,
   isAdmin,
 } = require("../middlewares/auth");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+
 
 // Configure Multer for video uploads
 // const upload = multer({ storage: storage }); //images
@@ -77,6 +80,17 @@ const {
 // ********************************************************************************************************
 //                                      Course routes
 // ********************************************************************************************************
+const s3Client = new S3Client({
+  region: 'ap-south-1',
+  credentials: {
+    accessKeyId: process.env.AWS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  }})
+
+
+
+
+
 
 const upload = multer({ 
     storage: multer.memoryStorage(),
@@ -129,5 +143,31 @@ router.post("/getCategoryPageDetails", categoryPageDetails);
 router.post("/createRating", isStudent, createRating);
 router.get("/getAverageRating", getAverageRating);
 router.get("/getReviews", getAllRating);
+
+router.post( "/testupload",
+
+ )
+async function putObject(filename, contentType) {
+	const command = new PutObjectCommand({
+			Bucket: "harshexpolms",
+			Key: `/uploads/user-uploads/${filename}`,
+    ContentType:contentType,
+		})
+
+    const url = await getSignedUrl(s3Client, command  );
+    return url;
+	
+
+}
+router.post("/testupload", async (req, res) => {
+  const { filename, contentType } = req.body;
+  const url = await putObject(`fuke-${Date.now()}`, "video/*");
+  res.send(url);
+});
+// IIFE function
+(function() {
+  // Your code here
+})();
+
 
 module.exports = router;
