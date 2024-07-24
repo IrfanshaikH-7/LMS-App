@@ -7,9 +7,11 @@ import {
 } from "react-native-responsive-screen";
 
 export default function CourseCard({ item }: { item: CoursesType }) {
+  console.log(item)
   return (
     <TouchableOpacity
       style={styles.container}
+      
       onPress={() =>
         router.push({
           pathname: "/(routes)/course-details",
@@ -20,13 +22,13 @@ export default function CourseCard({ item }: { item: CoursesType }) {
       <View style={{ paddingHorizontal: 10 }}>
         <Image
           style={{
-            width: wp(86),
+            width: '100%',
             height: 220,
             borderRadius: 5,
             alignSelf: "center",
             objectFit: "cover",
           }}
-          source={{ uri: item.thumbnail.url }}
+          source={item.thumbnail }
         />
         <View style={{ width: wp(85) }}>
           <Text
@@ -95,9 +97,9 @@ export default function CourseCard({ item }: { item: CoursesType }) {
             }}
           >
             <Ionicons name="list-outline" size={20} color={"#8A8A8A"} />
-            <Text style={{ marginLeft: 5 }}>
+            {/* <Text style={{ marginLeft: 5 }}>
               {item.courseData.length} Lectures
-            </Text>
+            </Text> */}
           </View>
         </View>
       </View>
@@ -107,15 +109,22 @@ export default function CourseCard({ item }: { item: CoursesType }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFF",
-    marginHorizontal: 6,
-    borderRadius: 12,
-    width: "95%",
-    height: "auto",
-    overflow: "hidden",
-    margin: "auto",
-    marginVertical: 15,
-    padding: 8,
+    backgroundColor: "white",
+    marginBottom: 10,
+    minWidth: "45%",
+    maxWidth: "49%",
+    marginHorizontal: 0,
+    height: 160, // Ensure this is set to control the size
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    overflow: "hidden", // Ensure the borderRadius effect applies to children
+    elevation: 4, // Adds shadow for Android
+    shadowColor: "#000000", // Shadow color for iOS
+    shadowOffset: { width: 0, height: 2 }, // Shadow direction and distance for iOS
+    shadowOpacity: 0.2, // Shadow opacity for iOS
+    shadowRadius: 3.84, // Shadow blur radius for iOS
+    
   },
   ratingText: {
     color: "white",
