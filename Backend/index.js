@@ -16,8 +16,6 @@ const {cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
-
-
 const {
 	S3Client,
 	PutObjectCommand,
