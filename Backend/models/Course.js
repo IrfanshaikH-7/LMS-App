@@ -10,7 +10,7 @@ const courseSchema = new mongoose.Schema({
         type:String,
         // trim:true, 
     },
-    instructor: {
+    Admin: {
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true,

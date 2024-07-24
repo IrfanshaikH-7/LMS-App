@@ -13,6 +13,14 @@ exports.createCourse = async (req, res) => {
     const userId = "669f61f8e351c9104ae67046";
 
     // Get all required fields from request body
+
+    console.log(req.body)
+
+
+    const thumbnailImage = req.file.path;
+    console.log(thumbnailImage)
+
+
     let {
       courseName,
       courseDescription,
@@ -23,22 +31,14 @@ exports.createCourse = async (req, res) => {
       status,
       // instructions: _instructions,
     } = req.body;
-    // Get thumbnail image from request files
-    const thumbnail = req.files.thumbnailImage;
 
-    // Convert the tag and instructions from stringified Array to Array
-    // const tag = JSON.parse(_tag)
-    // const instructions = JSON.parse(_instructions)
-
-    // console.log("tag", tag)
-
-    // Check if any of the required fields are missing
+  
     if (
       !courseName ||
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
-      !thumbnail ||
+
       !category
     ) {
       return res.status(400).json({
@@ -54,6 +54,7 @@ exports.createCourse = async (req, res) => {
       accountType: "Admin",
     });
 
+      console.log("instructorDetails", instructorDetails);
     if (!instructorDetails) {
       return res.status(404).json({
         success: false,
@@ -70,27 +71,27 @@ exports.createCourse = async (req, res) => {
       });
     }
 
-    console.log("0000")
+
     // Upload the Thumbnail to Cloudinary
-    const thumbnailImage = await uploadImageToCloudinary(
-      thumbnail,
-      process.env.FOLDER_NAME
-    );
-    console.log(thumbnailImage);
+    // const thumbnailImage = await uploadImageToCloudinary(
+    //   thumbnail,
+    //   process.env.FOLDER_NAME
+    // );
+
 
     console.log("thumbnailImage", thumbnailImage);
     // Create a new course with the given details
     const newCourse = await Course.create({
       courseName,
       courseDescription,
-      instructor: instructorDetails._id,
+      Admin: userId,
       whatYouWillLearn: whatYouWillLearn,
       price,
       // tag,
       category: categoryDetails._id,
-      thumbnail: thumbnailImage.secure_url,
+      thumbnail: thumbnailImage,
       status: status,
-      instructions,
+
     });
 
     console.log("newCourse", newCourse);
