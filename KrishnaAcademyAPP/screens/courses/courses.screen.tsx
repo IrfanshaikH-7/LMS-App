@@ -17,6 +17,7 @@ import Loader from "@/components/loader/loader";
 import { LinearGradient } from "expo-linear-gradient";
 import CourseCard from "@/components/cards/course.card";
 import Header from "@/components/header/header";
+import React from "react";
 
 export default function CoursesScreen() {
   const [courses, setCourses] = useState<CoursesType[]>([]);
