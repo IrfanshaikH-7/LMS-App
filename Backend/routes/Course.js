@@ -62,27 +62,13 @@ const { updateCourseProgress } = require("../controllers/courseProgress");
 
 // Importing Middlewares
 const { isStudent, isAdmin } = require("../middlewares/auth");
-// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-// const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
-
-// Configure Multer for video uploads
-// const upload = multer({ storage: storage }); //images
 
 // ********************************************************************************************************
 //                                      Course routes
 // ********************************************************************************************************
-// const s3Client = new S3Client({
-//   region: "ap-south-1",
-//   credentials: {
-//     accessKeyId: process.env.AWS_KEY,
-//     secretAccessKey: process.env.AWS_SECRET_KEY,
-//   },
-// });
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 1000 * 1024 * 1024 }, // for example, 10 MB limit
-  dest: "uploads/",
 });
 
 router.post("/createCourse", upload.single("file"), createCourse);
@@ -154,10 +140,9 @@ router.get("/getReviews", getAllRating);
 const {
   S3Client,
   PutObjectCommand,
-  getSignedUrl,
+
 } = require("@aws-sdk/client-s3");
-
-
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 async function uploadVideo(filename, contentType, file) {
   const s3Client = new S3Client({
     // Replace with your AWS credentials
@@ -198,17 +183,37 @@ async function uploadVideo(filename, contentType, file) {
   return publicUrl;
 }
 
-router.post("/testupload", upload.single('video'),async(req, res)=>{
+async function generatePresignedUrlForStreaming(filename) {
+  const params = {
+    Bucket: "harshexpolms",
+    Key: filename, // The key of the video file you want to stream
+  };
+
+  const command = new GetObjectCommand(params);
+
+  // Generate the presigned URL for streaming the video
+  const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
+
+  return presignedUrl;
+}
+
+router.post("/testupload", upload.single("video"), async (req, res) => {
   if (req.file) {
     const { originalname, mimetype, buffer } = req.file;
     console.log(originalname); // Log the original file name
+
+    const resp = await uploadVideo(originalname, mimetype, req.file.video);
+    res.send(resp);
+  } else {
+    res.send("No file uploaded");
   }
-  // const {video} = req.file;
-  // console.log(video)
-
-  const resp = await uploadVideo("test.mp4", "video/mov", req.file.video)
-  res.send(resp)
-
+  // res.send("done")
 });
+
+router.get('/stream', async (req, res) => {
+  const { filename } = req.query;
+  const url = await generatePresignedUrlForStreaming('SampleVideo_1280x720_20mb.mp4');
+  res.send(url);
+})
 
 module.exports = router;
