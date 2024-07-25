@@ -124,14 +124,14 @@ export default function SearchScreen() {
   const [quizzes, setQuizzes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-
+console.log('hello')
   useEffect(() => {
     const getQuizzes = async () => {
       try {
         const res = await axios.get(`${SERVER_URI}/api/v1/quiz/getAllQuiz`);
         setQuizzes(res.data.data);
 
-        // console.log(res.data.data);
+        console.log(res.data.data);
       } catch (error) {
         console.log(error);
       }
