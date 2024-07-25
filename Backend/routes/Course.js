@@ -1,10 +1,23 @@
 // Import the required modules
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
+cloudinary.config({
+  cloud_name: "dzwvmqbv0",
+  api_key: 572782272174972,
+  api_secret: "Sx6t5hAG6ynwO6mr8GN-L55A7MI",
+});
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "profile-images",
+    resource_type: "auto",
+  },
+});
 
-// Import the Controllers
-
-// Course Controllers Import
 const {
   createCourse,
   getAllCourses,
@@ -14,162 +27,199 @@ const {
   getInstructorCourses,
   deleteCourse,
 
-  getAllCoursesData
-} = require("../controllers/Course")
-
+  getAllCoursesData,
+} = require("../controllers/Course");
 
 // Categories Controllers Import
 const {
   showAllCategories,
   createCategory,
   categoryPageDetails,
-} = require("../controllers/Category")
+} = require("../controllers/Category");
 
 // Sections Controllers Import
 const {
   createSection,
   updateSection,
   deleteSection,
-} = require("../controllers/Section")
+} = require("../controllers/Section");
 
 // Sub-Sections Controllers Import
 const {
   createSubSection,
   updateSubSection,
   deleteSubSection,
-} = require("../controllers/SubSection")
+} = require("../controllers/SubSection");
 
 // Rating Controllers Import
 const {
   createRating,
   getAverageRating,
   getAllRating,
-} = require("../controllers/RatingAndReview")
+} = require("../controllers/RatingAndReview");
 
-const {
-  updateCourseProgress
-} = require("../controllers/courseProgress");
+const { updateCourseProgress } = require("../controllers/courseProgress");
 
 // Importing Middlewares
-const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
-
-
-
-const multer = require('multer');
-const AWS = require('aws-sdk');
-
-// Configure AWS S3 with credentials (replace with your actual values)
-AWS.config.update({
-  accessKeyId: 'YOUR_ACCESS_KEY_ID',
-  secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
-  region: 'YOUR_REGION' // Replace with your S3 bucket's region
-});
-
-const s3 = new AWS.S3();
-
-// Configure Multer for video uploads
-const upload = multer({
-  dest: 'uploads/' // Temporary directory for uploads (optional, can be removed)
-});
-
+const { isStudent, isAdmin } = require("../middlewares/auth");
 
 // ********************************************************************************************************
 //                                      Course routes
 // ********************************************************************************************************
 
-// Courses can Only be Created by Instructors
-router.post("/createCourse",   createCourse)
-//Add a Section to a Course
-router.post("/addSection", auth, isInstructor, createSection)
-// Update a Section
-router.post("/updateSection", auth, isInstructor, updateSection)
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
+
+router.post("/createCourse", upload.single("file"), createCourse);
+//Add a Section to a Course 2
+router.post("/addSection", createSection);
+// Update a Section 3
+router.post("/updateSection", updateSection);
 // Delete a Section
-router.post("/deleteSection", auth, isInstructor, deleteSection)
+router.post("/deleteSection", deleteSection);
 // Edit Sub Section
-router.post("/updateSubSection", auth, isInstructor, updateSubSection)
+router.post("/updateSubSection", updateSubSection);
 // Delete Sub Section
-router.post("/deleteSubSection", auth, isInstructor, deleteSubSection)
-// Add a Sub Section to a Section
-router.post("/addSubSection", auth, isInstructor, createSubSection)
+router.post("/deleteSubSection", deleteSubSection);
+// Add a Sub Section to a Section  4
+// router.post("/addSubSection", upload.single("video"), createSubSection);
 // Get all Registered Courses
-router.get("/getAllCourses", getAllCourses)
+router.get("/getAllCourses", getAllCourses);
 // Get Details for a Specific Courses
-router.post("/getCourseDetails", getCourseDetails)
+router.post("/getCourseDetails", getCourseDetails);
 // Get Details for a Specific Courses
-router.post("/getFullCourseDetails", auth, getFullCourseDetails)
+router.post("/getFullCourseDetails", getFullCourseDetails);
 // Edit Course routes
-router.post("/editCourse", auth, isInstructor, editCourse)
+router.post("/editCourse", editCourse);
 // Get all Courses Under a Specific Instructor
-router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses)
+router.get("/getInstructorCourses", getInstructorCourses);
 // Delete a Course
-router.delete("/deleteCourse", deleteCourse)
+router.delete("/deleteCourse", deleteCourse);
 
-router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
+router.post("/updateCourseProgress", isStudent, updateCourseProgress);
 
-router.get("/get-all-courses", getAllCoursesData)
+router.get("/get-all-courses", getAllCoursesData);
 
 // ********************************************************************************************************
 //                                      Category routes (Only by Admin)
 // ********************************************************************************************************
 // Category can Only be Created by Admin
 // TODO: Put IsAdmin Middleware here
-router.post("/createCategory", createCategory)
-router.get("/showAllCategories", showAllCategories)
-router.post("/getCategoryPageDetails", categoryPageDetails)
+router.post("/createCategory", createCategory);
+router.get("/showAllCategories", showAllCategories);
+router.post("/getCategoryPageDetails", categoryPageDetails);
 
 // ********************************************************************************************************
 //                                      Rating and Review
 // ********************************************************************************************************
-router.post("/createRating", auth, isStudent, createRating)
-router.get("/getAverageRating", getAverageRating)
-router.get("/getReviews", getAllRating)
+router.post("/createRating", isStudent, createRating);
+router.get("/getAverageRating", getAverageRating);
+router.get("/getReviews", getAllRating);
 
+const {
+  S3Client,
+  PutObjectCommand,
 
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-const uploadVideo = upload.single('video'); // Name of the video field in the request body
+const uploadVideo = async (filename, contentType, file) => {
+  const s3Client = new S3Client({
+    region: "ap-south-1",
+    credentials: {
+      accessKeyId: process.env.AWS_KEY,
+      secretAccessKey: process.env.AWS_SECRET_KEY,
+    },
+  });
 
-const testVideo = async (req, res, next) => {
-  try {
-    if (!req.file) {
-      // Handle no video uploaded case
-      return res.status(400).json({ message: 'No video uploaded' });
-    }
+  const uniqueFilename = `user-uploads/${Date.now()}-${filename}`;
 
-    const file = req.file;
+  const params = {
+    Bucket: "harshexpolms",
+    Key: uniqueFilename,
+    ContentType: contentType,
+  };
 
-    // Get file name and extension
-    const fileName = file.originalname;
-    const fileExtension = fileName.split('.').pop();
+  const command = new PutObjectCommand(params);
+  const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
-    // Generate a unique filename with timestamp
-    const newFileName = `${Date.now()}.${fileExtension}`;
+  const response = await fetch(presignedUrl, {
+    method: "PUT",
+    body: file,
+  });
 
-    // Create upload parameters for S3
-    const params = {
-      Bucket: 'YOUR_BUCKET_NAME', // Replace with your S3 bucket name
-      Key: newFileName,
-      Body: file.buffer,
-      ContentType: `video/${fileExtension}` // Set appropriate content type
-    };
-
-    // Upload the video to S3
-    await s3.upload(params).promise();
-
-    // Store the uploaded video URL in a property accessible to the next middleware
-    req.uploadedVideoUrl = newFileName; // Modify property name as needed
-    next();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error uploading video' });
+  if (!response.ok) {
+    throw new Error("Error uploading file");
   }
+
+  const publicUrl = `https://harshexpolms.s3.amazonaws.com/${uniqueFilename}`;
+  console.log(publicUrl);
+  return publicUrl;
+};
+
+const mergeChunks = async (fileName, totalChunks) => {
+  const chunkDir = __dirname + "/chunks";
+  const mergedFilePath = __dirname + "/merged_files";
+
+  if (!fs.existsSync(mergedFilePath)) {
+    fs.mkdirSync(mergedFilePath);
+  }
+
+  const writeStream = fs.createWriteStream(`${mergedFilePath}/${fileName}`);
+  for (let i = 0; i < totalChunks; i++) {
+    const chunkFilePath = `${chunkDir}/${fileName}.part_${i}`;
+    const chunkBuffer = await fs.promises.readFile(chunkFilePath);
+    writeStream.write(chunkBuffer);
+    fs.unlinkSync(chunkFilePath); // Delete the individual chunk file after merging
+  }
+
+  writeStream.end();
+  console.log("Chunks merged successfully");
 };
 
 
+router.post("/testupload", upload.single("video"), async (req, res) => {
+  if (req.file) {
+    const { originalname, mimetype, buffer } = req.file;
+    const chunk = buffer;
+    const chunkNumber = Number(req.body.chunkNumber); // Sent from the client
+    const totalChunks = Number(req.body.totalChunks); // Sent from the client
+    const fileName = req.body.originalname;
+
+    const chunkDir = __dirname + "/chunks"; // Directory to save chunks
+
+    if (!fs.existsSync(chunkDir)) {
+      fs.mkdirSync(chunkDir);
+    }
+
+    const chunkFilePath = `${chunkDir}/${fileName}.part_${chunkNumber}`;
+
+    try {
+      await fs.promises.writeFile(chunkFilePath, chunk);
+      console.log(`Chunk ${chunkNumber}/${totalChunks} saved`);
+
+      if (chunkNumber === totalChunks - 1) {
+        // If this is the last chunk, merge all chunks into a single file
+        await mergeChunks(fileName, totalChunks);
+        console.log("File merged successfully");
+
+        // Upload the merged file to S3
+        const mergedFilePath = `${__dirname}/merged_files/${fileName}`;
+        const mergedFileBuffer = await fs.promises.readFile(mergedFilePath);
+        const resp = await uploadVideo(fileName, mimetype, mergedFileBuffer);
+        res.status(200).json({ message: "File uploaded successfully", url: resp });
+      } else {
+        res.status(200).json({ message: "Chunk uploaded successfully" });
+      }
+    } catch (error) {
+      console.error("Error saving chunk:", error);
+      res.status(500).json({ error: "Error saving chunk" });
+    }
+  } else {
+    res.status(400).json({ error: "No file uploaded" });
+  }
+});
 
 
-router.post("/testVideo", testVideo)
-
-
-
-
-module.exports = router
+module.exports = router;

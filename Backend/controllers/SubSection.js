@@ -9,9 +9,19 @@ exports.createSubSection = async (req, res) => {
         // const {sectionId, title, timeDuration, description} = req.body;
         const {sectionId, title, description} = req.body;
 
+
+
+      
+
+
         //extracting... file
         // const video = req.files.videoFile;
-        const video = req.files.video
+        console.log(req.file)
+        const video = req.file.video;
+
+        
+
+
 
         //validation...
         // if(!sectionId || !title || !timeDuration || !description || !video){
