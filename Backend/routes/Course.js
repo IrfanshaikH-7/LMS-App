@@ -4,7 +4,7 @@ const router = express.Router();
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-
+const fs = require("fs");
 cloudinary.config({
   cloud_name: "dzwvmqbv0",
   api_key: 572782272174972,
@@ -117,35 +117,15 @@ router.post("/createRating", isStudent, createRating);
 router.get("/getAverageRating", getAverageRating);
 router.get("/getReviews", getAllRating);
 
-//
-// async function putObject(filename, contentType) {
-// 	const command = new PutObjectCommand({
-// 			Bucket: "harshexpolms",
-// 			Key: `/uploads/user-uploads/${filename}`,
-//     ContentType:contentType,
-// 		})
-
-//     const url = await getSignedUrl(s3Client, command  );
-//     return url;
-
-// }
-// router.post("/testupload", async (req, res) => {
-//   const { filename, contentType } = req.body;
-//   const url = await putObject(`fuke-${Date.now()}`, "video/*");
-//   res.send(url);
-// });
-
-// IIFE function
-
 const {
   S3Client,
   PutObjectCommand,
 
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-async function uploadVideo(filename, contentType, file) {
+
+const uploadVideo = async (filename, contentType, file) => {
   const s3Client = new S3Client({
-    // Replace with your AWS credentials
     region: "ap-south-1",
     credentials: {
       accessKeyId: process.env.AWS_KEY,
@@ -153,7 +133,6 @@ async function uploadVideo(filename, contentType, file) {
     },
   });
 
-  // Generate a unique filename with timestamp to avoid conflicts
   const uniqueFilename = `user-uploads/${Date.now()}-${filename}`;
 
   const params = {
@@ -163,11 +142,8 @@ async function uploadVideo(filename, contentType, file) {
   };
 
   const command = new PutObjectCommand(params);
-  const presignedUrl = await getSignedUrl(s3Client, command);
+  const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
-  // Upload the file using the presigned URL
-  // You can use fetch, axios, or other libraries to make the PUT request
-  // Example using fetch:
   const response = await fetch(presignedUrl, {
     method: "PUT",
     body: file,
@@ -177,43 +153,73 @@ async function uploadVideo(filename, contentType, file) {
     throw new Error("Error uploading file");
   }
 
-  // Construct public URL
   const publicUrl = `https://harshexpolms.s3.amazonaws.com/${uniqueFilename}`;
   console.log(publicUrl);
   return publicUrl;
-}
+};
 
-async function generatePresignedUrlForStreaming(filename) {
-  const params = {
-    Bucket: "harshexpolms",
-    Key: filename, // The key of the video file you want to stream
-  };
+const mergeChunks = async (fileName, totalChunks) => {
+  const chunkDir = __dirname + "/chunks";
+  const mergedFilePath = __dirname + "/merged_files";
 
-  const command = new GetObjectCommand(params);
+  if (!fs.existsSync(mergedFilePath)) {
+    fs.mkdirSync(mergedFilePath);
+  }
 
-  // Generate the presigned URL for streaming the video
-  const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
+  const writeStream = fs.createWriteStream(`${mergedFilePath}/${fileName}`);
+  for (let i = 0; i < totalChunks; i++) {
+    const chunkFilePath = `${chunkDir}/${fileName}.part_${i}`;
+    const chunkBuffer = await fs.promises.readFile(chunkFilePath);
+    writeStream.write(chunkBuffer);
+    fs.unlinkSync(chunkFilePath); // Delete the individual chunk file after merging
+  }
 
-  return presignedUrl;
-}
+  writeStream.end();
+  console.log("Chunks merged successfully");
+};
+
 
 router.post("/testupload", upload.single("video"), async (req, res) => {
   if (req.file) {
     const { originalname, mimetype, buffer } = req.file;
-    console.log(originalname); // Log the original file name
+    const chunk = buffer;
+    const chunkNumber = Number(req.body.chunkNumber); // Sent from the client
+    const totalChunks = Number(req.body.totalChunks); // Sent from the client
+    const fileName = req.body.originalname;
 
-    const resp = await uploadVideo(originalname, mimetype, req.file.video);
-    res.send(resp);
+    const chunkDir = __dirname + "/chunks"; // Directory to save chunks
+
+    if (!fs.existsSync(chunkDir)) {
+      fs.mkdirSync(chunkDir);
+    }
+
+    const chunkFilePath = `${chunkDir}/${fileName}.part_${chunkNumber}`;
+
+    try {
+      await fs.promises.writeFile(chunkFilePath, chunk);
+      console.log(`Chunk ${chunkNumber}/${totalChunks} saved`);
+
+      if (chunkNumber === totalChunks - 1) {
+        // If this is the last chunk, merge all chunks into a single file
+        await mergeChunks(fileName, totalChunks);
+        console.log("File merged successfully");
+
+        // Upload the merged file to S3
+        const mergedFilePath = `${__dirname}/merged_files/${fileName}`;
+        const mergedFileBuffer = await fs.promises.readFile(mergedFilePath);
+        const resp = await uploadVideo(fileName, mimetype, mergedFileBuffer);
+        res.status(200).json({ message: "File uploaded successfully", url: resp });
+      } else {
+        res.status(200).json({ message: "Chunk uploaded successfully" });
+      }
+    } catch (error) {
+      console.error("Error saving chunk:", error);
+      res.status(500).json({ error: "Error saving chunk" });
+    }
   } else {
-    res.send("No file uploaded");
+    res.status(400).json({ error: "No file uploaded" });
   }
-  // res.send("done")
 });
 
-router.get('/stream', async (req, res) => {
-  const { filename } = req.query;
-  const url = await generatePresignedUrlForStreaming('SampleVideo_1280x720_20mb.mp4');
-  res.send(url);
-})
 
 module.exports = router;

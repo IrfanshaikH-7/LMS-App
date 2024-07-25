@@ -81,8 +81,44 @@ const Home = () => {
     //         fetchCatalogPageData();
     //     }
     // }, [categoryID])
-
-
+    const [selectedFile, setSelectedFile] = useState()
+    console.log(selectedFile)
+    const handleTest = async () => {
+        if (end <= selectedFile.size) {
+          const chunk = selectedFile.slice(start, end);
+          const formData = new FormData();
+          formData.append("video", chunk);
+          formData.append("chunkNumber", chunkNumber);
+          formData.append("totalChunks", totalChunks);
+          formData.append("originalname", selectedFile.name);
+  
+          fetch("https://bookish-fiesta-5pw7j94v67g3pvpw-4000.app.github.dev/", {
+            method: "POST",
+            body: formData,
+          })
+            // .then((response) => response.json())
+            // .then((data) => {
+            //   console.log({ data });
+            //   const temp = `Chunk ${
+            //     chunkNumber + 1
+            //   }/${totalChunks} uploaded successfully`;
+            //   setStatus(temp);
+            //   setProgress(Number((chunkNumber + 1) * chunkProgress));
+            //   console.log(temp);
+            //   chunkNumber++;
+            //   start = end;
+            //   end = start + chunkSize;
+            //   uploadNextChunk();
+            // })
+            .catch((error) => {
+              console.error("Error uploading chunk:", error);
+            });
+        } else {
+          setProgress(100);
+          setSelectedFile(null);
+          setStatus("File upload completed");
+        }
+      };
     // console.log('================ CatalogPageData?.selectedCourses ================ ', CatalogPageData)
 
 
@@ -141,6 +177,10 @@ const Home = () => {
                         <CTAButton active={true} linkto={"/signup"}>
                             Learn More
                         </CTAButton>
+                        <button className='bg-yellow-200 rounded-md' onClick={handleTest}>   HAndle test
+                            
+                        </button>
+                        <input type='file' onChange={(e)=> setSelectedFile(e.target.files[0])}/>
 
                         <CTAButton active={false} linkto={"/login"}>
                             Book a Demo
