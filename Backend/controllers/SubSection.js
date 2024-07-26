@@ -8,12 +8,6 @@ exports.createSubSection = async (req, res) => {
         //fetching.. data
         // const {sectionId, title, timeDuration, description} = req.body;
         const {sectionId, title, description} = req.body;
-
-
-
-      
-
-
         //extracting... file
         // const video = req.files.videoFile;
         console.log(req.file)
