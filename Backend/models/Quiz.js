@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
 
-
-
-
-
 const Quiz = new mongoose.Schema({
   name: {
     type: String,
@@ -16,6 +12,12 @@ const Quiz = new mongoose.Schema({
   },
   image: {
     type: String,
+  },
+  isPaid: {
+    type: Boolean,
+  },
+  price: {
+    type:Number,
   },
   questions: [
     {

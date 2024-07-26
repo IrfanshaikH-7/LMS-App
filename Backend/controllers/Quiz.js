@@ -1,5 +1,6 @@
 const Quiz = require("../models/Quiz");
 const Questions = require("../models/Questions");
+const User = require("../models/User");
 
 
 exports.createQuiz = async (req, res) => { 
@@ -156,6 +157,84 @@ exports.editQuizbyId = async (req, res) => {
         }) 
     }
 } 
+
+
+//totest
+exports.buyQuizbyId = async (req, res) => {
+  try{
+      const { userId ,quizId} = req.body;
+      if(!userId && !id){
+        return res.status(403).json({
+          success:false,
+          message:"all fields are required",
+      });
+      }
+      
+      const user = await User.findByIdAndUpdate(
+        { _id: userId },
+        { $addToSet: { quizes: quizId } },
+        { new: true }
+      );
+
+      
+      if(user){
+          return res.status(201).json({
+              success:true,
+              message:"Quiz added in user ",
+              data: user,
+          });
+      }else{
+
+          return res.status(401).json({
+              success:false,
+              message:"Not found Quiz !!",
+          });
+      }
+
+  } catch(error){
+      console.log(error);
+      return res.status(500).json({
+          success:false,
+          message:"user cannot LOGGED in, try again ",
+      }) 
+  }
+} 
+
+//to test
+exports.getAllBoughtQuiz = async (req, res) => {
+
+  try{
+      const { userId } = req.body;
+      if(!userId){
+        return res.status(403).json({
+          success:false,
+          message:"all fields are required",
+      });
+      }
+      
+      const user = await User.findById({_id:userId}).populate("quizes");
+      if(!user){
+        return res.status(403).json({
+          success:false,
+          message:"user not found",
+      });
+      }
+      return res.status(200).json({
+          success:true,
+          message:"All quizz are here!!",
+          
+          data: user.quizes,
+
+      })
+
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"user cannot LOGGED in, try again ",
+        }) 
+    }
+}
 
 exports.ping = async (req, res) => {
     return res.status(200).json({

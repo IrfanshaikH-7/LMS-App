@@ -20,13 +20,17 @@ const s3 = new AWS.S3();
 const cloudFrontUrl = process.env.CLOUDFRONT_URL;
 
 const uploadFile = async (file) => {
+
+
+
   const fileKey = `${uuidv4()}-${file.originalname}`;
   const params = {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: fileKey,
-    Body: file.buffer,
+    Body: file.buffer ,
     ContentType: file.mimetype,
   };
+  console.log(fileKey);
 
   await s3.upload(params).promise();
   return `${cloudFrontUrl}/${fileKey}`;
@@ -77,3 +81,110 @@ exports.uploadStudyMaterials = async (req, res) => {
     });
   }
 };
+
+exports.getAllStudyMaterials = async (req, res) => {
+  try {
+    const studyMaterials = await StudyMaterial.find();
+
+    return res.json({
+      success: true,
+      data: studyMaterials,
+    });
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+exports.getStudyMaterialById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const studyMaterial = await StudyMaterial.findById(id);
+
+    if (!studyMaterial) {
+      return res.status(404).json({
+        success: false,
+        message: "Study material not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: studyMaterial,
+    });
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+//to test
+exports.buyStudyMaterial = async (req, res) => {
+  const { userId, materialId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Check if the course exists
+    const course = await StudyMaterial.findById(materialId);
+
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
+    // Add the course ID to the studyMaterials array
+    user.studyMaterials.push(materialId);
+    await user.save();
+
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+//to test
+exports.getAllBoughtStudyMaterials = async (req, res) => {
+
+
+  try {
+    const { userId } = req.body;
+
+    const user = await User.findById({ _id: userId }).populate("studyMaterials");
+    
+    if (!user) {
+      return res.status(403).json({
+        success: false,
+        message: "user not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "All studyMaterials are here!!",
+      data: user.studyMaterials,
+    });
+    
+  } catch (error) {
+
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "user cannot LOGGED in, try again"
+    
+  })
+ 
+
+
+}}

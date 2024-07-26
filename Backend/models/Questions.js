@@ -2,25 +2,31 @@ const mongoose = require("mongoose");
 
 const Questions = new mongoose.Schema({
   question: {
-    type: String,
+    en: { type: String },
+    hin: { type: String },
     // required: true,
   },
   options: {
     optionA: {
-      type: String,
+      en: { type: String },
+      hin: { type: String },
     },
     optionB: {
-      type: String,
+      en: { type: String },
+      hin: { type: String },
     },
     optionC: {
-      type: String,
+      en: { type: String },
+      hin: { type: String },
     },
     optionD: {
-      type: String,
+      en: { type: String },
+      hin: { type: String },
     },
   },
   correctAnswer: {
-    type: String,
+    en: { type: String },
+    hin: { type: String },
   },
 });
 

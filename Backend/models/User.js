@@ -30,6 +30,18 @@ const userSchema = new mongoose.Schema({
             ref:"Course",
         }
     ],
+    quizes:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Course",
+        }
+    ],
+    studyMaterials:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Course",
+        }
+    ],
     image:{
         type:String,
     },
