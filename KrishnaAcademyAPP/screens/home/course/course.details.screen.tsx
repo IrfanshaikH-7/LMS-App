@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView,  TouchableOpacity } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -19,6 +19,7 @@ import ReviewCard from "@/components/cards/review.card";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useUser from "@/hooks/auth/useUser";
 import Loader from "@/components/loader/loader";
+import { Image, ImageBackground } from "expo-image";
 
 export default function CourseDetailScreen() {
   const [activeButton, setActiveButton] = useState("About");
@@ -119,9 +120,11 @@ export default function CourseDetailScreen() {
                 </View>
               </View>
               <Image
-                source={{ uri: courseData?.thumbnail.url! }}
-                style={{ width: "100%", height: 230, borderRadius: 6 }}
+              source={{ uri:  'https://picsum.photos/seed/picsum/200/300' || courseData?.thumbnail?.url! }}
+
+                style={{ width: '100%', height: '100%', borderRadius: 6 }}
               />
+              
             </View>
             <Text
               style={{
@@ -173,7 +176,7 @@ export default function CourseDetailScreen() {
               <Text style={{ fontSize: 20, fontWeight: "600" }}>
                 Course Prerequisites
               </Text>
-              {courseData?.prerequisites.map(
+              {courseData?.prerequisites?.map(
                 (item: PrerequisiteType, index: number) => (
                   <View
                     key={index}
@@ -195,7 +198,7 @@ export default function CourseDetailScreen() {
               <Text style={{ fontSize: 20, fontWeight: "600" }}>
                 Course Benefits
               </Text>
-              {courseData?.benefits.map((item: BenefitType, index: number) => (
+              {courseData?.benefits?.map((item: BenefitType, index: number) => (
                 <View
                   key={index}
                   style={{
@@ -301,9 +304,9 @@ export default function CourseDetailScreen() {
                 >
                   {isExpanded
                     ? courseData?.description
-                    : courseData?.description.slice(0, 302)}
+                    : courseData?.description?.slice(0, 102)}
                 </Text>
-                {courseData?.description.length > 302 && (
+                {courseData?.description?.length > 302 && (
                   <TouchableOpacity
                     style={{ marginTop: 3 }}
                     onPress={() => setIsExpanded(!isExpanded)}

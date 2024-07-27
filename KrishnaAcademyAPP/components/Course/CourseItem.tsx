@@ -2,23 +2,24 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-import { Image } from 'react-native'
+
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
+import { Image } from 'expo-image';
 
 export default function CourseItem({ item }) {
     return (
         <View style={{
-            padding: 10,
+            padding: 5,
             backgroundColor: Colors.WHITE,
             marginRight: 15,
             borderRadius: 15,
         }}>
-            <Image source={{ uri: item?.banner?.url }}
-                style={{ width: 210, height: 120, borderRadius: 15 }}
+            <Image source={{ uri:  item?.banner?.url ? item?.banner?.url : "https://picsum.photos/seed/picsum/200/300" }}
+                style={{ width: 200, height: 150, borderRadius: 15 }}
             />
 
-            <View style={{ padding: 7 }}>
+            <View style={{ padding: 5 }}>
                 <Text style={{
                     fontFamily: 'outfit-medium',
                     fontSize: 17,

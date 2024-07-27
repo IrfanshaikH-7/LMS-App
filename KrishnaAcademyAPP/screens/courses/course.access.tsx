@@ -61,7 +61,7 @@ export default function CourseAccessScreen() {
         },
       })
       .then((res: any) => {
-        setfalse(false);
+        setfalss(false);
         setcourseContentData(res.data.content);
       })
       .catch((error) => {
