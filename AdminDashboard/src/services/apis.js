@@ -1,5 +1,5 @@
 // const BASE_URL = "https://bookish-fiesta-5pw7j94v67g3pvpw-4000.app.github.dev"
-const BASE_URL = "http://127.0.0.1:4000"
+export const BASE_URL = "http://127.0.0.1:4000"
 
 
 export const endpoints = {

@@ -1,9 +1,14 @@
+import axios from "axios";
 import React, { useState } from "react";
+
+import { toast } from "react-hot-toast";
+import { BASE_URL } from "../services/apis";
 
 type Props = {};
 
 const AddQuiz = (props: Props) => {
-  const [loading, isLoading] = useState(false);
+  const [loading, setisLoading] = useState(false);
+
   const [quiz, setQuiz] = useState({
     name: "",
     shortDescription: "",
@@ -24,6 +29,45 @@ const AddQuiz = (props: Props) => {
       },
     ],
   });
+  const handleChangeQues = (e, field, index, lang) => {
+    const newQuestions = [...quiz.questions];
+    if (field === "question") {
+      newQuestions[index].question[lang] = e.target.value;
+    } else if (field === "price") {
+      setQuiz({ ...quiz, price: e.target.value });
+    }
+    setQuiz({ ...quiz, questions: newQuestions });
+  };
+  const addQuestion = () => {
+    const newQuestion = {
+      question: { en: "", hin: "" },
+      options: {
+        optionA: { en: "", hin: "" },
+        optionB: { en: "", hin: "" },
+        optionC: { en: "", hin: "" },
+        optionD: { en: "", hin: "" },
+      },
+      correctAnswer: { en: "", hin: "" },
+    };
+    setQuiz({ ...quiz, questions: [...quiz.questions, newQuestion] });
+  };
+
+  const SubmitQuiz = async () => {
+    setisLoading(true);
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/quiz/createQuiz`,
+        quiz
+      );
+      console.log(response.data);
+
+      toast.success("Quiz Added ");
+    } catch (error) {
+      toast.error("Please  resbmit quiz and check the value");
+    }
+    setisLoading(false);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -59,7 +103,11 @@ const AddQuiz = (props: Props) => {
           onSubmit={handleSubmit}
           className="flex flex-col space-y-6 p-6 bg-gray-100 rounded-md shadow-md justify-center items-center  "
         >
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-row justify-center items-center bg-pure-greys-800 gap-5 rounded-md ">
+
+
+          <div className="">
+          <div className="flex  flex-row justify-center items-center gap-10 space-y-2">
             <label className="text-richblack-5">Enter the quiz name</label>
             <input
               type="text"
@@ -70,7 +118,7 @@ const AddQuiz = (props: Props) => {
             />
           </div>
 
-          <div className="flex flex-col space-y-2">
+          <div className="flex  flex-row justify-center items-center gap-10 space-y-2">
             <label className="text-richblack-5">Add short Description</label>
             <textarea
               placeholder="Short Description"
@@ -79,8 +127,9 @@ const AddQuiz = (props: Props) => {
               className="p-2 border border-yellow-25 rounded-md"
             />
           </div>
-
-          <div className="flex flex-col space-y-2">
+          </div>
+          <div>
+          <div className="flex  flex-row justify-center items-center gap-5  space-y-2">
             <label className="text-richblack-5">Select the Category</label>
             <input
               type="text"
@@ -91,7 +140,7 @@ const AddQuiz = (props: Props) => {
             />
           </div>
 
-          <div className="flex flex-col space-y-2">
+          <div className="flex  flex-row justify-center items-center gap-10 space-y-2">
             <label className="text-richblack-5">Image URL</label>
             <input
               type="text"
@@ -102,7 +151,7 @@ const AddQuiz = (props: Props) => {
             />
           </div>
 
-          <div className="flex flex-col space-y-2">
+          <div className="flex  flex-row justify-center items-center gap-10 space-x-5 mt-5">
             <label className="text-richblack-5 flex items-center">
               Paid:
               <input
@@ -113,6 +162,11 @@ const AddQuiz = (props: Props) => {
               />
             </label>
           </div>
+          </div>
+          </div>
+      
+
+        
 
           {quiz.isPaid && (
             <div className="flex flex-col space-y-2">
@@ -138,7 +192,7 @@ const AddQuiz = (props: Props) => {
                   type="text"
                   placeholder="Question (English)"
                   value={question.question.en}
-                  onChange={(e) => handleChange(e, "question", index, "en")}
+                  onChange={(e) => handleChangeQues(e, "question", index, "en")}
                   className="p-2 border border-yellow-25 rounded-md"
                 />
               </div>
@@ -149,7 +203,9 @@ const AddQuiz = (props: Props) => {
                   type="text"
                   placeholder="Question (Hindi)"
                   value={question.question.hin}
-                  onChange={(e) => handleChange(e, "question", index, "hin")}
+                  onChange={(e) =>
+                    handleChangeQues(e, "question", index, "hin")
+                  }
                   className="p-2 border border-yellow-25 rounded-md"
                 />
               </div>
@@ -198,7 +254,7 @@ const AddQuiz = (props: Props) => {
                   placeholder="Correct Answer (English)"
                   value={question.correctAnswer.en}
                   onChange={(e) =>
-                    handleChange(e, "correctAnswer", index, "en")
+                    handleChangeQues(e, "correctAnswer", index, "en")
                   }
                   className="p-2 border border-yellow-25 rounded-md"
                 />
@@ -213,17 +269,24 @@ const AddQuiz = (props: Props) => {
                   placeholder="Correct Answer (Hindi)"
                   value={question.correctAnswer.hin}
                   onChange={(e) =>
-                    handleChange(e, "correctAnswer", index, "hin")
+                    handleChangeQues(e, "correctAnswer", index, "hin")
                   }
                   className="p-2 border border-yellow-25 rounded-md"
                 />
               </div>
             </div>
           ))}
+          <button
+            onClick={addQuestion}
+            className="mt-4 p-2 bg-caribbeangreen-400 text-richblack-5 rounded-md"
+          >
+            Add Question
+          </button>
 
           <button
             type="submit"
             className="p-2 bg-blue-500 text-white rounded-md"
+            onClick={() => SubmitQuiz()}
           >
             Submit
           </button>
