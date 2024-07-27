@@ -95,7 +95,10 @@ export default function CourseList({ level }) {
       };
     
     return (
-        <View>
+        <View style={{
+            paddingBottom: 30,
+            paddingTop: 30,
+        }}>
             {/* <SubHeading text={level+' Courses'}
              color={level == 'Basic' && Colors.WHITE }/> */}
             <FlatList

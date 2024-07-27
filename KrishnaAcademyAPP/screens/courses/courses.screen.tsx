@@ -21,46 +21,46 @@ import React from "react";
 import CourseList from "@/components/Course/CourseList";
 const sampleItem = [
   {
-      "id": 1,
-      "name": "React Native Course",
-      "banner": {
-          "url": "https://example.com/banner1.jpg"
-      },
-      "chapters": [
-          { "title": "Introduction" },
-          { "title": "Getting Started" },
-          { "title": "Components" }
-      ],
-      "time": 10,
-      "price": 0
+    "id": 1,
+    "name": "React Native Course",
+    "banner": {
+      "url": "https://example.com/banner1.jpg"
+    },
+    "chapters": [
+      { "title": "Introduction" },
+      { "title": "Getting Started" },
+      { "title": "Components" }
+    ],
+    "time": 10,
+    "price": 0
   },
   {
-      "id": 2,
-      "name": "Advanced React Native",
-      "banner": {
-          "url": "https://example.com/banner2.jpg"
-      },
-      "chapters": [
-          { "title": "Advanced Components" },
-          { "title": "State Management" },
-          { "title": "Performance Optimization" }
-      ],
-      "time": 15,
-      "price": 50
+    "id": 2,
+    "name": "Advanced React Native",
+    "banner": {
+      "url": "https://example.com/banner2.jpg"
+    },
+    "chapters": [
+      { "title": "Advanced Components" },
+      { "title": "State Management" },
+      { "title": "Performance Optimization" }
+    ],
+    "time": 15,
+    "price": 50
   },
   {
-      "id": 3,
-      "name": "React Native with Redux",
-      "banner": {
-          "url": "https://example.com/banner3.jpg"
-      },
-      "chapters": [
-          { "title": "Introduction to Redux" },
-          { "title": "Redux with React Native" },
-          { "title": "Advanced Redux" }
-      ],
-      "time": 12,
-      "price": 30
+    "id": 3,
+    "name": "React Native with Redux",
+    "banner": {
+      "url": "https://example.com/banner3.jpg"
+    },
+    "chapters": [
+      { "title": "Introduction to Redux" },
+      { "title": "Redux with React Native" },
+      { "title": "Advanced Redux" }
+    ],
+    "time": 12,
+    "price": 30
   }
 ]
 export default function CoursesScreen() {
@@ -124,7 +124,7 @@ export default function CoursesScreen() {
     }
   };
 
- 
+
   return (
     <View>
 
@@ -132,17 +132,17 @@ export default function CoursesScreen() {
 
       {loading ? (
         <Loader />
-      )  : (
+      ) : (
         <LinearGradient
-          colors={["#E5ECF9", "#F6F7a9" ]}
-          style={{  paddingTop: 65, height: "100%" }}
+          colors={["#E5ECF9", "#F6F7a9"]}
+          style={{ paddingTop: 40, height: "100%" }}
         >
 
-     
 
 
-          <View style={{ padding: 10 }}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
+          <View style={{ padding: 0 }}>
+            {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
                 style={{
                   padding: 10,
@@ -179,13 +179,20 @@ export default function CoursesScreen() {
                   </Text>
                 </TouchableOpacity>
               ))}
-            </ScrollView>
+            </ScrollView> */}
           </View>
-          <View>
-            <ScrollView style={{ marginHorizontal: 15, gap: 12 }}>
-              {courses?.map((item: CoursesType, index: number) => (
+
+            <ScrollView style={{ marginHorizontal: 10, gap: 5, marginBottom:150, marginTop:10 }}>
+              {/* {courses?.map((item: CoursesType, index: number) => (
                 <CourseCard item={item} key={index} />
-              ))}
+              ))} */}
+              <CourseList level={"item"} />
+              <CourseList level={"item"} />
+
+
+              <CourseList level={"item"} />
+              <CourseList level={"item"} />
+
             </ScrollView>
             {/* {courses?.length === 0 && (
               <Text
@@ -195,8 +202,8 @@ export default function CoursesScreen() {
               </Text>
               
             )} */}
-                 <CourseList level={"item"} />
-          </View>
+
+
         </LinearGradient>
       )}
     </View>
