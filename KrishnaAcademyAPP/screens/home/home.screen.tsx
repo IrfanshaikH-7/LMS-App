@@ -19,30 +19,18 @@ export default function HomeScreen() {
       style={{ flex: 1, paddingTop: 50 }}
     >
       <Header />
-      {/* <SearchInput homeScreen={true} /> */}
-      {/* <ScrollView showsVerticalScrollIndicator={false}>
+      <SearchInput homeScreen={true} />
+      <ScrollView showsVerticalScrollIndicator={false}>
         <HomeBannerSlider />
 
 
-       
+
 
 
         <AllCourses />
-      </ScrollView> */}
-      <View
-      style={{
-        width: 400,
-        height: 400,
-        backgroundColor: "red",
-        borderRadius: 20,
-        overflow: "hidden",
-        margin: 10,
-      }}
-      >
-        <Text>dde</Text>
+      </ScrollView>
 
-      </View>
-    <Video
+      {/* <Video
       source={{
         uri: 'https://d33zqdivlk1hm.cloudfront.net/SampleVideo_1280x720_20mb.mp4',
       }}
@@ -51,7 +39,7 @@ export default function HomeScreen() {
       resizeMode='contain'
       isLooping
       style={{ width: '100%', height: 300 }}
-    />
+    /> */}
     </LinearGradient>
   );
 }

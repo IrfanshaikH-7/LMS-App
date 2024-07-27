@@ -18,40 +18,86 @@ import { LinearGradient } from "expo-linear-gradient";
 import CourseCard from "@/components/cards/course.card";
 import Header from "@/components/header/header";
 import React from "react";
-
+import CourseList from "@/components/Course/CourseList";
+const sampleItem = [
+  {
+      "id": 1,
+      "name": "React Native Course",
+      "banner": {
+          "url": "https://example.com/banner1.jpg"
+      },
+      "chapters": [
+          { "title": "Introduction" },
+          { "title": "Getting Started" },
+          { "title": "Components" }
+      ],
+      "time": 10,
+      "price": 0
+  },
+  {
+      "id": 2,
+      "name": "Advanced React Native",
+      "banner": {
+          "url": "https://example.com/banner2.jpg"
+      },
+      "chapters": [
+          { "title": "Advanced Components" },
+          { "title": "State Management" },
+          { "title": "Performance Optimization" }
+      ],
+      "time": 15,
+      "price": 50
+  },
+  {
+      "id": 3,
+      "name": "React Native with Redux",
+      "banner": {
+          "url": "https://example.com/banner3.jpg"
+      },
+      "chapters": [
+          { "title": "Introduction to Redux" },
+          { "title": "Redux with React Native" },
+          { "title": "Advanced Redux" }
+      ],
+      "time": 12,
+      "price": 30
+  }
+]
 export default function CoursesScreen() {
   const [courses, setCourses] = useState<CoursesType[]>([]);
   const [originalCourses, setOriginalCourses] = useState<CoursesType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [categories, setcategories] = useState([]);
   const [activeCategory, setactiveCategory] = useState("All");
   const [forceHideLoader, setForceHideLoader] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get(`${SERVER_URI}/get-layout/Categories`)
-      .then((res) => {
-        setcategories(res.data.layout.categories);
-        fetchCourses();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
-  const fetchCourses = () => {
-    axios
-      .get(`${SERVER_URI}/get-courses`)
-      .then((res: any) => {
-        setCourses(res.data.courses);
-        setOriginalCourses(res.data.courses);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error);
-      });
-  };
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${SERVER_URI}/get-layout/Categories`)
+  //     .then((res) => {
+  //       setcategories(res.data.layout.categories);
+  //       fetchCourses();
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
+  // const fetchCourses = () => {
+  //   axios
+  //     .get(`${SERVER_URI}/get-courses`)
+  //     .then((res: any) => {
+  //       setCourses(res.data.courses);
+  //       setOriginalCourses(res.data.courses);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setLoading(false);
+  //       console.log(error);
+  //     });
+  // };
 
   let [fontsLoaded, fontError] = useFonts({
     Raleway_700Bold,
@@ -88,9 +134,13 @@ export default function CoursesScreen() {
         <Loader />
       )  : (
         <LinearGradient
-          colors={["#E5ECF9", "#F6F7F9"]}
-          style={{ flex: 1, paddingTop: 65 }}
+          colors={["#E5ECF9", "#F6F7a9" ]}
+          style={{  paddingTop: 65, height: "100%" }}
         >
+
+     
+
+
           <View style={{ padding: 10 }}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
@@ -143,7 +193,9 @@ export default function CoursesScreen() {
               >
                 No data available!
               </Text>
+              
             )} */}
+                 <CourseList level={"item"} />
           </View>
         </LinearGradient>
       )}
