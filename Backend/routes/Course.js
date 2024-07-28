@@ -83,7 +83,7 @@ router.post("/updateSubSection", updateSubSection);
 // Delete Sub Section
 router.post("/deleteSubSection", deleteSubSection);
 // Add a Sub Section to a Section  4
-// router.post("/addSubSection", upload.single("video"), createSubSection);
+router.post("/addSubSection", upload.single("file"), createSubSection);
 // Get all Registered Courses
 router.get("/getAllCourses", getAllCourses);
 // Get Details for a Specific Courses
