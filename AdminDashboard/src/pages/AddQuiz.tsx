@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { toast } from "react-hot-toast";
-import { BASE_URL } from "../services/apis";
+
 
 type Props = {};
 
@@ -30,13 +30,23 @@ const AddQuiz = (props: Props) => {
     ],
   });
   const handleChangeQues = (e, field, index, lang) => {
+    const { value } = e.target;
     const newQuestions = [...quiz.questions];
-    if (field === "question") {
-      newQuestions[index].question[lang] = e.target.value;
-    } else if (field === "price") {
-      setQuiz({ ...quiz, price: e.target.value });
+    switch (field) {
+      case "question":
+        newQuestions[index].question[lang] = value;
+        setQuiz({ ...quiz, questions: newQuestions });
+        break;
+      case "price":
+        setQuiz({ ...quiz, price: value });
+        break;
+
+      case "correctAnswer":
+        newQuestions[index].correctAnswer[lang] = value;
+        setQuiz({ ...quiz, questions: newQuestions });
+      default:
+        break;
     }
-    setQuiz({ ...quiz, questions: newQuestions });
   };
   const addQuestion = () => {
     const newQuestion = {
@@ -90,6 +100,11 @@ const AddQuiz = (props: Props) => {
     // Handle form submission, e.g., send data to the server
     console.log(quiz);
   };
+  useEffect(() => {
+    console.log("🚀 ~ useEffect ~ quiz:", quiz)
+
+  }, [quiz]);
+
 
   return (
     <div className="flex flex-col overflow-auto justify-center">

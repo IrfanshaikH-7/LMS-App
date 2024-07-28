@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { BASE_URL } from '../services/apis';
 
-type Props = {}
+type Props = {};
 
 const StudyMaterials = (props: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [course, setCourse] = useState('');
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState(null);
 
   const uploadstudymaterial = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,25 +18,27 @@ const StudyMaterials = (props: Props) => {
       formData.append('title', title);
       formData.append('description', description);
       formData.append('course', course);
+      
       if (file) {
         formData.append('file', file);
       }
 
-      const response = await axios.post(`${BASE_URL}/api/v1/study/uploadStudyMaterials`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // const response = await axios.post(`${BASE_URL}/api/v1/study/uploadStudyMaterials`, formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+      console.log('formData', formData);
       console.log('Upload successful', response.data);
     } catch (error) {
       console.error('Error uploading study material', error);
     }
   };
-useEffect(() => {
-  //get the course if  wantend to be icluded  in course
 
-  //get the courses
-},[])
+  useEffect(() => {
+    // Fetch courses if needed
+  }, []);
+
   return (
     <div className='flex flex-col justify-center items-center'>
       <h1 className='flex flex-row justify-center text-richblack-50 text-xl mb-20'>
@@ -76,11 +79,12 @@ useEffect(() => {
           <div className='flex flex-col space-y-2'>
             <label className='text-richblack-5'>File</label>
             <input
-              type='file'
-              onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
-              className='p-2 border border-yellow-25 rounded-md'
-              required
-            />
+  title='Upload File'
+  type='file'
+  onChange={(e) => setFile(e.target.files ? e.target.files[0] : console.log('No file selected'))}
+  className='p-2 border border-yellow-25 rounded-md'
+  required
+/>
           </div>
           <button
             type='submit'
@@ -90,9 +94,8 @@ useEffect(() => {
           </button>
         </form>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default StudyMaterials
+export default StudyMaterials;
