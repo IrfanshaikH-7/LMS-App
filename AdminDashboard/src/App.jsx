@@ -35,6 +35,9 @@ import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import { ACCOUNT_TYPE } from "./utils/constants";
 
 import { HiArrowNarrowUp } from "react-icons/hi";
+import AddQuiz from "./pages/AddQuiz";
+import StudyMaterials from "./pages/StudyMaterials";
+import MyQuiz from "./pages/MyQuiz";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -156,6 +159,10 @@ function App() {
               />
               <Route path="courses/:courseId" element={<CourseDetails />} />
               <Route path="dashboard/my-profile" element={<MyProfile />} />
+              <Route path="dashboard/add-quiz" element={<AddQuiz />} />
+              <Route path="dashboard/my-quiz" element={<MyQuiz />} />
+              <Route path="dashboard/studymaterials" element={<StudyMaterials />} />
+              
               <Route path="dashboard/Settings" element={<Settings />} />
             </>
           )}

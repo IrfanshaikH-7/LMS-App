@@ -5,10 +5,14 @@ const User = require("../models/User");
 
 exports.createQuiz = async (req, res) => { 
 
+  const image = req.file.path;
+
     const {
         name,
         shortDescription,
         category,
+        isPaid,
+        price,
         quizData,
      } = req.body;
      console.log('first :', name, category, quizData, shortDescription)
@@ -22,14 +26,32 @@ exports.createQuiz = async (req, res) => {
 
       try {
         const questionData = quizData.map(question => ({
-          question: question.question,
-          options: {
-            optionA: question.optionA,
-            optionB: question.optionB,
-            optionC: question.optionC,
-            optionD: question.optionD,
+          question: {
+            en: question.question.en,
+            hin: question.question.hin,
           },
-          correctAnswer: question.correctAnswer,
+          options: {
+            optionA: {
+              en: question.options.optionA.en,
+              hin: question.options.optionA.hin,
+            },
+            optionB: {
+              en: question.options.optionB.en,
+              hin: question.options.optionB.hin,
+            },
+            optionC: {
+              en: question.options.optionC.en,
+              hin: question.options.optionC.hin,
+            },
+            optionD: {
+              en: question.options.optionD.en,
+              hin: question.options.optionD.hin,
+            },
+          },
+          correctAnswer: {
+            en: question.correctAnswer.en,
+            hin: question.correctAnswer.hin,
+          },
         }));
         console.log('second :', questionData);
     
