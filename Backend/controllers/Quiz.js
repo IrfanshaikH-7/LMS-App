@@ -5,7 +5,8 @@ const User = require("../models/User");
 
 exports.createQuiz = async (req, res) => { 
 
-  const image = req.file.path;
+  const image = req.file;
+  console.log(image)
 
     const {
         name,
@@ -75,6 +76,9 @@ exports.createQuiz = async (req, res) => {
       name: name,
       shortDescription: shortDescription,
       category,
+      isPaid,
+      price,
+      image,
       questions: questionIds,
     });
   

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import {BASE_URL} from "../services/apis"
 import { toast } from "react-hot-toast";
 
 
