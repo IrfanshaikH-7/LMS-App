@@ -13,7 +13,7 @@ const AddQuiz = (props: Props) => {
     name: "",
     shortDescription: "",
     category: "",
-    image: "",
+    image: null,
     isPaid: false,
     price: 0,
     questions: [
@@ -63,12 +63,28 @@ const AddQuiz = (props: Props) => {
   };
 
   const SubmitQuiz = async () => {
+    
     setisLoading(true);
+    const formData = new FormData();
+    formData.append("name", quiz.name);
+    formData.append("shortDescription", quiz.shortDescription);
+    formData.append("category", quiz.category);
+    formData.append("image", quiz.image);
+    formData.append("isPaid", quiz.isPaid);
+    formData.append("price", quiz.price);
+
+    formData.append("quizData", JSON.stringify(quiz.questions));
+
 
     try {
       const response = await axios.post(
         `${BASE_URL}/api/v1/quiz/createQuiz`,
-        quiz
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log(response.data);
 
@@ -86,12 +102,21 @@ const AddQuiz = (props: Props) => {
     subField?: string,
     lang?: string
   ) => {
-    if (index !== undefined && subField && lang) {
-      const updatedQuestions = [...quiz.questions];
-      updatedQuestions[index][field][subField][lang] = e.target.value;
-      setQuiz({ ...quiz, questions: updatedQuestions });
+    console.log(e.target.files)
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setQuiz({ ...quiz, [field]: file });
+      // Update state with file information
+     
     } else {
-      setQuiz({ ...quiz, [field]: e.target.value });
+      // Handle non-file inputs as before
+      if (index !== undefined && subField && lang) {
+        const updatedQuestions = [...quiz.questions];
+        updatedQuestions[index][field][subField][lang] = e.target.value;
+        setQuiz({ ...quiz, questions: updatedQuestions });
+      } else {
+        setQuiz({ ...quiz, [field]: e.target.value });
+      }
     }
   };
 
@@ -113,60 +138,62 @@ const AddQuiz = (props: Props) => {
           Add Quiz in both English and Hindi
         </h1>
       </div>
-      <div className="flex-1">
+      <div className="flex flex-1 items-center justify-between rounded-2xl border-[1px] border-richblack-700 bg-richblack-800 p-8 px-3 sm:px-12">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col space-y-6 p-6 bg-gray-100 rounded-md shadow-md justify-center items-center  "
+          className="flex flex-col space-y-6 py-6 w-full bg-richblack-800 rounded-md shadow-md justify-center items-center  "
         >
-          <div className="flex flex-row justify-center items-center bg-pure-greys-800 gap-5 rounded-md ">
+          <div className="flex flex-row w-full  justify-start items-start bg-richblack-800  gap-10 rounded-md ">
 
 
-          <div className="">
-          <div className="flex  flex-row justify-center items-center gap-10 space-y-2">
+          <div className="w-full">
+
+          <div className="flex   flex-col  items-start  mt-5 space-y-2">
             <label className="text-richblack-5">Enter the quiz name</label>
             <input
               type="text"
               placeholder="Quiz Name"
               value={quiz.name}
               onChange={(e) => handleChange(e, "name")}
-              className="p-2 border border-yellow-25 rounded-md"
+              className="p-2 w-full border border-yellow-25 rounded-md"
             />
           </div>
 
-          <div className="flex  flex-row justify-center items-center gap-10 space-y-2">
+          <div className="flex  flex-col items-start  mt-5 space-y-2">
             <label className="text-richblack-5">Add short Description</label>
             <textarea
               placeholder="Short Description"
               value={quiz.shortDescription}
               onChange={(e) => handleChange(e, "shortDescription")}
-              className="p-2 border border-yellow-25 rounded-md"
+              className="p-2 border  w-full border-yellow-25 rounded-md"
             />
           </div>
           </div>
           <div>
-          <div className="flex  flex-row justify-center items-center gap-5  space-y-2">
+          <div className="flex  flex-col items-start mt-5 space-y-2">
             <label className="text-richblack-5">Select the Category</label>
             <input
               type="text"
               placeholder="Category"
               value={quiz.category}
               onChange={(e) => handleChange(e, "category")}
-              className="p-2 border border-yellow-25 rounded-md"
+              className="p-2 border  w-full border-yellow-25 rounded-md"
             />
           </div>
 
-          <div className="flex  flex-row justify-center items-center gap-10 space-y-2">
+          <div className="flex  flex-col items-start mt-5 space-y-2">
             <label className="text-richblack-5">Image URL</label>
             <input
-              type="text"
+              type="file"
+              name="image"
+              
               placeholder="Image URL"
-              value={quiz.image}
               onChange={(e) => handleChange(e, "image")}
-              className="p-2 border border-yellow-25 rounded-md"
+              className="p-2 border  w-full border-yellow-25 rounded-md"
             />
           </div>
 
-          <div className="flex  flex-row justify-center items-center gap-10 space-x-5 mt-5">
+          <div className="flex  flex-row  items-start gap-10 mt-5 space-x-5 ">
             <label className="text-richblack-5 flex items-center">
               Paid:
               <input
@@ -184,7 +211,7 @@ const AddQuiz = (props: Props) => {
         
 
           {quiz.isPaid && (
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 mt-5">
               <label className="text-richblack-5">Price</label>
               <input
                 type="number"

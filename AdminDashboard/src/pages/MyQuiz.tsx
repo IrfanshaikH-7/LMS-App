@@ -4,7 +4,7 @@ type Props = {}
 
 const MyQuiz = (props: Props) => {
   return (
-    <div>MyQuiz</div>
+    <div>My - QuiZ</div>
   )
 }
 
