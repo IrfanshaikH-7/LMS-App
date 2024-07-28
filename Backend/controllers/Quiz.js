@@ -5,7 +5,7 @@ const User = require("../models/User");
 
 exports.createQuiz = async (req, res) => { 
 
-  const image = req.file;
+  const image = req.file.path;
   console.log(image)
 
     const {
@@ -16,7 +16,7 @@ exports.createQuiz = async (req, res) => {
         price,
         quizData,
      } = req.body;
-     console.log('first :', name, category, quizData, shortDescription)
+     console.log('first :', name, category, shortDescription)
      if (!name || !shortDescription || !quizData || !category) {
         return res.status(400).json({
           success: false,
@@ -26,7 +26,7 @@ exports.createQuiz = async (req, res) => {
     
 
       try {
-        const questionData = quizData.map(question => ({
+        const questionData = JSON.parse(quizData).map(question => ({
           question: {
             en: question.question.en,
             hin: question.question.hin,
