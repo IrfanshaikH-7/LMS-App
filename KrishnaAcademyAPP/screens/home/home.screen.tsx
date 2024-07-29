@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import React from "react";
 import { Video } from "expo-av";
+import StudyMaterialsList from "@/components/studymaterials";
 
 export default function HomeScreen() {
   const [videoUri, setVideoUri] = useState(null);
@@ -28,6 +29,12 @@ export default function HomeScreen() {
 
 
         <AllCourses />
+
+        <View style={{ height: 300 }}>
+          <StudyMaterialsList />
+         
+
+          </View>
       </ScrollView>
 
       {/* <Video

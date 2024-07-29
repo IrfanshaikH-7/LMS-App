@@ -6,34 +6,24 @@ const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
 
-
-// Cloudinary configuration
-// cloudinary.config({
-//   cloud_name: process.env.CLOUD_NAME,
-//   api_key: '682682682682682',
-//   api_secret: Sx6t5hAG6ynwO6mr8GN-L55A7MI,
-// });
-
 cloudinary.config({
-  cloud_name: 'dgheyg3iv', 
-        api_key: '224393467977991',
-  api_secret: "Sf7dFDdjNQcO_EnRZ3cvlOK74mM",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key:process.env.API_KEY,
+  api_secret: process.env.API_SECRET
 });
+  console.log("🚀 ~ API_SECRET:",process.env.API_SECRET)
+  console.log("🚀 ~ API_KEY:", process.env.API_KEY)
+  console.log("🚀 ~ CLOUD_NAME:", process.env.CLOUD_NAME)
 
-// Cloudinary storage configuration
+// // Configure Multer storage using Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "profile-images",
+    folder: "quiz",
     resource_type: "auto",
   },
-});
-
-// Multer configuration
-const upload = multer({
-  storage: storage,
-
-});
+})
+const upload = multer({ storage: storage });
 
 // Define the routes with the upload middleware and controllers
 router.post("/createQuiz",upload.single('image'), createQuiz);
