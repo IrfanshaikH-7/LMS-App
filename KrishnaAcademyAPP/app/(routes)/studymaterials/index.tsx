@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import PaymentComponent from '@/components/Payment/PaymentComponent';
+import PDFViewerModal from '../../../components/pdfmodal';
+
 
 
 const StudyMaterials = () => {
     const route = useRoute();
     const { study } = route.params;
     const dataObj = JSON.parse(study);
+    console.log("🚀 ~ StudyMaterials ~ dataObj:", dataObj)
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [selectedPdfUri, setSelectedPdfUri] = useState('');
   
+    const openPdfModal = (pdfUri) => {
+      setSelectedPdfUri(pdfUri);
+      setModalVisible(true);
+    };
+  
+    const closePdfModal = () => {
+      setModalVisible(false);
+      setSelectedPdfUri('');
+    };
 
   return (
     <View style={styles.container}>
@@ -20,6 +35,9 @@ const StudyMaterials = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item}
+        //   onPress={() => openPdfModal(item.fileUrl)} // Open PDF modal on press
+        //   onPress={() => console.log(item)} // Open PDF modal on press
+        onPress={() => openPdfModal(item.fileUrl)}
         //   onPress={() =>router.push('StudyMaterialsScreen', { })}
           >
             <View style={styles.itemContent}>
@@ -31,13 +49,19 @@ const StudyMaterials = () => {
               style={{
                 color: "#575757",
                 fontFamily: "Nunito_400Regular",
-                
+
               }}
               >{item.description.slice(0,15)}</Text>
+              <PaymentComponent item={item} itemType="Study Material" />
             </View>
           </TouchableOpacity>
         )}
       />
+        {/* <PDFViewerModal
+        isVisible={isModalVisible}
+        onClose={closePdfModal}
+        pdfUri={selectedPdfUri}
+      /> */}
     </View>
   );
 };

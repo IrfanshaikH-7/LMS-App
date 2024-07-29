@@ -10,6 +10,7 @@ import {
     MaterialCommunityIcons,
   } from "@expo/vector-icons";
 import { router, useNavigation } from 'expo-router';
+import PDFViewerModal from './pdfmodal';
 
 interface StudyMaterial {
   _id: string;
@@ -25,6 +26,18 @@ const StudyMaterialsList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 const [refreshing, setRefreshing] = useState(false);
+const [isModalVisible, setModalVisible] = useState(false);
+const [selectedPdfUri, setSelectedPdfUri] = useState('');
+
+const openPdfModal = (pdfUri) => {
+  setSelectedPdfUri(pdfUri);
+  setModalVisible(true);
+};
+
+const closePdfModal = () => {
+  setModalVisible(false);
+  setSelectedPdfUri('');
+};
   useEffect(() => {
     const fetchStudyMaterials = async () => {
       try {
@@ -85,7 +98,9 @@ const [refreshing, setRefreshing] = useState(false);
         numColumns={3}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View style={styles.item}>
+          <TouchableOpacity style={styles.item}
+        //   onPress={() => openPdfModal(item.pdfUri)} // Open PDF modal on press
+          >
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -97,9 +112,14 @@ const [refreshing, setRefreshing] = useState(false);
             <Text style={styles.title}>{item.title}</Text>
             </View>
             <Text>{item.description.slice(0,5)}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
+        {/* <PDFViewerModal
+        isVisible={isModalVisible}
+        onClose={closePdfModal}
+        pdfUri={selectedPdfUri}
+      /> */}
     </View>
   );
 };
