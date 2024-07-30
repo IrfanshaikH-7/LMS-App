@@ -81,7 +81,7 @@ const StudyMaterials = (props: Props) => {
             <input
   title='Upload File'
   type='file'
-  onChange={(e) => setFile(e.target.files ? e.target.files[0] : console.log('No file selected'))}
+  onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
   className='p-2 border border-yellow-25 rounded-md'
   required
 />

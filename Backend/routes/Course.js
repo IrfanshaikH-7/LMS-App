@@ -10,14 +10,16 @@ cloudinary.config({
   api_key: 572782272174972,
   api_secret: "Sx6t5hAG6ynwO6mr8GN-L55A7MI",
 });
+
+// Configure Multer storage using Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "profile-images",
     resource_type: "auto",
   },
-});
-
+})
+const upload = multer({ storage: storage });
 const {
   createCourse,
   getAllCourses,
@@ -67,9 +69,6 @@ const { isStudent, isAdmin } = require("../middlewares/auth");
 //                                      Course routes
 // ********************************************************************************************************
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-});
 
 router.post("/createCourse", upload.single("file"), createCourse);
 //Add a Section to a Course 2

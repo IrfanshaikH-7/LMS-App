@@ -102,6 +102,14 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
+         <Stack.Screen
+          name="(routes)/studymaterials/index"
+          options={{
+            headerShown: false,
+            title: "Enrolled Courses",
+            headerBackTitle: "Back",
+          }}
+        />
           {/* <Stack.Screen name="course-detail" component={CourseDetailScreen}/> */}
         {/* <Stack.Screen
           name="(routes)/quiz/quiz.details"

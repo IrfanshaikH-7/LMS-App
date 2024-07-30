@@ -5,7 +5,8 @@ const User = require("../models/User");
 
 exports.createQuiz = async (req, res) => { 
 
-  const image = req.file.path;
+
+
 
     const {
         name,
@@ -15,7 +16,10 @@ exports.createQuiz = async (req, res) => {
         price,
         quizData,
      } = req.body;
-     console.log('first :', name, category, quizData, shortDescription)
+     const Quizimage = req.file.path;
+
+     console.log('first :', Quizimage)
+     console.log('first :', name, category, shortDescription)
      if (!name || !shortDescription || !quizData || !category) {
         return res.status(400).json({
           success: false,
@@ -75,6 +79,9 @@ exports.createQuiz = async (req, res) => {
       name: name,
       shortDescription: shortDescription,
       category,
+      isPaid,
+      price,
+      image:Quizimage,
       questions: questionIds,
     });
   
@@ -87,8 +94,8 @@ exports.createQuiz = async (req, res) => {
         data: savedQuiz
     }) 
     } catch(error){
-        console.log(error);
-        return res.status(500).json({
+        console.log(error.message);
+        return res.status(401).json({
             success:false,
             message:"Canno create Quiz in, try again ",
         }) 

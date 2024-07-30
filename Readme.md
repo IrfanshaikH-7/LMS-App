@@ -6,10 +6,8 @@ mongodb+srv://misterharshkumar:fY3anVZhHhWkmcrX@cluster0.cxf5acu.mongodb.net/?re
 BACKEND- https://bookish-fiesta-5pw7j94v67g3pvpw-4000.app.github.dev
 
 
-https://bookish-fiesta-5pw7j94v67g3pvpw-5173.app.github.dev
-https://bookish-fiesta-5pw7j94v67g3pvpw-5173.app.github.dev
 
+https://bookish-fiesta-5pw7j94v67g3pvpw-5173.app.github.dev
 
 Admin
 indianshahishere@gmail.com
-a
