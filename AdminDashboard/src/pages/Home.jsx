@@ -200,16 +200,10 @@ console.log(selectedFile)
                         <CTAButton active={true} linkto={"/signup"}>
                             Learn More
                         </CTAButton>
-                        <div>
-      <h2>Resumable File Upload</h2>
-      <h3>{status}</h3>
-      {progress > 0 && <Progress value={progress} />}
-      <input type="file" onChange={handleFileChange} />
-      <button className='bg-yellow-300 px-4 rounded-md' onClick={handleFileUpload}>Upload File</button>
-    </div>
+                        
                         <CTAButton active={false} linkto={"/login"}>
                             Book a Demo
-                        </CTAButton> */}
+                        </CTAButton> 
                     </div>
                 </div>
 

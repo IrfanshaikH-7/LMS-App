@@ -95,6 +95,7 @@ exports.createQuiz = async (req, res) => {
     }) 
     } catch(error){
         console.log(error.message);
+        
         return res.status(401).json({
             success:false,
             message:"Canno create Quiz in, try again ",
@@ -124,6 +125,7 @@ exports.getQuizbyId = async (req, res) => {
 
 
 
+        console.log("Quiz data:", quiz);
             return res.status(201).json({
                 success:true,
                 data: quiz,
