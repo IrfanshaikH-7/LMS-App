@@ -23,7 +23,7 @@ const storage = new CloudinaryStorage({
     resource_type: "auto",
   },
 })
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Define the routes with the upload middleware and controllers
 router.post("/createQuiz",upload.single('image'), createQuiz);
