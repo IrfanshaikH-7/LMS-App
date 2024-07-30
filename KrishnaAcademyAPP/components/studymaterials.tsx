@@ -10,7 +10,7 @@ import {
     MaterialCommunityIcons,
   } from "@expo/vector-icons";
 import { router, useNavigation } from 'expo-router';
-import PDFViewerModal from './pdfmodal';
+import PDFViewerModal from '../app/(routes)/pdfviewer';
 import { Image } from 'expo-image';
 
 interface StudyMaterial {
@@ -99,7 +99,11 @@ const closePdfModal = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item}
-        //   onPress={() => openPdfModal(item.pdfUri)} // Open PDF modal on press
+
+          // onPress={() => router.push({
+          //   pathname: '(routes)/pdfviewer',
+          //   params: { pdfUri: item.description },
+          // })}
           >
             <View style={{
                 flexDirection: 'column',

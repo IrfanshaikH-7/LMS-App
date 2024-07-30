@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import PaymentComponent from '@/components/Payment/PaymentComponent';
-import PDFViewerModal from '../../../components/pdfmodal';
+import PDFViewerModal from '../pdfviewer';
 import { Image } from 'expo-image';
 
 
