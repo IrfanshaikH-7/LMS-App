@@ -70,7 +70,6 @@ export default function Material() {
                 </Pressable>
               )}
 
-
             />
           </View>
 

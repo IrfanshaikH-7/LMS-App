@@ -110,6 +110,14 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
+          <Stack.Screen
+          name="(routes)/pdfviewer"
+          options={{
+            headerShown: false,
+
+            headerBackTitle: "Back",
+          }}
+        />
           {/* <Stack.Screen name="course-detail" component={CourseDetailScreen}/> */}
         {/* <Stack.Screen
           name="(routes)/quiz/quiz.details"

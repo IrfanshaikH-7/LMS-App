@@ -10,7 +10,8 @@ import {
     MaterialCommunityIcons,
   } from "@expo/vector-icons";
 import { router, useNavigation } from 'expo-router';
-import PDFViewerModal from './pdfmodal';
+import PDFViewerModal from '../app/(routes)/pdfviewer';
+import { Image } from 'expo-image';
 
 interface StudyMaterial {
   _id: string;
@@ -78,7 +79,6 @@ const closePdfModal = () => {
 
   return (
     <View style={styles.container}>
-
       <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -99,19 +99,32 @@ const closePdfModal = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item}
-        //   onPress={() => openPdfModal(item.pdfUri)} // Open PDF modal on press
+
+          // onPress={() => router.push({
+          //   pathname: '(routes)/pdfviewer',
+          //   params: { pdfUri: item.description },
+          // })}
           >
             <View style={{
-                flexDirection: 'row',
+                flexDirection: 'column',
                 alignItems: 'center',
-                gap: 10,
+                gap: 5,
+                height:100,
             }}>
+                <Image
+                    style={{
+                      width: '50%',
+                      height: "80%",
+                      borderRadius: 5,
+                      alignSelf: "center",
+                      objectFit: "cover",
+                    }}
+                    source={{ uri: 'https://poainc.org/wp-content/uploads/2018/06/pdf-placeholder.png' }}
+                  />
 
-            <AntDesign name="pdffile1" size={24} color="black"   numberOfLines={1}
-  ellipsizeMode="tail" />
             <Text style={styles.title}>{item.title}</Text>
             </View>
-            <Text>{item.description.slice(0,5)}</Text>
+            {/* <Text>{item.description.slice(0,5)}</Text> */}
           </TouchableOpacity>
         )}
       />
@@ -127,7 +140,8 @@ const closePdfModal = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
+
   },
   heading: {
     fontSize: 24,
@@ -138,6 +152,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 16,
     flexDirection: 'column',
+    height: 120,
+    maxWidth: '30%',
     gap: 10,
     padding : 10,
     margin: 10,
