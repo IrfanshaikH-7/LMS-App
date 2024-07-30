@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import PaymentComponent from '@/components/Payment/PaymentComponent';
 import PDFViewerModal from '../../../components/pdfmodal';
+import { Image } from 'expo-image';
 
 
 
@@ -41,7 +42,25 @@ const StudyMaterials = () => {
         //   onPress={() =>router.push('StudyMaterialsScreen', { })}
           >
             <View style={styles.itemContent}>
-              <AntDesign name="pdffile1" size={24} color="black" />
+
+              <View style={{
+                flexDirection: 'column',
+                // justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '40%',
+
+              }}>
+
+            <Image
+                    style={{
+                      width: '60%',
+                      height: '60%',
+                      borderRadius: 5,
+                      alignSelf: "center",
+                      objectFit: "cover",
+                    }}
+                    source={{ uri: 'https://poainc.org/wp-content/uploads/2018/06/pdf-placeholder.png' }}
+                    />
               <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
                 {item.title}
               </Text>
@@ -52,6 +71,10 @@ const StudyMaterials = () => {
 
               }}
               >{item.description.slice(0,15)}</Text>
+                    </View>
+
+
+            
               <PaymentComponent item={item} itemType="Study Material" />
             </View>
           </TouchableOpacity>
@@ -106,7 +129,7 @@ const styles = StyleSheet.create({
   itemContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 5,
   },
 });
 

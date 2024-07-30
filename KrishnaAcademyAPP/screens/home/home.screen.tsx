@@ -30,7 +30,7 @@ export default function HomeScreen() {
 
         <AllCourses />
 
-        <View style={{ height: 300 }}>
+        <View style={{ height: 400 }}>
           <StudyMaterialsList />
          
 

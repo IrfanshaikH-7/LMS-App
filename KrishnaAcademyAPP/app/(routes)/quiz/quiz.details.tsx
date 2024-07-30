@@ -12,7 +12,7 @@ const quizDetails = (props: Props) => {
   const route = useRoute();
 
   const { quizId } = route.params;
-
+console.log(quizId, '-===================> quizId');
   const [quizDetails, setQuizDetails] = React.useState<any>(null);
 
   const [count, setCount] = useState<number>(0);
@@ -85,7 +85,10 @@ const handleSkip = () => {
 
 //   console.log("quizDetails---",questions, count);
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop:40 , paddingHorizontal:10}}>
+  <>
+  {
+    quizDetails ? (<Text> no quizes</Text>): (
+      <SafeAreaView style={{ flex: 1, paddingTop:40 , paddingHorizontal:10}}>
       <View
         style={{
           flexDirection: "row",
@@ -230,6 +233,9 @@ const handleSkip = () => {
         </View>
       )}
     </SafeAreaView>
+    )
+  }
+  </>
   );
 };
 

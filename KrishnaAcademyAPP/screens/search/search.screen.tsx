@@ -131,7 +131,7 @@ console.log('hello')
         const res = await axios.get(`${SERVER_URI}/api/v1/quiz/getAllQuiz`);
         setQuizzes(res.data.data);
 
-        console.log(res.data.data);
+        console.log(res.data.data,'get all quizes');
       } catch (error) {
         console.log(error);
       }
