@@ -1,18 +1,31 @@
-import { useNavigation } from 'expo-router';
+import { useRoute } from '@react-navigation/native';
+
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Pdf from 'react-native-pdf';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from "expo-router";
+import WebView from 'react-native-webview';
 
 const PDFViewerScreen = () => {
-    const route = useNavigation();
+  const route = useRoute();
+
+
+
 
   const { pdfUri } = route.params;
 
+  console.log(pdfUri);
+  const googleDocsViewerUri = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUri)}`;
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity style={styles.closeButton} onPress={() => router.back()}>
         <Text style={styles.closeButtonText}>Close</Text>
       </TouchableOpacity>
+      <WebView
+            source={{ uri: googleDocsViewerUri }}
+        style={styles.webview}
+      />
       {/* <Pdf
         source={{ uri: pdfUri }}
         onLoadComplete={(numberOfPages, filePath) => {
@@ -26,7 +39,7 @@ const PDFViewerScreen = () => {
         }}
         style={styles.pdf}
       /> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -45,6 +58,10 @@ const styles = StyleSheet.create({
   },
   pdf: {
     flex: 1,
+  },
+  webview: {
+    flex: 1,
+
   },
 });
 
