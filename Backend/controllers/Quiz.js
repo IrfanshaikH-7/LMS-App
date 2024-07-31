@@ -4,10 +4,6 @@ const User = require("../models/User");
 
 
 exports.createQuiz = async (req, res) => { 
-
-
-
-
     const {
         name,
         shortDescription,
