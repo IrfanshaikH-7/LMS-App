@@ -28,7 +28,7 @@ export default function HomeScreen() {
 
 
 
-        <AllCourses />
+        {/* <AllCourses /> */}
 
         <View style={{ height: 400 }}>
           <StudyMaterialsList />

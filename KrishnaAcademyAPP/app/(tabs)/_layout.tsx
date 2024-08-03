@@ -1,7 +1,8 @@
 import useUser from "@/hooks/auth/useUser";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
+
 
 export default function TabsLayout() {
   const { user } = useUser();
@@ -10,7 +11,7 @@ export default function TabsLayout() {
 
       screenOptions={({ route }) => {
         return {
-          tabBarIcon: ({ color }) => {
+          tabBarIcon: ({ focused }) => {
             let iconName;
             if (route.name === "index") {
               iconName = require("@/assets/icons/HouseSimple.png");
@@ -22,10 +23,47 @@ export default function TabsLayout() {
               iconName = require("@/assets/icons/User.png");
             }
             return (
-              <Image
-                style={{ width: 25, height: 25, tintColor: color }}
-                source={iconName}
-              />
+              <View style={{
+                backgroundColor: focused ? "#ff4e00" : "#fff",
+                width: '100%',
+                height: '100%',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingBottom: focused ? 10 : 0,
+                
+              }}>
+                <View
+                style={{
+                  // backgroundColor: focused ? "transparent" : "#fff",
+                  // borderColor: focused ? "#000" : "#000",
+                  borderColor: focused ? '#fff' : 'transparent', borderWidth: 3,
+                   borderRadius: 40,    
+
+                  width: 40,
+                  height: 40,
+
+                  justifyContent: 'center',
+                  alignItems: 'center',
+
+
+
+                }}
+                >
+
+                <Image
+                  style={{ width: focused ? 30:  25, height:focused ? 30 : 25, 
+                    tintColor: focused ? '#fff' : '#000' ,
+                    zIndex: 21,
+                    // borderColor: focused ? '#fff' : '#000', borderWidth: 2, borderRadius: 20, padding: 15    
+                    
+                    
+                    
+                  }}
+                  source={iconName}
+                  />
+                  </View>
+              </View>
             );
           },
           headerShown: false,

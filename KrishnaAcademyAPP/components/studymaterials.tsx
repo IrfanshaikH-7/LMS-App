@@ -12,6 +12,7 @@ import {
 import { router, useNavigation } from 'expo-router';
 import PDFViewerModal from '../app/(routes)/pdfviewer';
 import { Image } from 'expo-image';
+import PaymentComponent from './Payment/PaymentComponent';
 
 interface StudyMaterial {
   _id: string;
@@ -91,6 +92,17 @@ const StudyMaterialsList: React.FC = () => {
 
   const handleOpenMaterial  = async(item) => {
     console.log(item, "item.description")
+
+
+  }
+
+  const onCloseMaterial = async() => {
+    console.log("close")
+    setModalVisible(false);
+  }
+
+  const onPaymentSuccess = () => {
+    console.log("Payment Success-----")
   }
 
   return (
@@ -101,6 +113,19 @@ const StudyMaterialsList: React.FC = () => {
         alignItems: 'center',
         marginBottom: 16,
       }}>
+
+
+  <PaymentComponent
+    isVisible={isModalVisible}
+    onClose={onCloseMaterial}
+    onPaymentSuccess={onPaymentSuccess}
+
+    itemType="Study Material"
+    itemPrice="100"
+    handlePayment={() => console.log('Payment done')}
+    handleClose={closePdfModal}
+  />
+
     <TouchableOpacity onPress={()=>{setRefreshing(!refreshing)}}>
         <Text style={styles.heading}>Study Materials</Text>
         </TouchableOpacity>
@@ -123,10 +148,12 @@ const StudyMaterialsList: React.FC = () => {
 
           // onPress={()=>{console.log(item, "item.description")}}
 
-            onPress={() => router.push({
-              pathname: '(routes)/pdfviewer',
-              params: { pdfUri: item.fileUrl },
-            })}
+            // onPress={() => router.push({
+            //   pathname: '(routes)/pdfviewer',
+            //   params: { pdfUri: item.fileUrl },
+            // })}
+
+            onPress={() => openPdfModal(item.fileUrl)}
           >
               <Text style={{
                 position: 'absolute',
