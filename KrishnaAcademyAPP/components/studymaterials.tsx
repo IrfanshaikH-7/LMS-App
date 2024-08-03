@@ -89,6 +89,10 @@ const StudyMaterialsList: React.FC = () => {
     );
   }
 
+  const handleOpenMaterial  = async(item) => {
+    console.log(item, "item.description")
+  }
+
   return (
     <View style={styles.container}>
       <View style={{
@@ -114,6 +118,8 @@ const StudyMaterialsList: React.FC = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item}
+
+
 
           // onPress={()=>{console.log(item, "item.description")}}
 
