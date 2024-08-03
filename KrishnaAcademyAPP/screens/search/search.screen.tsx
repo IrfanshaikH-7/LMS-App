@@ -7,13 +7,13 @@ import {
   RefreshControl,
 } from "react-native";
 
-import SearchInput from "@/components/common/search.input";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
 import React from "react";
 import Header from "@/components/header/header";
-import Button from "@/components/button/button";
+
 import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
 
@@ -38,7 +38,7 @@ const renderItem = ({ item }) => {
         shadowRadius: 3.84, // Shadow blur radius for iOS
       }}
 
-      onPress={() => router.navigate({
+      onPress={() => router.push({
         pathname: "/(routes)/quiz/quiz.details",
         params: { quizId: item._id}
 
