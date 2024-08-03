@@ -48,22 +48,26 @@ export const styles = StyleSheet.create({
   },
   buttonWrapper: {
     backgroundColor: "#ED3137",
-    width: wp("92%"),
+    width: wp("75%"),
     paddingVertical: 18,
-    borderRadius: 4,
+
+    borderRadius: 50,
     marginTop: 40,
   },
   buttonText: {
     color: "white",
     textAlign: "center",
+    fontSize: hp("2.5%"),
+    
   },
   welcomeButtonStyle:{
     backgroundColor: "#ED3137",
     width: responsiveWidth(88),
     height: responsiveHeight(5.5),
     alignSelf: "center",
+    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 5,
+
   }
 });
