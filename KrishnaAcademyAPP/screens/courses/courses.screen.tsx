@@ -21,48 +21,48 @@ import React from "react";
 import CourseList from "@/components/Course/CourseList";
 const sampleItem = [
   {
-    "id": 1,
-    "name": "React Native Course",
-    "banner": {
-      "url": "https://example.com/banner1.jpg"
+    id: 1,
+    name: "React Native Course",
+    banner: {
+      url: "https://example.com/banner1.jpg",
     },
-    "chapters": [
-      { "title": "Introduction" },
-      { "title": "Getting Started" },
-      { "title": "Components" }
+    chapters: [
+      { title: "Introduction" },
+      { title: "Getting Started" },
+      { title: "Components" },
     ],
-    "time": 10,
-    "price": 0
+    time: 10,
+    price: 0,
   },
   {
-    "id": 2,
-    "name": "Advanced React Native",
-    "banner": {
-      "url": "https://example.com/banner2.jpg"
+    id: 2,
+    name: "Advanced React Native",
+    banner: {
+      url: "https://example.com/banner2.jpg",
     },
-    "chapters": [
-      { "title": "Advanced Components" },
-      { "title": "State Management" },
-      { "title": "Performance Optimization" }
+    chapters: [
+      { title: "Advanced Components" },
+      { title: "State Management" },
+      { title: "Performance Optimization" },
     ],
-    "time": 15,
-    "price": 50
+    time: 15,
+    price: 50,
   },
   {
-    "id": 3,
-    "name": "React Native with Redux",
-    "banner": {
-      "url": "https://example.com/banner3.jpg"
+    id: 3,
+    name: "React Native with Redux",
+    banner: {
+      url: "https://example.com/banner3.jpg",
     },
-    "chapters": [
-      { "title": "Introduction to Redux" },
-      { "title": "Redux with React Native" },
-      { "title": "Advanced Redux" }
+    chapters: [
+      { title: "Introduction to Redux" },
+      { title: "Redux with React Native" },
+      { title: "Advanced Redux" },
     ],
-    "time": 12,
-    "price": 30
-  }
-]
+    time: 12,
+    price: 30,
+  },
+];
 export default function CoursesScreen() {
   const [courses, setCourses] = useState<CoursesType[]>([]);
   const [originalCourses, setOriginalCourses] = useState<CoursesType[]>([]);
@@ -70,8 +70,6 @@ export default function CoursesScreen() {
   const [categories, setcategories] = useState([]);
   const [activeCategory, setactiveCategory] = useState("All");
   const [forceHideLoader, setForceHideLoader] = useState(false);
-
-
 
   // useEffect(() => {
   //   axios
@@ -124,48 +122,45 @@ export default function CoursesScreen() {
     }
   };
 
-
   return (
     <View>
-
       <Header />
 
       {loading ? (
         <Loader />
       ) : (
-        <LinearGradient
-          colors={["#E5ECF9", "#F6F7a9"]}
-          style={{ paddingTop: 40, height: "100%" }}
-        >
+        // <LinearGradient
+        //   colors={["#FFFF", "#FFFF"]}
+        //   style={{ paddingTop: 40, height: "100%" }}
+        // >
 
-
-
-
+        <View>
           <View style={{ padding: 0 }}>
             {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
-                style={{
-                  padding: 10,
-                  backgroundColor:
-                    activeCategory === "All" ? "#2467EC" : "#000",
-                  borderRadius: 20,
-                  paddingHorizontal: 20,
-                  marginRight: 5,
+              style={{
+                padding: 10,
+                backgroundColor:
+                activeCategory === "All" ? "#ED3137" : "#000",
+                borderRadius: 20,
+                paddingHorizontal: 20,
+                marginRight: 5,
                 }}
                 onPress={() => handleCategories("All")}
-              >
-                <Text
-                  style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}
                 >
-                  All
+                <Text
+                style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}
+                >
+                All
                 </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
+                
               {categories?.map((i: any, index: number) => (
                 <TouchableOpacity
                   style={{
                     padding: 10,
                     backgroundColor:
-                      activeCategory === i?.title ? "#2467EC" : "#000",
+                      activeCategory === i?.title ? "#ED3137" : "#000",
                     borderRadius: 50,
                     paddingHorizontal: 20,
                     marginHorizontal: 15,
@@ -182,19 +177,24 @@ export default function CoursesScreen() {
             </ScrollView> */}
           </View>
 
-            <ScrollView style={{ marginHorizontal: 10, gap: 5, marginBottom:150, marginTop:10 }}>
-              {/* {courses?.map((item: CoursesType, index: number) => (
+          <ScrollView
+            style={{
+              marginHorizontal: 10,
+              gap: 5,
+              marginBottom: 150,
+              marginTop: 10,
+            }}
+          >
+            {/* {courses?.map((item: CoursesType, index: number) => (
                 <CourseCard item={item} key={index} />
               ))} */}
-              <CourseList level={"item"} />
-              <CourseList level={"item"} />
+            <CourseList level={"item"} />
+            <CourseList level={"item"} />
 
-
-              <CourseList level={"item"} />
-              <CourseList level={"item"} />
-
-            </ScrollView>
-            {/* {courses?.length === 0 && (
+            <CourseList level={"item"} />
+            <CourseList level={"item"} />
+          </ScrollView>
+          {/* {courses?.length === 0 && (
               <Text
                 style={{ textAlign: "center", paddingTop: 50, fontSize: 18 }}
               >
@@ -202,9 +202,7 @@ export default function CoursesScreen() {
               </Text>
               
             )} */}
-
-
-        </LinearGradient>
+        </View>
       )}
     </View>
   );

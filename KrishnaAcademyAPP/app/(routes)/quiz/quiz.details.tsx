@@ -4,8 +4,18 @@ import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+
+  Modal,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { router } from "expo-router";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 type Props = {};
 
 const quizDetails = (props: Props) => {
@@ -17,13 +27,13 @@ const quizDetails = (props: Props) => {
 
   const [count, setCount] = useState<number>(0);
   const [questions, setQuestions] = useState<any[]>([]);
-  const [time, setTime] = useState<number>(20);
+  // const [time, setTime] = useState<number>(20);
   const [userScore, setUserScore] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [selectedBox, setSelectedBox] = useState<number | null>(null);
   const [getResultClicked, setGetResultClicked] = useState<boolean>(false);
-  const [language, setLanguage] = useState<'en' | 'hin'>('en');
-
+  const [language, setLanguage] = useState<"en" | "hin">("en");
+  const [scoreModalVisible, setScoreModalVisible] = useState<boolean>(false);
   useEffect(() => {
     const getQuizDetails = async () => {
       const res = await axios.post(
@@ -33,62 +43,64 @@ const quizDetails = (props: Props) => {
       const quizData = res?.data?.data;
       setQuizDetails(quizData);
 
-      console.log("quizData.questions:", typeof quizData.questions);
+      console.log("quizData.questions:", quizData);
       setQuestions(quizData.questions);
     };
 
     getQuizDetails();
   }, [quizId]);
+
+
   const handleSave = () => {
+    // console.log(
+    //   "questions[count].correctAnswer[language]",
+    //   questions[count].correctAnswer[language],
+    //   userAnswer
+    // );
+
     if (count < questions.length - 1) {
-      if (questions[count].correctAnswer === userAnswer) {
+      if (questions[count].correctAnswer[language] === userAnswer) {
         setUserScore((userScore) => userScore + 1);
       }
       setCount((count) => count + 1);
       setSelectedBox(null);
-      setTime(20);
+      // setTime(20);
     } else {
       setGetResultClicked(true);
       console.log("userScore", userScore);
-      // router.push({
-      //     pathname: "/(stack)/completed",
-      //     params: { score: userScore },
-      // });
+      setScoreModalVisible(true);
+
+     
     }
+    console.log("userScore", userScore, count);
   };
 
-  // useEffect(() => {
-  //     if (time > 0) {
-  //         const timerId = setInterval(() => {
-  //             setTime((prevTime) => prevTime - 1);
-  //         }, 1000);
 
-  //         return () => clearInterval(timerId);
-  //     } else if (time === 0) {
-  //         handleSave();
-  //     }
-  // }, [time]);
+
+  const toggleLanguage = () => {
+    setLanguage((prevLanguage) => (prevLanguage === "en" ? "hin" : "en"));
+  };
+
+
   const toggleColor = (index: number | null) => {
+    const optionsArray = Object.values(questions[count]?.options);
+    console.log(optionsArray[index][language], "----l", index);
     if (index === null) return;
     setSelectedBox(index);
-    setUserAnswer(questions[count].options[index]);
+    setUserAnswer(optionsArray[index][language]);
   };
 
   const handleSkip = () => {
     if (count < questions.length - 1) {
       setCount((count) => count + 1);
       setSelectedBox(null);
-      setTime(15);
+      // setTime(15);
     }
   };
 
   // console.log("quizDetails---",questions, count);
 
-
-  const toggleLanguage = () => {
-    setLanguage((prevLanguage) => (prevLanguage === 'en' ? 'hin' : 'en'));
-  };
-  console.log("questions-------->", questions[count]);
+  // console.log("questions-------->", questions[count]);
   const getOptionsArray = (question, language) => {
     if (!question || !question.options) {
       return [];
@@ -104,6 +116,27 @@ const quizDetails = (props: Props) => {
 
   return (
     <>
+      <Modal
+        transparent={true}
+        visible={scoreModalVisible}
+        animationType="slide"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.title}>Score Card</Text>
+            <View style={styles.scoreDisplay}>
+              <Text>Your Score:</Text>
+              <Text style={styles.score}>{userScore}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setScoreModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       {!quizDetails ? (
         <View
           style={{
@@ -113,181 +146,245 @@ const quizDetails = (props: Props) => {
             backgroundColor: "#f3f4f6",
           }}
         >
-        
-          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#f97316" }}>
-            Loading...
-          </Text>
+        <ActivityIndicator size="large" color="#ED3137" />
         </View>
       ) : (
         <SafeAreaView
-          style={{ flex: 1, paddingTop: 40, paddingHorizontal: 10 }}
+          style={{
+            flex: 1,
+            paddingTop: 40,
+            paddingHorizontal: 20,
+
+            flexDirection: "column",
+            // justifyContent: "space-between",
+          }}
         >
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{
+              position: "absolute",
+              top: 40,
+              left: 20,
+            }}
+          >
+            <MaterialIcons name="cancel" size={44} color="#f97316" />
+          </TouchableOpacity>
+
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: "column",
               justifyContent: "space-between",
               marginBottom: 24,
               alignItems: "center",
               width: "100%",
             }}
           >
-            <TouchableOpacity onPress={() => router.back()}>
-              <MaterialIcons name="cancel" size={44} color="#f97316" />
-            </TouchableOpacity>
-            <View style={{ alignItems: "center" }}>
+            <View style={{ alignItems: "center", marginTop: 20 }}>
               <Text
-                style={{ fontWeight: "bold", color: "#f97316", fontSize: 18 }}
+                style={{ fontWeight: "bold", color: "#f97316", fontSize: 25 }}
               >
-                {quizDetails?.category}
+                {quizDetails?.category.toUpperCase()}
               </Text>
-              <Button title="Toggle Language" onPress={toggleLanguage} />
-              <Text style={{ color: "#6b7280", fontSize: 18 }}>
-                {count + 1}/{questions.length}
-              </Text>
-            </View>
-            <View style={{ alignItems: "center" }}>
-              <AntDesign
-                name="clockcircle"
-                size={24}
-                color="#f97316"
-                style={{ marginBottom: 1 }}
-              />
-              <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-                {time < 10 ? `0${time}` : time}
-              </Text>
+
+              <View
+                style={{
+                  marginTop: 25,
+                }}
+              >
+              
+                <CountdownCircleTimer
+                  size={100}
+                  isPlaying
+                  duration={120}
+                  colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                  colorsTime={[7, 5, 2, 0]}
+                >
+                  {({ remainingTime }) => <Text>{remainingTime}</Text>}
+                </CountdownCircleTimer>
+              </View>
             </View>
           </View>
 
           <View
             style={{
-              backgroundColor: "rgb(233, 193, 160)",
-              paddingVertical: 16,
-              height: 150,
-              borderRadius: 30,
+              width: "100%",
+              flexDirection: "row",
+              gap: 4,
+              justifyContent: "space-between",
               alignItems: "center",
-              justifyContent: "center",
-              paddingHorizontal: 8,
+            }}
+          >
+            <Text style={{fontSize: 18, fontWeight: "500"}}>{count}/10</Text>
+            <TouchableOpacity
+            onPress={toggleLanguage}
+              style={{
+                backgroundColor: "rgb(233, 193, 160)",
+                padding: 10,
+                borderRadius: 30,
+                marginVertical: 8
+              }}
+            >
+              <Text>{language === 'en' ? 'hindi' : 'english'}</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* //question */}
+          <View
+            style={{
+              flexDirection: "column",
+              justifyContent: "space-between",
+
+              // paddingVertical: 16,
+              // height: 150,
+              // borderRadius: 30,
+              // alignItems: "center",
+              // justifyContent: "center",
+              // paddingHorizontal: 8,
               marginBottom: 32,
             }}
           >
-            <Text
-              style={{ fontSize: 24, textAlign: "center", fontWeight: "bold" }}
-            >
-              {  questions[count]?.question[language]}
-            </Text>
-          </View>
-
-          <Text
-            style={{
-              fontSize: 18,
-              marginBottom: 12,
-              color: "#f97316",
-              fontWeight: "bold",
-            }}
-          >
-            Select your answer
-          </Text>
-
-
-          <View style={{ alignItems: "center", marginBottom: 16 }}>
-          
-        {currentOptions.map((option, index) => (
-          <TouchableOpacity
-            style={{
-              backgroundColor: selectedBox === index ? "#fed7aa" : "#ffffff",
-              paddingVertical: 14,
-              paddingHorizontal: 8,
-              borderRadius: 30,
-              marginBottom: 12,
-              borderWidth: selectedBox === index ? 1 : 0,
-              borderColor: "#f97316",
-              width: "100%",
-            }}
-            key={index}
-            onPress={() => toggleColor(index)}
-          >
-            <Text>{`${option.key}: ${option.value}`}</Text>
-          </TouchableOpacity>
-        ))}
-  
-
-          </View>
-          {getResultClicked ? (
             <View
               style={{
-                flexDirection: "row",
+                backgroundColor: "rgb(233, 193, 160)",
+                paddingVertical: 16,
+                height: 150,
+                borderRadius: 30,
                 alignItems: "center",
                 justifyContent: "center",
+                paddingHorizontal: 8,
+                marginBottom: 32,
               }}
             >
-              <TouchableOpacity
-                disabled={true}
+              <Text
                 style={{
-                  backgroundColor: "#d1d5db",
-                  padding: 16,
-                  borderRadius: 20,
-                  width: "66%",
+                  fontSize: 24,
+                  textAlign: "center",
+                  fontWeight: "bold",
                 }}
               >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    textAlign: "center",
-                  }}
-                >
-                  Generating your score...
-                </Text>
-              </TouchableOpacity>
+                {questions[count]?.question[language]}
+              </Text>
             </View>
-          ) : (
-            <View
+
+            <Text
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                fontSize: 18,
+                marginBottom: 12,
+                color: "#f97316",
+                fontWeight: "bold",
               }}
             >
-              <TouchableOpacity
-                onPress={handleSkip}
-                style={{
-                  backgroundColor: "#fdba74",
-                  padding: 16,
-                  borderRadius: 20,
-                  width: "33%",
-                }}
-              >
-                <Text
+              Select your answer
+            </Text>
+
+            <View style={{ alignItems: "center", marginBottom: 16 }}>
+              {currentOptions.map((option, index) => (
+                <TouchableOpacity
                   style={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    textAlign: "center",
+                    backgroundColor:
+                      selectedBox === index ? "#fed7aa" : "#ffffff",
+                    paddingVertical: 18,
+                    paddingHorizontal: 30,
+                    borderRadius: 30,
+                    marginBottom: 12,
+                    borderWidth: selectedBox === index ? 1 : 0,
+                    borderColor: "#f97316",
+                    width: "100%",
                   }}
+                  key={index}
+                  onPress={() => toggleColor(index)}
                 >
-                  SKIP
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleSave}
-                style={{
-                  backgroundColor: "#86efac",
-                  padding: 16,
-                  borderRadius: 20,
-                  width: "33%",
-                }}
-              >
-                <Text
+                  <Text
                   style={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    textAlign: "center",
+                    fontWeight: "500",
+                    fontSize: 18,
+                    textAlign: "left",
+
                   }}
-                >
-                  {count === questions.length - 1 ? "Get Result" : "SAVE"}
-                </Text>
-              </TouchableOpacity>
+                  >{`${option.key.slice(-1)} . ${option.value}`}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
-          )}
+            {getResultClicked ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={()=> setScoreModalVisible(true)}
+                  // disabled={true}
+                  style={{
+                    backgroundColor: "#d1d5db",
+                    padding: 16,
+                    borderRadius: 20,
+                    width: "66%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Your score: {userScore}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  // position: "absolute",
+                  // bottom: 20,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={handleSkip}
+                  style={{
+                    backgroundColor: "#fdba74",
+                    padding: 16,
+                    borderRadius: 20,
+                    width: "33%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    SKIP
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSave}
+                  style={{
+                    backgroundColor: "#86efac",
+                    padding: 16,
+                    borderRadius: 20,
+                    width: "33%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    {count === questions.length - 1 ? "Get Result" : "SAVE"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </SafeAreaView>
       )}
     </>
@@ -295,3 +392,41 @@ const quizDetails = (props: Props) => {
 };
 
 export default quizDetails;
+
+const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  scoreDisplay: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  score: {
+    fontWeight: "bold",
+    color: "#4CAF50",
+    marginLeft: 10,
+  },
+  closeButton: {
+    backgroundColor: "#f44336",
+    padding: 10,
+    borderRadius: 4,
+  },
+  closeButtonText: {
+    color: "white",
+  },
+});

@@ -7,17 +7,18 @@ import {
   RefreshControl,
 } from "react-native";
 
-import SearchInput from "@/components/common/search.input";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
 import React from "react";
 import Header from "@/components/header/header";
-import Button from "@/components/button/button";
+
 import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const renderItem = ({ item }) => {
+  console.log(item, "item");
   return (
     <TouchableOpacity
       style={{
@@ -26,97 +27,114 @@ const renderItem = ({ item }) => {
         minWidth: "45%",
         maxWidth: "50%",
         marginHorizontal: 5,
-        height: 180, // Ensure this is set to control the size
+        // height: 180, // Ensure this is set to control the size
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 20,
         overflow: "hidden", // Ensure the borderRadius effect applies to children
-        elevation: 4, // Adds shadow for Android
-        shadowColor: "#000000", // Shadow color for iOS
-        shadowOffset: { width: 0, height: 2 }, // Shadow direction and distance for iOS
-        shadowOpacity: 0.2, // Shadow opacity for iOS
-        shadowRadius: 3.84, // Shadow blur radius for iOS
+
+      
       }}
-
-      onPress={() => router.navigate({
-        pathname: "/(routes)/quiz/quiz.details",
-        params: { quizId: item._id}
-
+      onPress={() =>
+        router.push({
+          pathname: "/(routes)/quiz/quiz.details",
+          params: { quizId: item._id },
+        })
       }
-
-      )  }
     >
-      <ImageBackground
-        source={{ uri: "https://picsum.photos/seed/picsum/200/300" }}
+
+<View
         style={{
-          width: "100%",
-          height: "100%", // Adjusted to fill the TouchableOpacity
-          // justifyContent: "center",
-          // alignItems: "center",
-        }}
-        imageStyle={{
-          borderRadius: 20, // Apply borderRadius to the image itself
+          position: "absolute",
+          top: 0,
+          left: 10,
+          justifyContent: "flex-start", // Aligns children vertically to the top
+          alignItems: "flex-start", // Aligns children horizontally to the left
+          // margin: 10, // Add margin to the top and left
+          // backgroundColor: "rgb(241, 344, 215)",
+          borderRadius: 20,
+          alignSelf: "flex-start",
         }}
       >
-        <View
+        <Text
           style={{
-            justifyContent: "flex-start", // Aligns children vertically to the top
-            alignItems: "flex-start", // Aligns children horizontally to the left
-            margin: 10, // Add margin to the top and left
-            // backgroundColor: "rgb(241, 344, 215)",
-            borderRadius: 20,
-            alignSelf: "flex-start",
+            color: "green",
+            fontSize: 16,
+            fontWeight: "bold",
+            textAlign: "left", // Align text to the left
           }}
         >
-          <Text
-            style={{
-              color: "green",
-              fontSize: 16,
-              fontWeight: "bold",
-              textAlign: "left", // Align text to the left
-            }}
-          >
-            $100
-          </Text>
-        </View>
+          R100
+        </Text>
+      </View>
+      {!item.image ? (
+        <ImageBackground
+          source={{ uri: "https://picsum.photos/seed/picsum/200/300" }}
+          style={{
+            width: "100%",
+            height: "100%", // Adjusted to fill the TouchableOpacity
+            // justifyContent: "center",
 
-        {/* Overlay View with Text */}
-        <View
+            // alignItems: "center",
+          }}
+          imageStyle={{
+            borderRadius: 20, // Apply borderRadius to the image itself
+          }}
+        />
+      ) : (
+        <Ionicons name="image-outline" size={110} color="red" style={{
+          marginVertical: 10,
+        }} />
+      )}
+
+
+
+      <View
+        style={{
+          backgroundColor:'#fff',
+          marginTop: -15,
+          width: "100%",
+          marginVertical: 10, 
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          paddingHorizontal: 10,
+
+          // position: "absolute",
+          // bottom: 0,
+          // left: 0,
+          // right: 0,
+          // height: 80, // Adjust the height for your shadow effect
+          // backgroundColor: "rgba(0,0,0,0.4)", // Semi-transparent view for shadow effect
+          // flexDirection: "column",
+          // justifyContent: "flex-start",
+          // alignItems: "center",
+          // gap: 10,
+        }}
+      >
+        <Text
           style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 80, // Adjust the height for your shadow effect
-            backgroundColor: "rgba(0,0,0,0.4)", // Semi-transparent view for shadow effect
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            gap: 10,
+            // color: "white",
+            fontSize: 16,
+            fontWeight: "600",
+            textAlign: "left",
           }}
         >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "400",
-              textAlign: "left",
-            }}
-          >
-            {item.name}
-          </Text>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 12,
-              fontWeight: "condensed",
-              textAlign: "right",
-            }}
-          >
-            {item.shortDescription}
-          </Text>
-        </View>
-      </ImageBackground>
+          {item.name}
+
+        </Text>
+        <Text
+          style={{
+            // color: "white",
+            fontSize: 12,
+            fontWeight: "condensed",
+            textAlign: "left",
+          }}
+        >
+          {item.shortDescription.slice(0,10)}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -124,7 +142,7 @@ export default function SearchScreen() {
   const [quizzes, setQuizzes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-console.log('hello')
+  console.log("hello");
   useEffect(() => {
     const getQuizzes = async () => {
       try {
@@ -142,12 +160,11 @@ console.log('hello')
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     // Place your data fetching logic here
-    setTimeout(() => { // Simulate a network request
+    setTimeout(() => {
+      // Simulate a network request
       setRefreshing(false);
     }, 2000);
   }, []);
-
-  
 
   return (
     <SafeAreaView
@@ -157,7 +174,7 @@ console.log('hello')
       }}
     >
       <Header />
-      <SearchInput />
+      {/* <SearchInput /> */}
 
       <View
         style={{
@@ -172,20 +189,15 @@ console.log('hello')
         }}
       >
         <FlatList
-
           data={quizzes}
           renderItem={renderItem}
           contentContainerStyle={{ width: "100%", gap: 10 }}
           columnWrapperStyle={{ gap: 10 }}
           showsVerticalScrollIndicator={false}
-
           numColumns={2}
           keyExtractor={(item) => item._id}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
       </View>

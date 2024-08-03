@@ -17,6 +17,7 @@ const {
 } = require("../controllers/ResetPassword")
 
 const { auth } = require("../middlewares/auth")
+const { buyQuiz, buyMaterials } = require("../controllers/BuyItem")
 
 // Routes for Login, Signup, and Authentication
 
@@ -47,6 +48,10 @@ router.post("/reset-password-token", resetPasswordToken)
 
 // Route for resetting user's password after verification
 router.post("/reset-password", resetPassword)
+
+
+router.post("/buyQuiz/:id", buyQuiz)
+router.post("/buyMaterials/:id", buyMaterials)
 
 // Export the router for use in the main application
 module.exports = router

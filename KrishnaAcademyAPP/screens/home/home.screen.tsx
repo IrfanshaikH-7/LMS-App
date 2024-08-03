@@ -20,21 +20,15 @@ export default function HomeScreen() {
       style={{ flex: 1, paddingTop: 50 }}
     >
       <Header />
-      <SearchInput homeScreen={true} />
+      {/* <SearchInput homeScreen={true} /> */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <HomeBannerSlider />
 
-
-
-
-
-        <AllCourses />
+        {/* <AllCourses /> */}
 
         <View style={{ height: 400 }}>
           <StudyMaterialsList />
-         
-
-          </View>
+        </View>
       </ScrollView>
 
       {/* <Video

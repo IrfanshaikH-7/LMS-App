@@ -35,18 +35,18 @@ export default function CourseDetailScreen() {
     }
   }, [user]);
 
-  const handleAddToCart = async () => {
-    const existingCartData = await AsyncStorage.getItem("cart");
-    const cartData = existingCartData ? JSON.parse(existingCartData) : [];
-    const itemExists = cartData.some(
-      (item: any) => item._id === courseData._id
-    );
-    if (!itemExists) {
-      cartData.push(courseData);
-      await AsyncStorage.setItem("cart", JSON.stringify(cartData));
-    }
-    router.push("/(routes)/cart");
-  };
+  // const handleAddToCart = async () => {
+  //   const existingCartData = await AsyncStorage.getItem("cart");
+  //   const cartData = existingCartData ? JSON.parse(existingCartData) : [];
+  //   const itemExists = cartData.some(
+  //     (item: any) => item._id === courseData._id
+  //   );
+  //   if (!itemExists) {
+  //     cartData.push(courseData);
+  //     await AsyncStorage.setItem("cart", JSON.stringify(cartData));
+  //   }
+  //   // router.push("/(routes)/cart"); //discarded
+  // };
 
   let [fontsLoaded, fontError] = useFonts({
     Raleway_600SemiBold,
@@ -229,7 +229,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 42,
                   backgroundColor:
-                    activeButton === "About" ? "#2467EC" : "transparent",
+                    activeButton === "About" ? "#ED3137" : "transparent",
                   borderRadius: activeButton === "About" ? 50 : 0,
                 }}
                 onPress={() => setActiveButton("About")}
@@ -248,7 +248,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 42,
                   backgroundColor:
-                    activeButton === "Lessons" ? "#2467EC" : "transparent",
+                    activeButton === "Lessons" ? "#ED3137" : "transparent",
                   borderRadius: activeButton === "Lessons" ? 50 : 0,
                 }}
                 onPress={() => setActiveButton("Lessons")}
@@ -267,7 +267,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 42,
                   backgroundColor:
-                    activeButton === "Reviews" ? "#2467EC" : "transparent",
+                    activeButton === "Reviews" ? "#ED3137" : "transparent",
                   borderRadius: activeButton === "Reviews" ? 50 : 0,
                 }}
                 onPress={() => setActiveButton("Reviews")}
@@ -313,7 +313,7 @@ export default function CourseDetailScreen() {
                   >
                     <Text
                       style={{
-                        color: "#2467EC",
+                        color: "#ED3137",
                         fontSize: 14,
                       }}
                     >
@@ -352,7 +352,7 @@ export default function CourseDetailScreen() {
             {checkPurchased === true ? (
               <TouchableOpacity
                 style={{
-                  backgroundColor: "#2467EC",
+                  backgroundColor: "#ED3137",
                   paddingVertical: 16,
                   borderRadius: 4,
                 }}
@@ -377,11 +377,11 @@ export default function CourseDetailScreen() {
             ) : (
               <TouchableOpacity
                 style={{
-                  backgroundColor: "#2467EC",
+                  backgroundColor: "#ED3137",
                   paddingVertical: 16,
                   borderRadius: 4,
                 }}
-                onPress={() => handleAddToCart()}
+                // onPress={() => handleAddToCart()}
               >
                 <Text
                   style={{
@@ -391,7 +391,7 @@ export default function CourseDetailScreen() {
                     fontFamily: "Nunito_600SemiBold",
                   }}
                 >
-                  Add to cart
+                Buy it
                 </Text>
               </TouchableOpacity>
             )}

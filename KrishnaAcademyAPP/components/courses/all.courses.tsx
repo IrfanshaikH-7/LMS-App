@@ -131,7 +131,7 @@ export default function AllCourses() {
           <Text
             style={{
               fontSize: 15,
-              color: "#2467EC",
+              color: "#ED3137",
               fontFamily: "Nunito_600SemiBold",
             }}
           >

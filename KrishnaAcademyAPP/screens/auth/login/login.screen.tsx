@@ -209,7 +209,7 @@ export default function LoginScreen() {
                 padding: 16,
                 borderRadius: 8,
                 marginHorizontal: 16,
-                backgroundColor: "#2467EC",
+                backgroundColor: "#ED3137",
                 marginTop: 15,
               }}
               onPress={handleSignIn}
@@ -243,7 +243,7 @@ export default function LoginScreen() {
                   style={{
                     fontSize: 18,
                     fontFamily: "Raleway_600SemiBold",
-                    color: "#2467EC",
+                    color: "#ED3137",
                     marginLeft: 5,
                   }}
                 >

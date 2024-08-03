@@ -15,7 +15,7 @@ export const commonStyles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonContainer: {
-    backgroundColor: "#2467EC",
+    backgroundColor: "#ED3137",
     width: responsiveWidth(88),
     height: responsiveWidth(2.5),
     borderRadius: 5,
@@ -29,7 +29,7 @@ export const commonStyles = StyleSheet.create({
     marginHorizontal: 5,
   },
   activeDotStyle: {
-    backgroundColor: "#2467Ec",
+    backgroundColor: "#ED3137",
     width: responsiveWidth(2.5),
     height: responsiveWidth(2.5),
     borderRadius: 5,

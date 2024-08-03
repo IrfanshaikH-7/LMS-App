@@ -45,7 +45,7 @@ export default function OnBoardingScreen() {
             source={require("@/assets/onboarding/shape_6.png")}
           />
           <Text style={[styles.titleText, { fontFamily: "Raleway_700Bold" }]}>
-            LMS
+            Krishna Academy
           </Text>
         </View>
         <View style={styles.dscpWrapper}>
@@ -53,17 +53,26 @@ export default function OnBoardingScreen() {
             Explore a variety of interactive lesson,
           </Text>
           <Text style={[styles.dscpText, { fontFamily: "Nunito_400Regular" }]}>
-            video, quizze & assignment.
+            video, quiz & assignment.
           </Text>
         </View>
         <TouchableOpacity
           style={styles.buttonWrapper}
-          onPress={() => router.push("/(routes)/welcome-intro")}
+          onPress={() => router.push("/(routes)/login")}
         >
           <Text style={[styles.buttonText, { fontFamily: "Nunito_700Bold" }]}>
-            Getting Started
+            Login
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonWrapper}
+          onPress={() => router.push("/(routes)/sign-up")}
+        >
+          <Text style={[styles.buttonText, { fontFamily: "Nunito_700Bold" }]}>
+           Signup
+          </Text>
+        </TouchableOpacity>
+       
       </View>
     </LinearGradient>
   );

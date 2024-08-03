@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
   },
 
   activeDot: {
-    backgroundColor: "#2467EC",
+    backgroundColor: "#ED3137",
     width: 10,
     height: 10,
     borderRadius: 5,

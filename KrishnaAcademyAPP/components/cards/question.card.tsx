@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   button: {
     width: widthPercentageToDP("35%"),
     height: 40,
-    backgroundColor: "#2467EC",
+    backgroundColor: "#ED3137",
     marginVertical: 10,
     borderRadius: 40,
     alignItems: "center",

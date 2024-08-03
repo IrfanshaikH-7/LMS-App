@@ -162,7 +162,7 @@ export const styles = StyleSheet.create({
   searchIconContainer: {
     width: 36,
     height: 36,
-    backgroundColor: "#2467EC",
+    backgroundColor: "#ED3137",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
