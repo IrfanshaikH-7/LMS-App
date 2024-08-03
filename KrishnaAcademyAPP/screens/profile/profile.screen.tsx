@@ -7,7 +7,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView,  TouchableOpacity } from "react-native";
 import {
   useFonts,
   Raleway_600SemiBold,
@@ -25,6 +25,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
 import { router } from "expo-router";
+import { Image } from "expo-image";
 
 export default function ProfileScreen() {
   const { user, loading, setRefetch } = useUser();
@@ -104,32 +105,35 @@ export default function ProfileScreen() {
           <ScrollView>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <View style={{ position: "relative" }}>
-                <Image
-                  source={{
-                    uri:
-                      image ||
-                      user?.avatar?.url ||
-                      "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png",
-                  }}
-                  style={{ width: 90, height: 90, borderRadius: 100 }}
-                />
-                <TouchableOpacity
-                  style={{
-                    position: "absolute",
-                    bottom: 5,
-                    right: 0,
-                    width: 30,
-                    height: 30,
-                    backgroundColor: "#f5f5f5",
-                    borderRadius: 100,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  onPress={pickImage}
-                >
-                  <Ionicons name="camera-outline" size={25} />
-                </TouchableOpacity>
+              {/* <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
+          <Image
+            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
+
+
+            style={styles.image}
+          />
+        </TouchableOpacity>
+        <View>
+          <Text style={[styles.helloText, { fontFamily: "Raleway_700Bold" }]}>
+            Hello,
+          </Text>
+          <Text style={[styles.text, { fontFamily: "Raleway_700Bold" }]}>
+            {user?.name}
+          </Text>
+        </View> */}
+         <Image
+            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
+
+
+            style={{
+                width: 100,
+                height: 100,
+                marginRight: 8,
+                borderRadius: 100,
+              }}
+          />
+
+            
               </View>
             </View>
             <Text
@@ -257,6 +261,61 @@ export default function ProfileScreen() {
                   <AntDesign name="right" size={26} color={"#CBD5E0"} />
                 </TouchableOpacity>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 20,
+                }}
+                onPress={() => router.push("/(routes)/enrolled-courses")}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    columnGap: 30,
+                  }}
+                >
+                  <View
+                    style={{
+                      borderWidth: 2,
+                      borderColor: "#dde2ec",
+                      padding: 15,
+                      borderRadius: 100,
+                      width: 55,
+                      height: 55,
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      style={{ alignSelf: "center" }}
+                      name="cash-multiple"
+                      size={20}
+                      color={"black"}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{ fontSize: 16, fontFamily: "Nunito_700Bold" }}
+                    >
+                      Purchases
+                    </Text>
+                    <Text
+                      style={{
+                        color: "#575757",
+                        fontFamily: "Nunito_400Regular",
+                      }}
+                    >
+                      The all enrolled courses
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity>
+                  <AntDesign name="right" size={26} color={"#CBD5E0"} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+
+
               <TouchableOpacity
                 style={{
                   flexDirection: "row",

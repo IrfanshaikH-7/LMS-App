@@ -35,18 +35,18 @@ export default function CourseDetailScreen() {
     }
   }, [user]);
 
-  const handleAddToCart = async () => {
-    const existingCartData = await AsyncStorage.getItem("cart");
-    const cartData = existingCartData ? JSON.parse(existingCartData) : [];
-    const itemExists = cartData.some(
-      (item: any) => item._id === courseData._id
-    );
-    if (!itemExists) {
-      cartData.push(courseData);
-      await AsyncStorage.setItem("cart", JSON.stringify(cartData));
-    }
-    router.push("/(routes)/cart");
-  };
+  // const handleAddToCart = async () => {
+  //   const existingCartData = await AsyncStorage.getItem("cart");
+  //   const cartData = existingCartData ? JSON.parse(existingCartData) : [];
+  //   const itemExists = cartData.some(
+  //     (item: any) => item._id === courseData._id
+  //   );
+  //   if (!itemExists) {
+  //     cartData.push(courseData);
+  //     await AsyncStorage.setItem("cart", JSON.stringify(cartData));
+  //   }
+  //   // router.push("/(routes)/cart"); //discarded
+  // };
 
   let [fontsLoaded, fontError] = useFonts({
     Raleway_600SemiBold,
@@ -381,7 +381,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 16,
                   borderRadius: 4,
                 }}
-                onPress={() => handleAddToCart()}
+                // onPress={() => handleAddToCart()}
               >
                 <Text
                   style={{
@@ -391,7 +391,7 @@ export default function CourseDetailScreen() {
                     fontFamily: "Nunito_600SemiBold",
                   }}
                 >
-                  Add to cart
+                Buy it
                 </Text>
               </TouchableOpacity>
             )}

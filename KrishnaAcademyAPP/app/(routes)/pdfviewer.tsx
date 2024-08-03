@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute } from '@react-navigation/native';
 import WebView from 'react-native-webview';
@@ -11,7 +11,7 @@ enableScreens();
 const PDFViewerScreen = () => {
   const route = useRoute();
   const { pdfUri } = route.params;
-
+  const [loading, setLoading] = useState(true);
   console.log(pdfUri);
   const googleDocsViewerUri = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUri)}`;
 
@@ -40,17 +40,24 @@ const PDFViewerScreen = () => {
         >
           <Text style={styles.closeButtonText}>Close</Text>
         </TouchableOpacity>
-        <WebView
-          source={{ uri: googleDocsViewerUri }}
-          style={styles.webview}
-          onShouldStartLoadWithRequest={(request) => {
-            // Disable downloading by intercepting download requests
-            if (request.url.endsWith('.pdf')) {
-              return false;
-            }
-            return true;
-          }}
-        />
+        {loading && (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#ED3137" />
+        </View>
+      )}
+      <WebView
+        source={{ uri: googleDocsViewerUri }}
+        style={styles.webview}
+        onLoadStart={() => setLoading(true)}
+        onLoadEnd={() => setLoading(false)}
+        onShouldStartLoadWithRequest={(request) => {
+          // Disable downloading by intercepting download requests
+          if (request.url.endsWith('.pdf')) {
+            return false;
+          }
+          return true;
+        }}
+      />
       </SafeAreaView>
     </Screen>
   );

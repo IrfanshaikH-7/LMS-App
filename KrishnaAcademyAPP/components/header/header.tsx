@@ -2,12 +2,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import useUser from "@/hooks/auth/useUser";
-import { Feather } from "@expo/vector-icons";
-import { router } from "expo-router";
+
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { Image } from "expo-image";
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 export default function Header() {
   const [cartItems, setCartItems] = useState([]);
@@ -32,54 +33,53 @@ export default function Header() {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
-          <Image
-            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
 
-
-            style={styles.image}
-          />
-        </TouchableOpacity>
-        <View>
-          <Text style={[styles.helloText, { fontFamily: "Raleway_700Bold" }]}>
-            Hello,
-          </Text>
-          <Text style={[styles.text, { fontFamily: "Raleway_700Bold" }]}>
-            {user?.name}
-          </Text>
-        </View>
+        <Image source={{
+          uri: "https://res.cloudinary.com/dbnnlqq5v/image/upload/v1722698298/ieglfi8opdzrrtzwzfwi.png"
+        }}
+          style={{
+            width: 60,
+            height: 60,
+            backgroundColor: "transparent",
+            // marginRight: 8,
+            borderRadius: 10,
+          }}
+        />
+    
+        
       </View>
       <TouchableOpacity
-        style={styles.bellButton}
-        onPress={() => router.push("/(routes)/cart")}
-      >
-        <View>
-          <Feather name="shopping-bag" size={26} color={"black"} />
-          <View style={styles.bellContainer}>
-            <Text style={{ color: "#fff", fontSize: 14 }}>
-              {cartItems?.length}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+          onPress={() => router.push("/(routes)/notifications")}
+        >
+
+          <FontAwesome name="bell" size={30} color="rgb(242, 221, 126)" />
+        </TouchableOpacity>
+
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    // backgroundColor: '#fff',
+    width: "100%",
+    // marginLeft: -10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: 16,
+    justifyContent: "center",
+    marginHorizontal: 12,
+    paddingHorizontal: 12,
     marginBottom: 16,
-    width: "90%",
     zIndex: 100,
   },
 
   headerWrapper: {
+    width: '90%',
+    // backgroundColor: '#fff',
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
 
   image: {

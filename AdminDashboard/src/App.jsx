@@ -25,12 +25,12 @@ import MyCourses from "./components/core/Dashboard/MyCourses";
 import EditCourse from "./components/core/Dashboard/EditCourse/EditCourse";
 import Instructor from "./components/core/Dashboard/Instructor";
 
-import Cart from "./components/core/Dashboard/Cart/Cart";
-import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
+
+
 import AddCourse from "./components/core/Dashboard/AddCourse/AddCourse";
 
 import ViewCourse from "./pages/ViewCourse";
-import VideoDetails from "./components/core/ViewCourse/VideoDetails";
+// import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 
 import { ACCOUNT_TYPE } from "./utils/constants";
 

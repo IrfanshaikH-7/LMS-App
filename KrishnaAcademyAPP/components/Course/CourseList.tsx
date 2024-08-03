@@ -113,10 +113,11 @@ export default function CourseList({ level }) {
           style={{
             fontFamily: "outfit-bold",
             fontSize: 24,
-            color: Colors.WHITE,
+            color: '#000',
+            margin:10,
           }}
         >
-          {level} Courses
+          {level.toUpperCase()} Courses
         </Text>
       </View>
       <FlatList

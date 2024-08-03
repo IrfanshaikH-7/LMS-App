@@ -8,6 +8,8 @@ import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
 
 export default function CourseItem({ item }) {
+
+    const randomNumber = Math.floor(Math.random() * 5);
     return (
         <View style={{
             padding: 5,
@@ -15,7 +17,7 @@ export default function CourseItem({ item }) {
             marginRight: 15,
             borderRadius: 15,
         }}>
-            <Image source={{ uri:  item?.banner?.url ? item?.banner?.url : "https://picsum.photos/seed/picsum/200/300" }}
+            <Image source={{ uri:  !item?.banner?.url ? item?.banner?.url : `https://res.cloudinary.com/dbnnlqq5v/image/upload/v1722503025/cld-sample-${randomNumber+2}.jpg` }}
                 style={{ width: 200, height: 150, borderRadius: 15 }}
             />
 
