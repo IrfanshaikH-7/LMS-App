@@ -24,17 +24,11 @@ export default function HomeScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <HomeBannerSlider />
 
-
-
-
-
         {/* <AllCourses /> */}
 
         <View style={{ height: 400 }}>
           <StudyMaterialsList />
-         
-
-          </View>
+        </View>
       </ScrollView>
 
       {/* <Video
