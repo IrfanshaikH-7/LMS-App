@@ -147,7 +147,7 @@ export default function CoursesScreen() {
                 style={{
                   padding: 10,
                   backgroundColor:
-                    activeCategory === "All" ? "#2467EC" : "#000",
+                    activeCategory === "All" ? "#ED3137" : "#000",
                   borderRadius: 20,
                   paddingHorizontal: 20,
                   marginRight: 5,
@@ -165,7 +165,7 @@ export default function CoursesScreen() {
                   style={{
                     padding: 10,
                     backgroundColor:
-                      activeCategory === i?.title ? "#2467EC" : "#000",
+                      activeCategory === i?.title ? "#ED3137" : "#000",
                     borderRadius: 50,
                     paddingHorizontal: 20,
                     marginHorizontal: 15,

@@ -157,7 +157,7 @@ console.log('hello')
       }}
     >
       <Header />
-      <SearchInput />
+      {/* <SearchInput /> */}
 
       <View
         style={{

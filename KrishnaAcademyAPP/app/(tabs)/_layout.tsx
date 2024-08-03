@@ -24,7 +24,7 @@ export default function TabsLayout() {
             }
             return (
               <View style={{
-                backgroundColor: focused ? "#ff4e00" : "#fff",
+                backgroundColor: focused ? "#ED3137" : "#fff",
                 width: '100%',
                 height: '100%',
                 flexDirection: 'column',

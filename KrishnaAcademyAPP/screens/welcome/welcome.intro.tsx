@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, SafeAreaView } from "react-native";
 import {
   Nunito_400Regular,
   Nunito_600SemiBold,
@@ -23,11 +23,11 @@ export default function WelcomeIntroScreen() {
   }
 
   const renderItem = ({ item }: { item: onboardingSwiperDataType }) => (
-    <LinearGradient
-      colors={["#E5ECF9", "F6F7F9", "#E8EEF9"]}
-      style={{ flex: 1, paddingHorizontal: 16 }}
+    <SafeAreaView
+      // colors={["#E5ECF9", "F6F7F9", "#E8EEF9"]}
+      style={{ flex: 1, paddingHorizontal: 16 , backgroundColor:'#ffff'}}
     >
-      <View style={{ marginTop: 80 }}>
+      <View style={{ marginTop: 80 , backgroundColor:'#fff', borderRadius:50}}>
         <Image
           source={item.image}
           style={{ alignSelf: "center", marginBottom: 30 }}
@@ -62,7 +62,7 @@ export default function WelcomeIntroScreen() {
           </Text>
         </View>
       </View>
-    </LinearGradient>
+    </SafeAreaView>
   );
 
   return (

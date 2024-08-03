@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Toast } from 'react-native-toast-notifications';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Toast } from "react-native-toast-notifications";
+import { Ionicons } from "@expo/vector-icons";
 import RazorpayCheckout from "react-native-razorpay";
 // Import your payment gateway SDK here
 
-const PaymentComponent = ({ isVisible, itemType, itemPrice, onClose, onPaymentSuccess }) => {
+const PaymentComponent = ({
+  isVisible,
+  itemType,
+  itemPrice,
+  onClose,
+  onPaymentSuccess,
+}) => {
   const navigation = useNavigation();
 
   const [paymentStatus, setPaymentStatus] = useState<boolean | null>(null);
-
-  const handlePayment = async () => {
-    try {
-
-      Toast.show("Payment Success", {
-        successColor: "green",
-        duration: 4000,
-        icon: <Ionicons name="checkmark-circle" size={24} color="green" />,
-      });
-        var options = {
+  const [paymentData, setPaymentData] = useState<any | null>(null);
+  const handleRazorPay = async () => {
+    var options = {
       description: "Puchase Study Material",
       image:
         "https://res.cloudinary.com/dgheyg3iv/image/upload/v1720931194/dmym7wh5u0vvhp2i1tki.png", //logo
@@ -27,8 +26,8 @@ const PaymentComponent = ({ isVisible, itemType, itemPrice, onClose, onPaymentSu
       currency: "INR",
       key: "rzp_test_lmy83ka5bsXLz8",
       amount: 1000000,
-      name: "Ekaant",
-      order_id: "",
+      name: "KrishnaAcademy",
+      order_id: "333",
       prefill: {
         email: `mister.harshkumar@gmail.com `,
         contact: `7991168445`,
@@ -39,9 +38,7 @@ const PaymentComponent = ({ isVisible, itemType, itemPrice, onClose, onPaymentSu
       .then((data) => {
         // handle success
         setPaymentStatus(true);
-        // setPaymentData(data);
-        // setPaymentId(data.razorpay_payment_id);
-        // console.log(data, "Payment Success");
+        setPaymentData(data);
 
         // setIsPaymentComplete(true);
         Toast.show("Payment Success", {
@@ -52,7 +49,10 @@ const PaymentComponent = ({ isVisible, itemType, itemPrice, onClose, onPaymentSu
       })
       .catch((error) => {
         // handle failure
+        setPaymentStatus(true);
+
         setPaymentStatus(false);
+        // setPaymentData(error);
 
         console.log(
           "Error in payment",
@@ -61,13 +61,28 @@ const PaymentComponent = ({ isVisible, itemType, itemPrice, onClose, onPaymentSu
           error.source,
           error.metadata
         );
-        alert(
-          `Error: ${error.code} | ${error.description} | ${error.source} | ${error.metadata}`
-        );
+        // alert(
+        //   `Error: ${error.code} | ${error.description} | ${error.source} | ${error.metadata}`
+        // );
+      });
+  };
+  const handlePayment = async () => {
+    try {
+      Toast.show("Payment Success", {
+        successColor: "green",
+        duration: 4000,
+        icon: <Ionicons name="checkmark-circle" size={24} color="green" />,
       });
 
-      onPaymentSuccess();
+      await handleRazorPay();
+
+      if (paymentStatus) {
+        console.log("Payment Success75");
+        console.log(paymentData);
+      }
       onClose();
+      onPaymentSuccess();
+
       // Implement payment logic here using the payment gateway SDK
       // For example, using Stripe:
       // const paymentIntent = await createPaymentIntent(item.price);
@@ -76,95 +91,46 @@ const PaymentComponent = ({ isVisible, itemType, itemPrice, onClose, onPaymentSu
       // On successful payment, navigate to the respective item screen
       // navigation.navigate(itemType, { item });
     } catch (error) {
-      console.error('Payment failed', error);
+      console.error("Payment failed", error);
     }
   };
 
-  // const handlePayment = async () => {
-  //   var options = {
-  //     description: "Room Booking",
-  //     image:
-  //       "https://res.cloudinary.com/dgheyg3iv/image/upload/v1720931194/dmym7wh5u0vvhp2i1tki.png", //logo
-
-  //     currency: "INR",
-  //     key: "rzp_test_lmy83ka5bsXLz8",
-  //     amount: `${PaymentPrice * 100}`,
-  //     name: "Ekaant",
-  //     order_id: "",
-  //     prefill: {
-  //       email: `${userData.user.email}`,
-  //       contact: `${userData.user.phoneNumber}`,
-  //       name: `${userData.user.username}`,
-  //     },
-  //   };
-  //   RazorpayCheckout.open(options)
-  //     .then((data) => {
-  //       // handle success
-  //       setPaymentStatus(true);
-  //       setPaymentData(data);
-  //       setPaymentId(data.razorpay_payment_id);
-  //       // console.log(data, "Payment Success");
-
-  //       setIsPaymentComplete(true);
-  //       Toast.show("Payment Success", {
-  //         successColor: "green",
-  //         duration: 4000,
-  //         icon: <Ionicons name="checkmark-circle" size={24} color="green" />,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       // handle failure
-  //       setPaymentStatus(false);
-
-  //       console.log(
-  //         "Error in payment",
-  //         error.code,
-  //         error.description,
-  //         error.source,
-  //         error.metadata
-  //       );
-  //       alert(
-  //         `Error: ${error.code} | ${error.description} | ${error.source} | ${error.metadata}`
-  //       );
-  //     });
-  // };
 
 
   return (
-    <Modal
-    transparent={true}
-    visible={isVisible}
-    animationType="slide"
-  >
-    <View style={styles.modalOverlay}>
-      <View style={styles.modalContent}>
-        <Text style={styles.heading}>Purchase {itemType}</Text>
-        {/* <Text style={styles.price}>Price: ${itemPrice}</Text> */}
-        <TouchableOpacity style={styles.button} onPress={handlePayment}>
-          <Text style={styles.buttonText}>Pay Now</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.closeButton} onPress={()=> onClose()}>
-          <Text style={styles.closeButtonText}>Close</Text>
-        </TouchableOpacity>
+    <Modal transparent={true} visible={isVisible} animationType="slide">
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.heading}>Purchase {itemType}</Text>
+          {/* <Text style={styles.price}>Price: ${itemPrice}</Text> */}
+          <TouchableOpacity style={styles.button} onPress={handlePayment}>
+            <Text style={styles.buttonText}>Pay Now</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => onClose()}
+          >
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  </Modal>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   heading: {
     fontSize: 24,
@@ -175,21 +141,21 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     padding: 10,
     borderRadius: 4,
     marginBottom: 10,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
   },
   closeButton: {
-    backgroundColor: '#f44336',
+    backgroundColor: "#f44336",
     padding: 10,
     borderRadius: 4,
   },
   closeButtonText: {
-    color: 'white',
+    color: "white",
   },
 });
 

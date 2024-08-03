@@ -23,19 +23,29 @@ interface StudyMaterial {
 
 const StudyMaterialsList: React.FC = () => {
 
-
-  const [studyMaterials, setStudyMaterials] = useState<StudyMaterial[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPdfUri, setSelectedPdfUri] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState<boolean | null>(false);
+  const [studyMaterials, setStudyMaterials] = useState([]);
+const [pdfUri, setPdfUri] = useState('');
 
-
-
-  const openPdfModal = (pdfUri) => {
+  const openPdfModal = () => {
     setSelectedPdfUri(pdfUri);
-    setModalVisible(true);
+    console.log("openPdfModal");
+    console.log(pdfUri, "pdfUri"); 
+      if(!pdfUri) {
+        return;
+      }
+    router.push({
+        pathname: '(routes)/pdfviewer',
+        params: { pdfUri: pdfUri },
+      })
+
+
+
   };
 
   const closePdfModal = () => {
@@ -43,12 +53,11 @@ const StudyMaterialsList: React.FC = () => {
     setSelectedPdfUri('');
   };
 
-
   const fetchStudyMaterials = async () => {
     try {
       const response = await axios.get(`${SERVER_URI}/api/v1/study/getAllStudyMaterials`);
       console.log(response.data, "---");
-      setStudyMaterials(response.data.data.slice(0, 5)); // Limit to 10 items
+      setStudyMaterials(response.data.data.slice(0, 5)); // Limit to 5 items
       setLoading(false);
       setRefreshing(false);
     } catch (err) {
@@ -62,10 +71,32 @@ const StudyMaterialsList: React.FC = () => {
     fetchStudyMaterials();
   }, [refreshing]);
 
-
   const onRefresh = () => {
     setRefreshing(true);
     fetchStudyMaterials();
+  };
+
+  const handleOpenMaterial = async () => {
+    // console.log("open========", item) ;
+    setModalVisible(true);
+    // console.log(item, "item.description");
+    if (paymentStatus) {
+      openPdfModal();
+      console.log("Payment Success-----1051");
+    } else {
+      console.log("Payment required to open material");
+    }
+  };
+
+  const onCloseMaterial = async () => {
+    console.log("close");
+    setModalVisible(false);
+  };
+
+  const onPaymentSuccess = async (item) => {
+    console.log("Payment Success-----105");
+    setPaymentStatus(true);
+    openPdfModal(item.fileUrl);
   };
 
   if (loading) {
@@ -75,9 +106,11 @@ const StudyMaterialsList: React.FC = () => {
       </View>
     );
   }
+
   if (error) {
     return (
-      <TouchableOpacity style={styles.centered}
+      <TouchableOpacity
+        style={styles.centered}
         onPress={() => {
           setError(null);
           setLoading(true);
@@ -90,41 +123,28 @@ const StudyMaterialsList: React.FC = () => {
     );
   }
 
-  const handleOpenMaterial  = async(item) => {
-    console.log(item, "item.description")
-
-
-  }
-
-  const onCloseMaterial = async() => {
-    console.log("close")
-    setModalVisible(false);
-  }
-
-  const onPaymentSuccess = () => {
-    console.log("Payment Success-----")
-  }
 
   return (
     <View style={styles.container}>
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 16,
-      }}>
-
-
-  <PaymentComponent
-    isVisible={isModalVisible}
-    onClose={onCloseMaterial}
-    onPaymentSuccess={onPaymentSuccess}
-
-    itemType="Study Material"
-    itemPrice="100"
-    handlePayment={() => console.log('Payment done')}
-    handleClose={closePdfModal}
-  />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}
+      >
+        {/* Render study materials here */}
+      {/* </View> */}
+      <PaymentComponent
+        isVisible={isModalVisible}
+        onClose={onCloseMaterial}
+        onPaymentSuccess={() => onPaymentSuccess(selectedPdfUri)}
+        itemType="Study Material"
+        itemPrice="100"
+        handlePayment={() => console.log('Payment done')}
+        handleClose={closePdfModal}
+      />
 
     <TouchableOpacity onPress={()=>{setRefreshing(!refreshing)}}>
         <Text style={styles.heading}>Study Materials</Text>
@@ -136,6 +156,7 @@ const StudyMaterialsList: React.FC = () => {
           <Ionicons name="arrow-forward" size={30} color="gray" />
         </TouchableOpacity>
       </View>
+
       <FlatList
 
         data={studyMaterials}
@@ -146,14 +167,19 @@ const StudyMaterialsList: React.FC = () => {
 
 
 
-          // onPress={()=>{console.log(item, "item.description")}}
+          // onPress={()=>{console.log(item.fileUrl, "item.description")}}
 
             // onPress={() => router.push({
             //   pathname: '(routes)/pdfviewer',
             //   params: { pdfUri: item.fileUrl },
             // })}
 
-            onPress={() => openPdfModal(item.fileUrl)}
+            onPress={() => {
+                console.log(item.fileUrl, "item-----");
+                setPdfUri(item.fileUrl);
+              handleOpenMaterial()
+
+            }}
           >
               <Text style={{
                 position: 'absolute',

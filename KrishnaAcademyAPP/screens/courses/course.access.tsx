@@ -208,7 +208,7 @@ export default function CourseAccessScreen() {
                 paddingVertical: 10,
                 paddingHorizontal: 42,
                 backgroundColor:
-                  activeButton === "About" ? "#2467EC" : "transparent",
+                  activeButton === "About" ? "#ED3137" : "transparent",
                 borderRadius: activeButton === "About" ? 50 : 0,
               }}
               onPress={() => setActiveButton("About")}
@@ -227,7 +227,7 @@ export default function CourseAccessScreen() {
                 paddingVertical: 10,
                 paddingHorizontal: 42,
                 backgroundColor:
-                  activeButton === "Q&A" ? "#2467EC" : "transparent",
+                  activeButton === "Q&A" ? "#ED3137" : "transparent",
                 borderRadius: activeButton === "Q&A" ? 50 : 0,
               }}
               onPress={() => setActiveButton("Q&A")}
@@ -246,7 +246,7 @@ export default function CourseAccessScreen() {
                 paddingVertical: 10,
                 paddingHorizontal: 42,
                 backgroundColor:
-                  activeButton === "Reviews" ? "#2467EC" : "transparent",
+                  activeButton === "Reviews" ? "#ED3137" : "transparent",
                 borderRadius: activeButton === "Reviews" ? 50 : 0,
               }}
               onPress={() => setActiveButton("Reviews")}
@@ -293,7 +293,7 @@ export default function CourseAccessScreen() {
                 >
                   <Text
                     style={{
-                      color: "#2467EC",
+                      color: "#ED3137",
                       fontSize: 14,
                     }}
                   >
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
   button: {
     width: widthPercentageToDP("35%"),
     height: 40,
-    backgroundColor: "#2467EC",
+    backgroundColor: "#ED3137",
     marginVertical: 10,
     borderRadius: 40,
     alignItems: "center",

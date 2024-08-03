@@ -45,7 +45,7 @@ export default function OnBoardingScreen() {
             source={require("@/assets/onboarding/shape_6.png")}
           />
           <Text style={[styles.titleText, { fontFamily: "Raleway_700Bold" }]}>
-            LMS
+            Krishna Academy
           </Text>
         </View>
         <View style={styles.dscpWrapper}>
@@ -53,7 +53,7 @@ export default function OnBoardingScreen() {
             Explore a variety of interactive lesson,
           </Text>
           <Text style={[styles.dscpText, { fontFamily: "Nunito_400Regular" }]}>
-            video, quizze & assignment.
+            video, quiz & assignment.
           </Text>
         </View>
         <TouchableOpacity

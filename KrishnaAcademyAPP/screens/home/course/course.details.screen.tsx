@@ -229,7 +229,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 42,
                   backgroundColor:
-                    activeButton === "About" ? "#2467EC" : "transparent",
+                    activeButton === "About" ? "#ED3137" : "transparent",
                   borderRadius: activeButton === "About" ? 50 : 0,
                 }}
                 onPress={() => setActiveButton("About")}
@@ -248,7 +248,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 42,
                   backgroundColor:
-                    activeButton === "Lessons" ? "#2467EC" : "transparent",
+                    activeButton === "Lessons" ? "#ED3137" : "transparent",
                   borderRadius: activeButton === "Lessons" ? 50 : 0,
                 }}
                 onPress={() => setActiveButton("Lessons")}
@@ -267,7 +267,7 @@ export default function CourseDetailScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 42,
                   backgroundColor:
-                    activeButton === "Reviews" ? "#2467EC" : "transparent",
+                    activeButton === "Reviews" ? "#ED3137" : "transparent",
                   borderRadius: activeButton === "Reviews" ? 50 : 0,
                 }}
                 onPress={() => setActiveButton("Reviews")}
@@ -313,7 +313,7 @@ export default function CourseDetailScreen() {
                   >
                     <Text
                       style={{
-                        color: "#2467EC",
+                        color: "#ED3137",
                         fontSize: 14,
                       }}
                     >
@@ -352,7 +352,7 @@ export default function CourseDetailScreen() {
             {checkPurchased === true ? (
               <TouchableOpacity
                 style={{
-                  backgroundColor: "#2467EC",
+                  backgroundColor: "#ED3137",
                   paddingVertical: 16,
                   borderRadius: 4,
                 }}
@@ -377,7 +377,7 @@ export default function CourseDetailScreen() {
             ) : (
               <TouchableOpacity
                 style={{
-                  backgroundColor: "#2467EC",
+                  backgroundColor: "#ED3137",
                   paddingVertical: 16,
                   borderRadius: 4,
                 }}

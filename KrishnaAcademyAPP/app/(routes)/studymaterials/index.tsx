@@ -17,15 +17,15 @@ const StudyMaterials = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedPdfUri, setSelectedPdfUri] = useState('');
   
-    const openPdfModal = (pdfUri) => {
-      setSelectedPdfUri(pdfUri);
-      setModalVisible(true);
-    };
+    // const openPdfModal = (pdfUri) => {
+    //   setSelectedPdfUri(pdfUri);
+    //   setModalVisible(true);
+    // };
   
-    const closePdfModal = () => {
-      setModalVisible(false);
-      setSelectedPdfUri('');
-    };
+    // const closePdfModal = () => {
+    //   setModalVisible(false);
+    //   setSelectedPdfUri('');
+    // };
 
   return (
     <View style={styles.container}>
@@ -38,7 +38,7 @@ const StudyMaterials = () => {
           <TouchableOpacity style={styles.item}
         //   onPress={() => openPdfModal(item.fileUrl)} // Open PDF modal on press
         //   onPress={() => console.log(item)} // Open PDF modal on press
-        onPress={() => openPdfModal(item.fileUrl)}
+        // onPress={() => openPdfModal(item.fileUrl)}
         //   onPress={() =>router.push('StudyMaterialsScreen', { })}
           >
             <View style={styles.itemContent}>

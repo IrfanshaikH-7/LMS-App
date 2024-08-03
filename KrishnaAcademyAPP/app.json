@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "client",
+    "name": "Krishna Academy",
     "slug": "lms",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/App.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {

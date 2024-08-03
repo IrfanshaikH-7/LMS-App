@@ -9,9 +9,10 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Button,
+
   Modal,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
@@ -26,7 +27,7 @@ const quizDetails = (props: Props) => {
 
   const [count, setCount] = useState<number>(0);
   const [questions, setQuestions] = useState<any[]>([]);
-  const [time, setTime] = useState<number>(20);
+  // const [time, setTime] = useState<number>(20);
   const [userScore, setUserScore] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [selectedBox, setSelectedBox] = useState<number | null>(null);
@@ -49,95 +50,13 @@ const quizDetails = (props: Props) => {
     getQuizDetails();
   }, [quizId]);
 
-  // {
-  //   "__v": 0,
-  //   "_id": "66a8e8a63f3c51b0daa04ee9",
-  //   "category": "general",
-  //   "image": "https://picsum.photos/200",
-  //   "isPaid": true,
-  //   "name": "Sample Quiz2",
-  //   "price": 332,
-  //   "questions": [
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ede",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04edf",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee0",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee1",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee2",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee3",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee4",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee5",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee6",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     },
-  //     {
-  //       "__v": 0,
-  //       "_id": "66a8e8a63f3c51b0daa04ee7",
-  //       "correctAnswer": { /* Object */ },
-  //       "options": { /* Object */ },
-  //       "question": { /* Object */ }
-  //     }
-  //   ],
-  //   "shortDescription": "hindihindihindihindihindihindi"
-  // }
 
   const handleSave = () => {
-    console.log(
-      "questions[count].correctAnswer[language]",
-      questions[count].correctAnswer[language],
-      userAnswer
-    );
+    // console.log(
+    //   "questions[count].correctAnswer[language]",
+    //   questions[count].correctAnswer[language],
+    //   userAnswer
+    // );
 
     if (count < questions.length - 1) {
       if (questions[count].correctAnswer[language] === userAnswer) {
@@ -145,37 +64,24 @@ const quizDetails = (props: Props) => {
       }
       setCount((count) => count + 1);
       setSelectedBox(null);
-      setTime(20);
+      // setTime(20);
     } else {
       setGetResultClicked(true);
       console.log("userScore", userScore);
       setScoreModalVisible(true);
 
-      // router.push({
-      //     pathname: "/(stack)/completed",
-      //     params: { score: userScore },
-      // });
+     
     }
     console.log("userScore", userScore, count);
   };
 
-  // useEffect(() => {
-  //     if (time > 0) {
-  //         const timerId = setInterval(() => {
-  //             setTime((prevTime) => prevTime - 1);
-  //         }, 1000);
 
-  //         return () => clearInterval(timerId);
-  //     } else if (time === 0) {
-  //         handleSave();
-  //     }
-  // }, [time]);
 
   const toggleLanguage = () => {
     setLanguage((prevLanguage) => (prevLanguage === "en" ? "hin" : "en"));
   };
 
-  // {"optionA": {"en": "Paris", "hin": "पेरिस"}, "optionB": {"en": "London", "hin": "लंदन"}, "optionC": {"en": "Berlin", "hin": "बर्लिन"}, "optionD": {"en": "Madrid", "hin": "मैड्रिड"}}
+
   const toggleColor = (index: number | null) => {
     const optionsArray = Object.values(questions[count]?.options);
     console.log(optionsArray[index][language], "----l", index);
@@ -188,13 +94,13 @@ const quizDetails = (props: Props) => {
     if (count < questions.length - 1) {
       setCount((count) => count + 1);
       setSelectedBox(null);
-      setTime(15);
+      // setTime(15);
     }
   };
 
   // console.log("quizDetails---",questions, count);
 
-  console.log("questions-------->", questions[count]);
+  // console.log("questions-------->", questions[count]);
   const getOptionsArray = (question, language) => {
     if (!question || !question.options) {
       return [];
@@ -240,16 +146,15 @@ const quizDetails = (props: Props) => {
             backgroundColor: "#f3f4f6",
           }}
         >
-          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#f97316" }}>
-            Loading...
-          </Text>
+        <ActivityIndicator size="large" color="#ED3137" />
         </View>
       ) : (
         <SafeAreaView
           style={{
             flex: 1,
             paddingTop: 40,
-            paddingHorizontal: 10,
+            paddingHorizontal: 20,
+
             flexDirection: "column",
             // justifyContent: "space-between",
           }}
@@ -286,17 +191,7 @@ const quizDetails = (props: Props) => {
                   marginTop: 25,
                 }}
               >
-                {/* <View style={{ alignItems: "center" }}>
-              <AntDesign
-                name="clockcircle"
-                size={24}
-                color="#f97316"
-                style={{ marginBottom: 1 }}
-              />
-              <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-                {time < 10 ? `0${time}` : time}
-              </Text>
-            </View> */}
+              
                 <CountdownCircleTimer
                   size={100}
                   isPlaying
@@ -388,8 +283,8 @@ const quizDetails = (props: Props) => {
                   style={{
                     backgroundColor:
                       selectedBox === index ? "#fed7aa" : "#ffffff",
-                    paddingVertical: 14,
-                    paddingHorizontal: 18,
+                    paddingVertical: 18,
+                    paddingHorizontal: 30,
                     borderRadius: 30,
                     marginBottom: 12,
                     borderWidth: selectedBox === index ? 1 : 0,
@@ -399,7 +294,14 @@ const quizDetails = (props: Props) => {
                   key={index}
                   onPress={() => toggleColor(index)}
                 >
-                  <Text>{`${option.key}: ${option.value}`}</Text>
+                  <Text
+                  style={{
+                    fontWeight: "500",
+                    fontSize: 18,
+                    textAlign: "left",
+
+                  }}
+                  >{`${option.key.slice(-1)} . ${option.value}`}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -412,7 +314,8 @@ const quizDetails = (props: Props) => {
                 }}
               >
                 <TouchableOpacity
-                  disabled={true}
+                  onPress={()=> setScoreModalVisible(true)}
+                  // disabled={true}
                   style={{
                     backgroundColor: "#d1d5db",
                     padding: 16,
@@ -427,7 +330,7 @@ const quizDetails = (props: Props) => {
                       textAlign: "center",
                     }}
                   >
-                    Generating your score...
+                    Your score: {userScore}
                   </Text>
                 </TouchableOpacity>
               </View>

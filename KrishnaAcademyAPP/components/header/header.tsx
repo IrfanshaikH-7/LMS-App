@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   bellContainer: {
     width: 20,
     height: 20,
-    backgroundColor: "#2467EC",
+    backgroundColor: "#ED3137",
     position: "absolute",
     borderRadius: 50,
     right: -5,
