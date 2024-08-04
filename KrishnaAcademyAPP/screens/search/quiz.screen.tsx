@@ -23,6 +23,9 @@ const renderItem = ({ item }) => {
     <TouchableOpacity
       style={{
         backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "#d2cccc",
+
         // marginBottom: 10,
         minWidth: "45%",
         maxWidth: "50%",
@@ -75,7 +78,7 @@ const renderItem = ({ item }) => {
         style={{
           backgroundColor: "#EBEBEB",
           borderRadius: 10,
-          width: 160,
+          width: 150,
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
@@ -158,7 +161,7 @@ const renderItem = ({ item }) => {
     </TouchableOpacity>
   );
 };
-export default function SearchScreen() {
+export default function QuizScreen() {
   const [quizzes, setQuizzes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -187,23 +190,26 @@ export default function SearchScreen() {
   }, []);
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
-        paddingTop: 50,
+        // backgroundColor:'red',
+
       }}
     >
-      <Header />
-      {/* <SearchInput /> */}
+
+
 
       <View
         style={{
           // marginHorizontal: 10,
+          // backgroundColor: "red",
 
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
           padding: 10,
+
 
           // height: "100%",
         }}
@@ -221,6 +227,6 @@ export default function SearchScreen() {
           }
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

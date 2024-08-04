@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "@/components/header/header";
@@ -17,19 +18,33 @@ import { Video } from "expo-av";
 import StudyMaterialsList from "@/components/studymaterials";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import QuizScreen from "../search/quiz.screen";
 
 export default function HomeScreen() {
   const [videoUri, setVideoUri] = useState(null);
   const videoref = React.useRef(null);
 
   return (
-    <LinearGradient
-      colors={["#E5ECF9", "#F6F7F9"]}
-      style={{ flex: 1, paddingTop: 50 }}
-    >
+   <SafeAreaView
+   style={{
+    flex: 1,
+    paddingTop: 50,
+   }}
+   >
+
+   
       <Header />
       {/* <SearchInput homeScreen={true} /> */}
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}
+      style={
+        {
+          // flex:1,
+          backgroundColor: "white",
+          // padding: 10,
+          // paddingHorizontal: 10,
+        }
+      }
+      >
         <HomeBannerSlider />
 
         {/* <AllCourses /> */}
@@ -37,7 +52,7 @@ export default function HomeScreen() {
         {/* <StudyMaterialsList /> */}
 
         <View
-          style={{ height: 400, marginHorizontal: 10, paddingHorizontal: 10 }}
+          style={{ height: 400, marginHorizontal: 0, paddingHorizontal: 0 }}
         >
           <View
             style={{
@@ -75,11 +90,11 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
 
+                <QuizScreen/>
 
-        <StudyMaterialsList />
         </View>
       </ScrollView>
-    </LinearGradient>
+      </SafeAreaView>
   );
 }
 
