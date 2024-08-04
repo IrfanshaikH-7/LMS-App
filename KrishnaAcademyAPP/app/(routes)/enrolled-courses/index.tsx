@@ -25,18 +25,7 @@ export default function index() {
 
   return (
     <>
-      {/* {loader || loading ? (
-        <Loader />
-      ) : (
-        <LinearGradient colors={["#E5ECF9", "#F6F7F9"]} style={{ flex: 1 }}>
-          <FlatList
-            data={courses}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={({ item }) => <CourseCard item={item} />}
-          />
-        </LinearGradient>
-      )} */}
+     
       <Material />
     </>
   );

@@ -7,10 +7,12 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { Image } from "expo-image";
-import { FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Link, router } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Header() {
+  const navigation = useNavigation();
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -32,9 +34,13 @@ export default function Header() {
 
   return (
     <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
-        <FontAwesome name="bell" size={30} color="rgb(242, 221, 126)" />
+       <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+        <Ionicons name="menu" size={30} color="rgb(242, 221, 126)" />
       </TouchableOpacity>
+
+   
+        {/* <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
+      </TouchableOpacity> */}
       <View>
         <Image
           source={{
