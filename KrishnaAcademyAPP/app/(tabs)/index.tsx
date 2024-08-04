@@ -8,15 +8,78 @@ import { StyleSheet, Text, View } from "react-native";
 
 
 import React from 'react';
+import { Image } from "expo-image";
+import useUser from "@/hooks/auth/useUser";
+import CourseDetailScreen from "@/screens/home/course/course.details.screen";
+import { router, useNavigation } from "expo-router";
 
 const CustomDrawerContent = (props) => {
+  const { user, loading, setRefetch } = useUser();
+
+  const navigation = useNavigation();
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
+
+      <View style={styles.userInfoWrapper}>
+        <Image
+          source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
+          width={80}
+          height={80}
+          style={{
+            borderRadius: 40,
+            // margin: 10,
+          }}
+        />
+        <View style={styles.userDetailsWrapper}>
+          <Text style={styles.userName}>  {user?.name}</Text>
+          <Text style={styles.userEmail}>{user?.email}</Text>
+        </View>
+      </View>
+
+    
+      <View style={styles.section}>
+        <Text style={styles.heading}>My Accounts</Text>
+        <DrawerItem
+          label="Saved Questions"
+
+        
+          onPress={() => router.navigate("/(routes)/enrolled-courses") }
+          icon={({ focused, size }) => (
+            <Ionicons
+              name="bookmark"
+              size={size}
+              color={focused ? 'blue' : 'black'}
+            />
+          )}
+        />
+        <DrawerItem
+          label="My Courses"
+          onPress={() => {/* Add your my courses logic here */}}
+          icon={({ focused, size }) => (
+            <Ionicons
+              name="school"
+              size={size}
+              color={focused ? 'blue' : 'black'}
+            />
+          )}
+        />
+        <DrawerItem
+          label="My Purchases"
+          onPress={() => {/* Add your my courses logic here */}}
+          icon={({ focused, size }) => (
+            <Ionicons
+              name="cash"
+              size={size}
+              color={focused ? 'blue' : 'black'}
+            />
+          )}
+        />
+      </View>
       <View style={styles.section}>
         <Text style={styles.heading}>Others</Text>
         <DrawerItem
-          label="Share App"
+          label="Share this App"
           onPress={() => {/* Add your share app logic here */}}
           icon={({ focused, size }) => (
             <Ionicons
@@ -26,12 +89,51 @@ const CustomDrawerContent = (props) => {
             />
           )}
         />
+     
         <DrawerItem
           label="Rate Others"
           onPress={() => {/* Add your rate others logic here */}}
           icon={({ focused, size }) => (
             <Ionicons
               name="star"
+              size={size}
+              color={focused ? 'blue' : 'black'}
+            />
+          )}
+        />
+           <DrawerItem
+          label="About Us"
+          onPress={() => {/* Add your share app logic here */}}
+          icon={({ focused, size }) => (
+            <Ionicons
+              name="people"
+              size={size}
+              color={focused ? 'blue' : 'black'}
+            />
+          )}
+        />
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.heading}>Connect</Text>
+        <View style={ {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginHorizontal: 16,
+  }}>
+          <Ionicons name="logo-facebook" size={24} color="blue" style={styles.icon} />
+          <Ionicons name="logo-twitter" size={24} color="skyblue" style={styles.icon} />
+          <Ionicons name="logo-instagram" size={24} color="purple" style={styles.icon} />
+          <Ionicons name="logo-linkedin" size={24} color="blue" style={styles.icon} />
+        </View>
+      </View>
+      <View style={styles.section}>
+        {/* <Text style={styles.heading}>Account</Text> */}
+        <DrawerItem
+          label="Logout"
+          onPress={() => {/* Add your sign out logic here */}}
+          icon={({ focused, size }) => (
+            <Ionicons
+              name="log-out"
               size={size}
               color={focused ? 'blue' : 'black'}
             />
@@ -58,21 +160,32 @@ export default function index() {
         }}
       /> */}
       <Drawer.Group
-       options={{
+      screenOptions={{
+
         headerShown: false,
       }}
       >
+
+
         <Drawer.Screen
-          name="index"
+          name="Home"
+          // children={
+          //   () => <HomeScreen />
+          // }
           component={HomeScreen}
-      
+
           options={{
             headerShown: false,
+
             title: 'Home',
+          
+            
+
           
             drawerIcon: ({ focused, size }) => (
               <Ionicons
                 name="home"
+
                 size={size}
                 color={focused ? 'blue' : 'black'}
               />
@@ -82,20 +195,6 @@ export default function index() {
 
 
 
-<Drawer.Screen
-        name="profile"
-        component={ProfileScreen}
-        options={{
-          title: 'Settings',
-          drawerIcon: ({ focused, size }) => (
-            <Ionicons
-              name="settings"
-              size={size}
-              color={focused ? 'blue' : 'black'}
-            />
-          ),
-        }}
-      />
         
       </Drawer.Group>
     </Drawer.Navigator>
@@ -118,4 +217,36 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginBottom: 10,
   },
+  navItemLabel: {
+    marginLeft: -20,
+    fontSize: 18,
+  },
+  userInfoWrapper: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    // borderBottomColor: "#000",
+    // borderBottomWidth: 1,
+    // marginBottom: 10,
+  },
+  userImg: {
+    borderRadius: 40,
+  },
+  userDetailsWrapper: {
+    marginTop: 25,
+    marginLeft: 10,
+  },
+  userName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  userEmail: {
+    fontSize:16,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  }
 });

@@ -63,7 +63,7 @@ function RootLayoutNav() {
   return (
     <ToastProvider>
       <Stack screenOptions={{
-            header: (props) => <Header {...props}  />,
+            // header: (props) => <Header {...props}  />,
             headerShown: false
           }}>
        
