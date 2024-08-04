@@ -185,22 +185,78 @@ const quizDetails = (props: Props) => {
               >
                 {quizDetails?.category.toUpperCase()}
               </Text>
-
+              {/* { top part} */}
               <View
                 style={{
+                  width: '100%',
                   marginTop: 25,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'red',
+                  paddingBottom: 6,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
                 }}
+
               >
-              
-                <CountdownCircleTimer
-                  size={100}
-                  isPlaying
-                  duration={120}
-                  colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                  colorsTime={[7, 5, 2, 0]}
+                <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                <View
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 80,
+                  borderWidth: 2,
+                  borderColor: 'red'
+                }}
+
                 >
-                  {({ remainingTime }) => <Text>{remainingTime}</Text>}
-                </CountdownCircleTimer>
+                    {/* {play icon here} */}
+                </View>
+                  <View>
+                    <Text style={{fontSize: 14,}}>{"00.29.35"}</Text>
+                    <Text style={{fontSize: 14, color: '#f97316'}}>{'Static GK'}</Text>
+                  </View>
+              </View>
+
+                <View style={{flexDirection: 'row', gap:8}}>
+            <TouchableOpacity
+            onPress={toggleLanguage}
+              style={{
+                // backgroundColor: "rgb(233, 193, 160)",
+                padding: 10,
+                borderRadius: 4,
+                borderColor:'black',
+                borderWidth: 1,
+                marginVertical: 8
+              }}
+            >
+              <Text>{language === 'en' ? 'hindi' : 'english'}</Text>
+            </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={()=> console.log('submit clicked')}
+                  style={{
+                    display: 'flex',
+                    backgroundColor: "red",
+                    paddingVertical: 8,
+                    justifyContent: 'center',
+                    paddingHorizontal: 14,
+                    borderRadius: 8,
+                    width: "auto",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "800",
+                      fontSize: 14,
+                      color: 'white',
+                      textAlign: "center",
+                    }}
+                  >
+                    {"Submit"}
+                  </Text>
+                </TouchableOpacity>
+                </View>
+              
+               
               </View>
             </View>
           </View>
