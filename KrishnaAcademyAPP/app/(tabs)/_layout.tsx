@@ -42,11 +42,12 @@ export default function TabsLayout() {
           <Image
             source={iconName}
             style={{
-              width: 30,
-              height: 30,
-              tintColor: focused ? "#fff" : "#000",
+              width: 25,
+              height: 25,
+              tintColor: focused ? "#FFF" : "#000",
             }}
           />
+
         </Animated.View>
       </Animated.View>
     );
@@ -59,11 +60,14 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => {
             let iconName;
             if (route.name === "index") {
-              iconName = require("@/assets/icons/HouseSimple.png");
+              iconName = require("@/assets/icons/home.png");
+            } else if (route.name === "studymaterials/index") {
+
+              iconName = require("@/assets/icons/information2.png");
             } else if (route.name === "search/index") {
-              iconName = require("@/assets/icons/search.png");
+              iconName = require("@/assets/icons/puzzle-piece.png");
             } else if (route.name === "courses/index") {
-              iconName = require("@/assets/icons/BookBookmark.png");
+              iconName = require("@/assets/icons/more.png");
             } else if (route.name === "profile/index") {
               iconName = require("@/assets/icons/User.png");
             }
@@ -91,6 +95,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="index" />
+      <Tabs.Screen name="studymaterials/index" />
       <Tabs.Screen name="courses/index" />
       <Tabs.Screen name="search/index" />
       <Tabs.Screen name="profile/index" />
