@@ -5,6 +5,7 @@ const StudyMaterialSchema = new mongoose.Schema({
   price: { type: Number, required: false },
   title: { type: String, required: true },
   description: { type: String },
+  thumbnail: { type: String, required: false },
   fileType: { type: String, required:false },
   fileUrl: { type: String, required: true },
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: false },

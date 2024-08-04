@@ -22,19 +22,24 @@ const renderItem = ({ item }) => {
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: "white",
-        marginBottom: 10,
+        backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "#d2cccc",
+
+        // marginBottom: 10,
         minWidth: "45%",
         maxWidth: "50%",
         marginHorizontal: 5,
-        // height: 180, // Ensure this is set to control the size
+        height: 250, // Ensure this is set to control the size
         flexDirection: "column",
+        justifyContent: "space-between",
         alignItems: "center",
-        justifyContent: "center",
+        gap:0,
+
+
+
         borderRadius: 20,
         overflow: "hidden", // Ensure the borderRadius effect applies to children
-
-      
       }}
       onPress={() =>
         router.push({
@@ -43,57 +48,75 @@ const renderItem = ({ item }) => {
         })
       }
     >
-
-<View
+      <View
         style={{
+
           position: "absolute",
-          top: 0,
+          top: 5,
           left: 10,
           justifyContent: "flex-start", // Aligns children vertically to the top
           alignItems: "flex-start", // Aligns children horizontally to the left
-          // margin: 10, // Add margin to the top and left
-          // backgroundColor: "rgb(241, 344, 215)",
-          borderRadius: 20,
+          backgroundColor: "green", // Dark background color
+          borderRadius: 10,
           alignSelf: "flex-start",
+          padding: 5, // Add padding for better appearance
         }}
       >
         <Text
           style={{
-            color: "green",
-            fontSize: 16,
-            fontWeight: "bold",
+            color: "white", // White text color
+            fontSize: 14,
+            // fontWeight: "bold",
             textAlign: "left", // Align text to the left
           }}
         >
           R100
         </Text>
       </View>
-      {!item.image ? (
-        <ImageBackground
-          source={{ uri: "https://picsum.photos/seed/picsum/200/300" }}
-          style={{
-            width: "100%",
-            height: "100%", // Adjusted to fill the TouchableOpacity
-            // justifyContent: "center",
-
-            // alignItems: "center",
-          }}
-          imageStyle={{
-            borderRadius: 20, // Apply borderRadius to the image itself
-          }}
-        />
-      ) : (
-        <Ionicons name="image-outline" size={110} color="red" style={{
-          marginVertical: 10,
-        }} />
-      )}
-
-
 
       <View
         style={{
+          backgroundColor: "#EBEBEB",
+          borderRadius: 10,
+          width: 150,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          // marginBottom: 10,
+          marginTop: 40,
+        }}
+      >
+        {!item.image ? (
+          <ImageBackground
+            source={{ uri: "https://picsum.photos/seed/picsum/200/300" }}
+            style={{
+              width: "100%",
+              height: "100%", // Adjusted to fill the TouchableOpacity
+              // justifyContent: "center",
+
+              // alignItems: "center",
+            }}
+            imageStyle={{
+              borderRadius: 20, // Apply borderRadius to the image itself
+            }}
+          />
+        ) : (
+          <Ionicons
+            name="image-outline"
+            size={140}
+            color="red"
+            style={
+              {
+                // marginVertical: 10,
+              }
+            }
+          />
+        )}
+      </View>
+      <View
+        style={{
           backgroundColor:'#fff',
-          marginTop: -15,
+          // marginTop: -15,
           width: "100%",
           marginVertical: 10, 
           flexDirection: "column",
@@ -138,7 +161,7 @@ const renderItem = ({ item }) => {
     </TouchableOpacity>
   );
 };
-export default function SearchScreen() {
+export default function QuizScreen() {
   const [quizzes, setQuizzes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -167,23 +190,26 @@ export default function SearchScreen() {
   }, []);
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
-        paddingTop: 50,
+        // backgroundColor:'red',
+
       }}
     >
-      <Header />
-      {/* <SearchInput /> */}
+
+
 
       <View
         style={{
           // marginHorizontal: 10,
+          // backgroundColor: "red",
 
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
           padding: 10,
+
 
           // height: "100%",
         }}
@@ -201,6 +227,6 @@ export default function SearchScreen() {
           }
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

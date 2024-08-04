@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
-import axios from 'axios';
-import { SERVER_URI } from '@/utils/uri';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
+import axios from "axios";
+import { SERVER_URI } from "@/utils/uri";
 
 import {
   AntDesign,
@@ -9,10 +17,10 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { router, useNavigation } from 'expo-router';
-import PDFViewerModal from '../app/(routes)/pdfviewer';
-import { Image } from 'expo-image';
-import PaymentComponent from './Payment/PaymentComponent';
+import { router, useNavigation } from "expo-router";
+import PDFViewerModal from "../app/(routes)/pdfviewer";
+import { Image } from "expo-image";
+import PaymentComponent from "./Payment/PaymentComponent";
 
 interface StudyMaterial {
   _id: string;
@@ -22,46 +30,44 @@ interface StudyMaterial {
 }
 
 const StudyMaterialsList: React.FC = () => {
-
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedPdfUri, setSelectedPdfUri] = useState('');
+  const [selectedPdfUri, setSelectedPdfUri] = useState("");
   const [paymentStatus, setPaymentStatus] = useState<boolean | null>(false);
   const [studyMaterials, setStudyMaterials] = useState([]);
-const [pdfUri, setPdfUri] = useState('');
+  const [pdfUri, setPdfUri] = useState("");
 
   const openPdfModal = () => {
     setSelectedPdfUri(pdfUri);
     console.log("openPdfModal");
-    console.log(pdfUri, "pdfUri"); 
-      if(!pdfUri) {
-        return;
-      }
+    console.log(pdfUri, "pdfUri");
+    if (!pdfUri) {
+      return;
+    }
     router.push({
-        pathname: '(routes)/pdfviewer',
-        params: { pdfUri: pdfUri },
-      })
-
-
-
+      pathname: "(routes)/pdfviewer",
+      params: { pdfUri: pdfUri },
+    });
   };
 
   const closePdfModal = () => {
     setModalVisible(false);
-    setSelectedPdfUri('');
+    setSelectedPdfUri("");
   };
 
   const fetchStudyMaterials = async () => {
     try {
-      const response = await axios.get(`${SERVER_URI}/api/v1/study/getAllStudyMaterials`);
+      const response = await axios.get(
+        `${SERVER_URI}/api/v1/study/getAllStudyMaterials`
+      );
       console.log(response.data, "---");
       setStudyMaterials(response.data.data.slice(0, 5)); // Limit to 5 items
       setLoading(false);
       setRefreshing(false);
     } catch (err) {
-      setError('Failed to fetch study materials');
+      setError("Failed to fetch study materials");
       setLoading(false);
       setRefreshing(false);
     }
@@ -123,51 +129,27 @@ const [pdfUri, setPdfUri] = useState('');
     );
   }
 
-
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 16,
-        }}
-      >
-        {/* Render study materials here */}
-      {/* </View> */}
-      <PaymentComponent
-        isVisible={isModalVisible}
-        onClose={onCloseMaterial}
-        onPaymentSuccess={() => onPaymentSuccess(selectedPdfUri)}
-        itemType="Study Material"
-        itemPrice="100"
-        handlePayment={() => console.log('Payment done')}
-        handleClose={closePdfModal}
-      />
-
-    <TouchableOpacity onPress={()=>{setRefreshing(!refreshing)}}>
-        <Text style={styles.heading}>Study Materials</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push({
-          pathname: '(routes)/studymaterials',
-          params: { study: JSON.stringify(studyMaterials) },
-        })}>
-          <Ionicons name="arrow-forward" size={30} color="gray" />
-        </TouchableOpacity>
-      </View>
+        <PaymentComponent
+          isVisible={isModalVisible}
+          onClose={onCloseMaterial}
+          onPaymentSuccess={() => onPaymentSuccess(selectedPdfUri)}
+          itemType="Study Material"
+          itemPrice="100"
+          handlePayment={() => console.log("Payment done")}
+          handleClose={closePdfModal}
+        />
+    
 
       <FlatList
-
         data={studyMaterials}
         numColumns={3}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.item}
-
-
-
-          // onPress={()=>{console.log(item.fileUrl, "item.description")}}
+          <TouchableOpacity
+            style={styles.item}
+            // onPress={()=>{console.log(item.fileUrl, "item.description")}}
 
             // onPress={() => router.push({
             //   pathname: '(routes)/pdfviewer',
@@ -175,46 +157,50 @@ const [pdfUri, setPdfUri] = useState('');
             // })}
 
             onPress={() => {
-                console.log(item.fileUrl, "item-----");
-                setPdfUri(item.fileUrl);
-              handleOpenMaterial()
-
+              console.log(item.fileUrl, "item-----");
+              setPdfUri(item.fileUrl);
+              handleOpenMaterial();
             }}
           >
-              <Text style={{
-                position: 'absolute',
+            <Text
+              style={{
+                position: "absolute",
                 top: 5,
-                right: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                color: 'white',
+                left:5,
+                backgroundColor: "#2DC43E",
+                color: "white",
                 padding: 2,
                 borderRadius: 3,
-              }}>{item?.isPaid ? item?.price : "free"}</Text>
-            <View style={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 5,
-              height: 100,
-            }}>
-            
+              }}
+            >
+              {item?.isPaid ? item?.price : "free"}
+            </Text>
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 5,
+                height: 100,
+              }}
+            >
               <Image
                 style={{
-                  width: '50%',
+                  width: "50%",
                   height: "80%",
                   borderRadius: 5,
                   alignSelf: "center",
                   objectFit: "cover",
                 }}
-                source={{ uri: 'https://poainc.org/wp-content/uploads/2018/06/pdf-placeholder.png' }}
+                source={{
+                  uri: "https://poainc.org/wp-content/uploads/2018/06/pdf-placeholder.png",
+                }}
               />
 
               <Text style={styles.title}>{item.title}</Text>
             </View>
-
           </TouchableOpacity>
         )}
       />
-
     </View>
   );
 };
@@ -222,36 +208,65 @@ const [pdfUri, setPdfUri] = useState('');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-
+    // padding: 10,
   },
   heading: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // marginBottom: 16,
   },
   item: {
     flex: 1,
     marginBottom: 16,
-    flexDirection: 'column',
+    flexDirection: "column",
     height: 120,
-    maxWidth: '30%',
+    maxWidth: "30%",
     gap: 10,
     padding: 10,
     margin: 10,
 
-    backgroundColor: 'rgb(233, 221, 221)1)',
+    backgroundColor: "rgb(233, 221, 221)1)",
     borderRadius: 8,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   centered: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
 export default StudyMaterialsList;
+
+
+{/* <View
+style={{
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: 16,
+}}
+>
+
+
+<TouchableOpacity
+  onPress={() => {
+    setRefreshing(!refreshing);
+  }}
+>
+  <Text style={styles.heading}>Study Materials</Text>
+</TouchableOpacity>
+<TouchableOpacity
+  onPress={() =>
+    router.push({
+      pathname: "(routes)/studymaterials",
+      params: { study: JSON.stringify(studyMaterials) },
+    })
+  }
+>
+  <Ionicons name="arrow-forward" size={30} color="gray" />
+</TouchableOpacity>
+</View> */}
