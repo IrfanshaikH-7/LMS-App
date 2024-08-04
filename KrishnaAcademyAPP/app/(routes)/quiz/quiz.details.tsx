@@ -379,7 +379,7 @@ const quizDetails = (props: Props) => {
                       textAlign: "center",
                     }}
                   >
-                    {count === questions.length - 1 ? "Get Result" : "SAVE"}
+                    {count === questions.length - 1 ? "Get Result" : "Next"}
                   </Text>
                 </TouchableOpacity>
               </View>
