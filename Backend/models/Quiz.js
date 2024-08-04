@@ -13,6 +13,9 @@ const Quiz = new mongoose.Schema({
   image: {
     type: String,
   },
+  timer:{
+    type: Number,
+  },
   isPaid: {
     type: Boolean,
   },

@@ -31,12 +31,15 @@ export default function Header() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerWrapper}>
-
-        <Image source={{
-          uri: "https://res.cloudinary.com/dbnnlqq5v/image/upload/v1722698298/ieglfi8opdzrrtzwzfwi.png"
-        }}
+    <View style={styles.headerWrapper}>
+        <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
+        <FontAwesome name="bell" size={30} color="rgb(242, 221, 126)" />
+      </TouchableOpacity>
+      <View>
+        <Image
+          source={{
+            uri: "https://res.cloudinary.com/dbnnlqq5v/image/upload/v1722698298/ieglfi8opdzrrtzwzfwi.png",
+          }}
           style={{
             width: 60,
             height: 60,
@@ -45,24 +48,35 @@ export default function Header() {
             borderRadius: 10,
           }}
         />
-    
-        
       </View>
-      <TouchableOpacity
-          onPress={() => router.push("/(routes)/notifications")}
-        >
 
-          <FontAwesome name="bell" size={30} color="rgb(242, 221, 126)" />
-        </TouchableOpacity>
+      <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap:5
+      }}
+      >
+        <Image 
+        source={require('../../assets/icons/customer-service.png')}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 10
+        }}
+        />
 
-
+      <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
+        <FontAwesome name="bell" size={35} color="rgb(242, 221, 126)" />
+      </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#fff',
+    // backgroundColor: '#0000',
     width: "100%",
     // marginLeft: -10,
     flexDirection: "row",
@@ -75,11 +89,12 @@ const styles = StyleSheet.create({
   },
 
   headerWrapper: {
-    width: '90%',
-    // backgroundColor: '#fff',
+    width: "100%",
+    backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    paddingHorizontal:10,
   },
 
   image: {

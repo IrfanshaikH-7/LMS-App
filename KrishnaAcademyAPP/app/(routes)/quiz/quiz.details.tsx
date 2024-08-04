@@ -9,7 +9,6 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-
   Modal,
   StyleSheet,
   ActivityIndicator,
@@ -33,6 +32,7 @@ const quizDetails = (props: Props) => {
   const [selectedBox, setSelectedBox] = useState<number | null>(null);
   const [getResultClicked, setGetResultClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<"en" | "hin">("en");
+  const [timer, setTimer] = useState(0);
   const [scoreModalVisible, setScoreModalVisible] = useState<boolean>(false);
   useEffect(() => {
     const getQuizDetails = async () => {
@@ -50,6 +50,13 @@ const quizDetails = (props: Props) => {
     getQuizDetails();
   }, [quizId]);
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setTimer((prevTimer) => prevTimer + 1);
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleSave = () => {
     // console.log(
@@ -69,18 +76,13 @@ const quizDetails = (props: Props) => {
       setGetResultClicked(true);
       console.log("userScore", userScore);
       setScoreModalVisible(true);
-
-     
     }
     console.log("userScore", userScore, count);
   };
 
-
-
   const toggleLanguage = () => {
     setLanguage((prevLanguage) => (prevLanguage === "en" ? "hin" : "en"));
   };
-
 
   const toggleColor = (index: number | null) => {
     const optionsArray = Object.values(questions[count]?.options);
@@ -146,13 +148,13 @@ const quizDetails = (props: Props) => {
             backgroundColor: "#f3f4f6",
           }}
         >
-        <ActivityIndicator size="large" color="#ED3137" />
+          <ActivityIndicator size="large" color="#ED3137" />
         </View>
       ) : (
         <SafeAreaView
           style={{
             flex: 1,
-            paddingTop: 40,
+            paddingTop: 50,
             paddingHorizontal: 20,
 
             flexDirection: "column",
@@ -163,7 +165,7 @@ const quizDetails = (props: Props) => {
             onPress={() => router.back()}
             style={{
               position: "absolute",
-              top: 40,
+              top: 50,
               left: 20,
             }}
           >
@@ -188,75 +190,78 @@ const quizDetails = (props: Props) => {
               {/* { top part} */}
               <View
                 style={{
-                  width: '100%',
+                  width: "100%",
                   marginTop: 25,
                   borderBottomWidth: 0.5,
-                  borderBottomColor: 'red',
+                  borderBottomColor: "red",
                   paddingBottom: 6,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                 }}
-
               >
-                <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
                 <View
-                style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: 80,
-                  borderWidth: 2,
-                  borderColor: 'red'
-                }}
-
+                  style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
                 >
-                    {/* {play icon here} */}
-                </View>
+                  {quizDetails?.timer !== 0 && (
+                    <CountdownCircleTimer
+                      size={50}
+                      isPlaying
+                      duration={quizDetails?.timer}
+                      colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                      colorsTime={[9, 7, 5, 2, 0]}
+                      trailStrokeWidth={1}
+                      strokeWidth={4}
+                    >
+                      {({ remainingTime }) => <Text>{remainingTime}</Text>}
+                    </CountdownCircleTimer>
+                  )}
+
                   <View>
-                    <Text style={{fontSize: 14,}}>{"00.29.35"}</Text>
-                    <Text style={{fontSize: 14, color: '#f97316'}}>{'Static GK'}</Text>
+                    {/* <Text style={{ fontSize: 14 }}>{timer}</Text> */}
+                    <Text style={{ fontSize: 14, color: "#f97316" }}>
+                      {"Static GK"}
+                    </Text>
                   </View>
-              </View>
+                </View>
 
-                <View style={{flexDirection: 'row', gap:8}}>
-            <TouchableOpacity
-            onPress={toggleLanguage}
-              style={{
-                // backgroundColor: "rgb(233, 193, 160)",
-                padding: 10,
-                borderRadius: 4,
-                borderColor:'black',
-                borderWidth: 1,
-                marginVertical: 8
-              }}
-            >
-              <Text>{language === 'en' ? 'hindi' : 'english'}</Text>
-            </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={()=> console.log('submit clicked')}
-                  style={{
-                    display: 'flex',
-                    backgroundColor: "red",
-                    paddingVertical: 8,
-                    justifyContent: 'center',
-                    paddingHorizontal: 14,
-                    borderRadius: 8,
-                    width: "auto",
-                  }}
-                >
-                  <Text
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <TouchableOpacity
+                    onPress={toggleLanguage}
                     style={{
-                      fontWeight: "800",
-                      fontSize: 14,
-                      color: 'white',
-                      textAlign: "center",
+                      // backgroundColor: "rgb(233, 193, 160)",
+                      padding: 10,
+                      borderRadius: 4,
+                      borderColor: "black",
+                      borderWidth: 1,
+                      marginVertical: 8,
                     }}
                   >
-                    {"Submit"}
-                  </Text>
-                </TouchableOpacity>
+                    <Text>{language === "en" ? "hindi" : "english"}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => console.log("submit clicked")}
+                    style={{
+                      display: "flex",
+                      backgroundColor: "red",
+                      paddingVertical: 8,
+                      justifyContent: "center",
+                      paddingHorizontal: 14,
+                      borderRadius: 8,
+                      width: "auto",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "800",
+                        fontSize: 14,
+                        color: "white",
+                        textAlign: "center",
+                      }}
+                    >
+                      {"Submit"}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              
-               
               </View>
             </View>
           </View>
@@ -265,7 +270,7 @@ const quizDetails = (props: Props) => {
             style={{
               width: "100%",
               flexDirection: "row",
-              gap: 2,
+              gap: 4,
               justifyContent: "flex-start",
               alignItems: "center",
             }}
@@ -282,30 +287,29 @@ const quizDetails = (props: Props) => {
             >
               <Text>{language === 'en' ? 'hindi' : 'english'}</Text>
             </TouchableOpacity> */}
-            {
-              questions.map((question : any, index: any) =>(
-
-                <View
+            {questions.map((question: any, index: any) => (
+              <View
                 style={{
-
-                   height: 32,
-                   width: 32,
-                   borderRadius: 12,
-                   borderWidth: 2,
-                   backgroundColor: count === index ? 'red' : 'white',
-                   borderColor:'gray',
-                   alignItems: 'center',
+                  height: 32,
+                  width: 32,
+                  borderRadius: 12,
+                  borderWidth: 2,
+                  backgroundColor: count === index ? "red" : "white",
+                  borderColor: "gray",
+                  alignItems: "center",
                   //  flexWrap: 'wrap',
-                   justifyContent: 'center',
+                  justifyContent: "center",
                 }}
-           ><Text
-           style={{
-            color: count === index ? 'white' : 'black'
-         }}
-           >{index}</Text></View>
-            
-              ))
-            }
+              >
+                <Text
+                  style={{
+                    color: count === index ? "white" : "black",
+                  }}
+                >
+                  {index}
+                </Text>
+              </View>
+            ))}
           </View>
 
           {/* //question */}
@@ -325,26 +329,26 @@ const quizDetails = (props: Props) => {
                 paddingHorizontal: 0,
               }}
             >
-              <View
-              
-              >
-                <Text  style={{
-                fontSize: 20,
-                textAlign: "flex-start",
-                fontWeight: "700",
-              }}>Q.{count + 1}</Text>
-              <Text
-                style={{
-                  fontSize: 18,
-                  textAlign: "flex-start",
-                  fontWeight: "bold",
-                }}
-              >
-                {questions[count]?.question[language]}
-              </Text>
-
+              <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    textAlign: "left",
+                    fontWeight: "600",
+                  }}
+                >
+                  Q.{count + 1}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    textAlign: "left",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {questions[count]?.question[language]}
+                </Text>
               </View>
-              
             </View>
 
             <Text
@@ -357,15 +361,16 @@ const quizDetails = (props: Props) => {
             >
               Select your answer
             </Text>
-            <View style={{ alignItems: "center", marginBottom: 0,  }}>
+            <View style={{ alignItems: "center", marginBottom: 0 }}>
               {currentOptions.map((option, index) => (
                 <TouchableOpacity
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 5,
                     backgroundColor:
-                      selectedBox === index ? "#ffffff" : "#ffffff",
+                      selectedBox === index ? "#ecd2a2" : "#ffffff",
                     paddingVertical: 12,
                     paddingHorizontal: 12,
                     borderRadius: 8,
@@ -378,26 +383,36 @@ const quizDetails = (props: Props) => {
                   onPress={() => toggleColor(index)}
                 >
                   <Text
-                  style={{
-                    fontWeight: "500",
-                    fontSize: 16,
-                    textAlign: "left",
-
-                  }}
-                  >{option.value}</Text>
-                 <View
-            style={{
-               width: 16,
-               height: 16,
-               borderRadius: 12,
-               borderWidth: 2,
-               borderColor: selectedBox === index  ? 'black' : 'gray',
-               alignItems: 'center',
-               justifyContent: 'center',
-            }}
-         >
-            {selectedBox === index ?  <View style={{ width: 10, height: 10, borderRadius: 6, backgroundColor: 'black' }} /> : null}
-         </View>
+                    style={{
+                      fontWeight: "500",
+                      fontSize: 16,
+                      textAlign: "left",
+                    }}
+                  >
+                    {option.value}
+                  </Text>
+                  <View
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: 12,
+                      borderWidth: 2,
+                      borderColor: selectedBox === index ? "black" : "gray",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {selectedBox === index ? (
+                      <View
+                        style={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: 6,
+                          backgroundColor: "black",
+                        }}
+                      />
+                    ) : null}
+                  </View>
                 </TouchableOpacity>
               ))}
             </View>
@@ -410,7 +425,7 @@ const quizDetails = (props: Props) => {
                 }}
               >
                 <TouchableOpacity
-                  onPress={()=> setScoreModalVisible(true)}
+                  onPress={() => setScoreModalVisible(true)}
                   // disabled={true}
                   style={{
                     backgroundColor: "#d1d5db",
@@ -454,13 +469,12 @@ const quizDetails = (props: Props) => {
                     style={{
                       fontWeight: "800",
                       fontSize: 14,
-                      color: 'black',
+                      color: "black",
                       textAlign: "center",
-                      
                     }}
                   >
-                   {" << PREVIOUS"}
-                    </Text>
+                    {" << PREVIOUS"}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={handleSave}
@@ -476,7 +490,7 @@ const quizDetails = (props: Props) => {
                     style={{
                       fontWeight: "800",
                       fontSize: 14,
-                      color: 'white',
+                      color: "white",
                       textAlign: "center",
                     }}
                   >

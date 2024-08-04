@@ -124,7 +124,7 @@ export default function CoursesScreen() {
 
   return (
     <View>
-      <Header />
+      {/* <Header /> */}
 
       {loading ? (
         <Loader />

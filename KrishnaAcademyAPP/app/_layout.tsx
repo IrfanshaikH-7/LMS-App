@@ -119,14 +119,14 @@ function RootLayoutNav() {
           }}
         />
           {/* <Stack.Screen name="course-detail" component={CourseDetailScreen}/> */}
-        {/* <Stack.Screen
-          name="(routes)/quiz/quiz.details"
+        <Stack.Screen
+          name="(routes)/blogs/blogscreen"
           options={{
-            headerShown: false,
-            title: "Enrolled Courses",
+            // headerShown: false,
+            title: "Daily Updates",
             headerBackTitle: "Back",
           }}
-        /> */}
+        />
       </Stack>
     </ToastProvider>
   );
