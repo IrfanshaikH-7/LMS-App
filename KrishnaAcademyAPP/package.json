@@ -17,6 +17,7 @@
     "@expo-google-fonts/raleway": "^0.2.3",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.6.8",
     "expo": "~51.0.24",
@@ -39,7 +40,8 @@
     "react-native": "0.74.3",
     "react-native-animated-loader": "^1.0.0",
     "react-native-app-intro-slider": "^4.0.4",
-
+    "react-native-countdown-circle-timer": "^3.2.1",
+    "react-native-gesture-handler": "~2.16.1",
     "react-native-modal": "^13.0.1",
     "react-native-pdf": "^6.7.5",
     "react-native-razorpay": "^2.3.0",

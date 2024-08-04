@@ -6,7 +6,12 @@ import "react-native-reanimated";
 import { Stack } from "expo-router";
 import { ToastProvider } from "react-native-toast-notifications";
 import { LogBox } from "react-native";
-
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+import index from "./(tabs)";
+import Header from "@/components/header/header";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -15,7 +20,11 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const Drawer = createDrawerNavigator();
+
 export default function RootLayout() {
+
+  const [data, setData] = useState([]);
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -40,16 +49,30 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* <NavigationContainer> */}
+      <RootLayoutNav />
+
+      {/* </NavigationContainer> */}
+    </GestureHandlerRootView>
+  );
 }
 
 function RootLayoutNav() {
   return (
     <ToastProvider>
-      <Stack screenOptions={{ headerShown: false,  }}
+      <Stack screenOptions={{
+            header: (props) => <Header {...props}  />,
+            headerShown: false
+          }}>
+       
+          <Stack.Screen name="index" 
+          
+          />
+                <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
 
-      >
-        <Stack.Screen name="index" />
+
         <Stack.Screen name="(routes)/welcome-intro/index" />
         <Stack.Screen name="(routes)/login/index" />
         <Stack.Screen name="(routes)/sign-up/index" />
@@ -102,7 +125,7 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="(routes)/studymaterials/index"
           options={{
             headerShown: false,
@@ -110,7 +133,7 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
-          <Stack.Screen
+        <Stack.Screen
           name="(routes)/pdfviewer"
           options={{
             headerShown: false,
@@ -118,7 +141,7 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
-          {/* <Stack.Screen name="course-detail" component={CourseDetailScreen}/> */}
+        {/* <Stack.Screen name="course-detail" component={CourseDetailScreen}/> */}
         <Stack.Screen
           name="(routes)/blogs/blogscreen"
           options={{
