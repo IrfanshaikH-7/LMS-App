@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "@/components/header/header";
 import SearchInput from "@/components/common/search.input";
@@ -9,6 +15,8 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { Video } from "expo-av";
 import StudyMaterialsList from "@/components/studymaterials";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const [videoUri, setVideoUri] = useState(null);
@@ -26,12 +34,68 @@ export default function HomeScreen() {
 
         {/* <AllCourses /> */}
 
-        <View style={{ height: 400 }}>
-          <StudyMaterialsList />
+        {/* <StudyMaterialsList /> */}
+
+        <View
+          style={{ height: 400, marginHorizontal: 10, paddingHorizontal: 10 }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+              // backgroundColor: "lightblue",
+            }}
+          >
+            <TouchableOpacity
+            // onPress={()=>{setRefreshing(!refreshing)}}
+            >
+              <Text style={styles.heading}>Test Series</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "(routes)/studymaterials",
+                  // params: { study: JSON.stringify(studyMaterials) },
+                })
+              }
+            >
+              {/* <Ionicons name="arrow-forward" size={30} color="gray" /> */}
+
+              <Text
+                style={{
+                  color: "red",
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                View All
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+
+        <StudyMaterialsList />
         </View>
       </ScrollView>
+    </LinearGradient>
+  );
+}
 
-      {/* <Video
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: "bold",
+    // marginBottom: 16,
+  },
+});
+{
+  /* <Video
       source={{
         uri: 'https://d33zqdivlk1hm.cloudfront.net/SampleVideo_1280x720_20mb.mp4',
       }}
@@ -40,9 +104,5 @@ export default function HomeScreen() {
       resizeMode='contain'
       isLooping
       style={{ width: '100%', height: 300 }}
-    /> */}
-    </LinearGradient>
-  );
+    /> */
 }
-
-export const styles = StyleSheet.create({});

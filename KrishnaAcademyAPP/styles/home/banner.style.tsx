@@ -7,8 +7,8 @@ import {
 
 export const styles = StyleSheet.create({
   container: {
-    marginTop: 12,
-    height: hp("35%"),
+    marginTop: 5,
+    height: hp("25%"),
     marginHorizontal: 16,
   },
 
