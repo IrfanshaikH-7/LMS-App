@@ -34,10 +34,10 @@ const renderItem = ({ item }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        gap:0,
+        gap:4,
 
 
-
+        padding: 4,
         borderRadius: 20,
         overflow: "hidden", // Ensure the borderRadius effect applies to children
       }}
@@ -52,8 +52,8 @@ const renderItem = ({ item }) => {
         style={{
 
           position: "absolute",
-          top: 5,
-          left: 10,
+          top: 12,
+          left: 12,
           justifyContent: "flex-start", // Aligns children vertically to the top
           alignItems: "flex-start", // Aligns children horizontally to the left
           backgroundColor: "green", // Dark background color
@@ -83,7 +83,7 @@ const renderItem = ({ item }) => {
           justifyContent: "center",
           alignItems: "center",
           // marginBottom: 10,
-          marginTop: 40,
+          marginTop: 48,
         }}
       >
         {!item.image ? (
@@ -217,7 +217,7 @@ export default function QuizScreen() {
         <FlatList
           data={quizzes}
           renderItem={renderItem}
-          contentContainerStyle={{ width: "100%", gap: 10 }}
+          contentContainerStyle={{ width: "100%", gap: 10, }}
           columnWrapperStyle={{ gap: 10 }}
           showsVerticalScrollIndicator={false}
           numColumns={2}
