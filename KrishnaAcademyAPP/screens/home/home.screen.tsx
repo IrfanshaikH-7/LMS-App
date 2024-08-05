@@ -60,6 +60,7 @@ export default function HomeScreen() {
               justifyContent: "space-between",
               alignItems: "center",
               marginBottom: 16,
+              marginHorizontal: 16
               // backgroundColor: "lightblue",
             }}
           >
@@ -104,7 +105,7 @@ export const styles = StyleSheet.create({
     padding: 10,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
     // marginBottom: 16,
   },
