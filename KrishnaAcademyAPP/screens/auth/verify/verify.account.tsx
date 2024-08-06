@@ -34,7 +34,7 @@ export default function VerifyAccountScreen() {
 
   const handleSumbit = async () => {
     const otp = code.join("");
-    const token = await AsyncStorage.getItem("token");
+    // const token = await AsyncStorage.getItem("token");
 
     await axios
       .post(`${SERVER_URI}/activate-user`, {

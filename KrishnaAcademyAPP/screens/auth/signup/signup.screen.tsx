@@ -31,7 +31,6 @@ import {
 import { useEffect, useState } from "react";
 import { commonStyles } from "@/styles/common/common.styles";
 import { router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
@@ -107,6 +106,7 @@ export default function SignUpScreen() {
   };
   const handleOtp = async () => {
     console.log("called otp");
+    Toast.show("Sent Otp")
     setButtonSpinner(true);
     const response = await axios.post(`${SERVER_URI}/api/v1/auth/sendotp`, {
       phoneNumber : userInfo.phoneNumber,
@@ -120,7 +120,15 @@ export default function SignUpScreen() {
     setButtonSpinner(true);
 
     const deviceData = await collectDeviceData();
-    console.log("🚀 ~ handleSignIn ~ deviceData:", typeof deviceData);
+    console.log("🚀 ~ handleSignIn ~ deviceData:",  deviceData);
+    if (!deviceData) {
+      Toast.show("Error in collecting device data", {
+        type: "danger",
+        message: "Error in collecting device data",
+      });
+    }
+
+    console.log(userInfo, "----")
 
     try {
       const response = await axios.post(`${SERVER_URI}/api/v1/auth/signup`, {
@@ -130,11 +138,12 @@ export default function SignUpScreen() {
         phoneNumber: userInfo.phoneNumber,
         otp: userInfo.otp,
         accountType: "Student",
-        deviceId: deviceData,
+        deviceData: deviceData,
       });
 
-      console.log(response.data);
-      await AsyncStorage.setItem("token", response.data.Token);
+      console.log(response.data, "0000");
+
+
       Toast.show(response.data.message, {
         type: "success",
       });
@@ -146,10 +155,10 @@ export default function SignUpScreen() {
         otp: "",
       });
       setButtonSpinner(false);
-      router.push("/(routes)/verifyAccount");
+      router.push("/(routes)/login");
 
-      setButtonSpinner(false);
-      // Handle successful response here (already implemented)
+
+
     } catch (error) {
       console.error(error); // Log the error for debugging
       Toast.show(error.message || "Signup failed. Please try again.", {
