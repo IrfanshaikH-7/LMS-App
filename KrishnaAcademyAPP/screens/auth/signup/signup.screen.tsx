@@ -54,13 +54,11 @@ export default function SignUpScreen() {
     password: "",
   });
 
-
   useEffect(() => {
-    if(userInfo.phoneNumber.length == 10){
-      handleOtp()
+    if (userInfo.phoneNumber.length == 10) {
+      handleOtp();
     }
-
-  },[userInfo.phoneNumber])
+  }, [userInfo.phoneNumber]);
 
   let [fontsLoaded, fontError] = useFonts({
     Raleway_600SemiBold,
@@ -108,65 +106,58 @@ export default function SignUpScreen() {
     }
   };
   const handleOtp = async () => {
-    console.log("called otp")
+    console.log("called otp");
     setButtonSpinner(true);
-    const res = await axios
-      .post(`${SERVER_URI}/api/v1/auth/sendotp`, {
-        email: userInfo.phoneNumber,
-      })
+    const response = await axios.post(`${SERVER_URI}/api/v1/auth/sendotp`, {
+      phoneNumber : userInfo.phoneNumber,
+    });
 
-      console.log(res)
-      setButtonSpinner(false);
-  }
+    // console.log(response);
+    setButtonSpinner(false);
+  };
 
   const handleSignIn = async () => {
     setButtonSpinner(true);
 
-    const deviceData = await  collectDeviceData();
-    console.log("🚀 ~ handleSignIn ~ deviceData:", typeof deviceData)
+    const deviceData = await collectDeviceData();
+    console.log("🚀 ~ handleSignIn ~ deviceData:", typeof deviceData);
 
-
-    await axios
-      .post(`${SERVER_URI}/api/v1/auth/signup`, {
+    try {
+      const response = await axios.post(`${SERVER_URI}/api/v1/auth/signup`, {
         name: userInfo.name,
         email: userInfo.email,
         password: userInfo.password,
-        phoneNumber:userInfo.phoneNumber,
-        otp:userInfo.otp,
-        accountType:"Student",
+        phoneNumber: userInfo.phoneNumber,
+        otp: userInfo.otp,
+        accountType: "Student",
         deviceId: deviceData,
-      })
-      .then(async (res) => {
-        await AsyncStorage.setItem(
-          "token",
-          res.data.Token
-        );
-        Toast.show(res.data.message, {
-          type: "success",
-        });
-        setUserInfo({
-          name: "",
-          email: "",
-          password: "",
-          phoneNumber: "",
-          otp: "",
-
-        });
-        setButtonSpinner(false);
-        router.push("/(routes)/verifyAccount");
-      })
-      .catch((error) => {
-        console.log("🚀 ~ handleSignIn ~ error:", error)
-        
-        setButtonSpinner(false);
-        Toast.show("Email already exist!", {
-          type: "danger",
-        });
       });
+
+      console.log(response.data);
+      await AsyncStorage.setItem("token", response.data.Token);
+      Toast.show(response.data.message, {
+        type: "success",
+      });
+      setUserInfo({
+        name: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        otp: "",
+      });
+      setButtonSpinner(false);
+      router.push("/(routes)/verifyAccount");
+
+      setButtonSpinner(false);
+      // Handle successful response here (already implemented)
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      Toast.show(error.message || "Signup failed. Please try again.", {
+        type: "error",
+      }); // Display an error message to the user
+      setButtonSpinner(false); // Stop the button spinner if used
+    }
   };
-
- 
-
 
   return (
     <LinearGradient
@@ -190,7 +181,7 @@ export default function SignUpScreen() {
               style={[styles.input, { paddingLeft: 40, marginBottom: -12 }]}
               keyboardType="default"
               value={userInfo.name}
-              placeholder="shahriar sajeeb"
+              placeholder="Harsh"
               onChangeText={(value) =>
                 setUserInfo({ ...userInfo, name: value })
               }
@@ -202,13 +193,14 @@ export default function SignUpScreen() {
               color={"#A1A1A1"}
             />
           </View>
-          <View style={{
+          <View
+            style={{
               flexDirection: "column",
               justifyContent: "space-between",
               marginHorizontal: 2,
-              gap:5
-
-          }}>
+              gap: 5,
+            }}
+          >
             <TextInput
               style={[styles.input, { paddingLeft: 40 }]}
               keyboardType="email-address"
@@ -237,7 +229,7 @@ export default function SignUpScreen() {
               value={userInfo.phoneNumber}
               placeholder="7991168445"
               onChangeText={(value) =>
-                setUserInfo({ ...userInfo, phoneNumber : value })
+                setUserInfo({ ...userInfo, phoneNumber: value })
               }
             />
             <Fontisto
@@ -256,9 +248,7 @@ export default function SignUpScreen() {
               keyboardType="default"
               value={userInfo.otp}
               placeholder="OTP"
-              onChangeText={(value) =>
-                setUserInfo({ ...userInfo, otp: value })
-              }
+              onChangeText={(value) => setUserInfo({ ...userInfo, otp: value })}
             />
             <Fontisto
               style={{ position: "absolute", left: 26, top: 17.8 }}
@@ -272,7 +262,6 @@ export default function SignUpScreen() {
               </View>
             )}
 
-            
             <View style={{ marginTop: 15 }}>
               <TextInput
                 style={commonStyles.input}
@@ -337,8 +326,6 @@ export default function SignUpScreen() {
                 </Text>
               )}
             </TouchableOpacity>
-
-        
 
             <View style={styles.signupRedirect}>
               <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>

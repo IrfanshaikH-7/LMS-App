@@ -101,6 +101,11 @@ const userSchema = new mongoose.Schema({
 
         },
     },
+    quizResuls:{
+        type:[
+            {type:String}
+        ]
+    }
 },
 // Add timestamps for when the document is created and last modified
 { timestamps: true }

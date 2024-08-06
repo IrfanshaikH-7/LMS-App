@@ -79,27 +79,8 @@ exports.getUserById = async (req, res) => {
       });
     }
 
-    // Check if user already exists
-    const user = await User.findOne({ _id: id });
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "User not found",
-      });
-    }
 
-    return res.status(200).json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "User cannot be registered. Please try again.",
-    });
-  }
-};
+
 
 exports.updateUserById = async (req, res) => {
   try {
@@ -166,7 +147,7 @@ exports.signup = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log("169");
+   
       return res.status(400).json({
         success: false,
         message: "User already exists. Please sign in to continue.",
@@ -180,15 +161,15 @@ exports.signup = async (req, res) => {
     // const response = await OTP.find({ email }).sort({ createdAt: -1 });
 
     if (response.length === 0) {
-      // OTP not found for the email
-      console.log("183");
+
+
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid",
       });
     } else if (otp !== response[0].otp) {
       // Invalid OTP
-      console.log("189", otp, response[0].otp);
+     
       return res.status(400).json({
         success: false,
         message: "The OTP you entered is wrong !!",

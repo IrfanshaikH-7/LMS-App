@@ -20,7 +20,7 @@ export default function TabsIndex() {
           }}
         >
           <LinearGradient
-            colors={["#E5ECF9", "#F6F7F9"]}
+            colors={["rgb(191, 221, 116)", "rgb(160, 229, 145)"]}
             style={{
               flexDirection: "column",
               justifyContent: "center",
@@ -38,7 +38,7 @@ export default function TabsIndex() {
           </LinearGradient>
         </View>
       ) : (
-        <Redirect href={!user ? "/(routes)/onboarding" : "/(tabs)"} />
+        <Redirect href={user ? "/(routes)/onboarding" : "/(tabs)"} />
       )}
     </>
   );

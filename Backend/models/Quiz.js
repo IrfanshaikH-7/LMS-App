@@ -10,6 +10,9 @@ const Quiz = new mongoose.Schema({
   category: {
     type: String,
   },
+  testSeries:{
+    type:String
+  },
   image: {
     type: String,
   },

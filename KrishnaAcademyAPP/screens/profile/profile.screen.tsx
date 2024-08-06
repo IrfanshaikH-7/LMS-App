@@ -7,7 +7,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, ScrollView,  TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import {
   useFonts,
   Raleway_600SemiBold,
@@ -26,6 +26,7 @@ import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
 import { router } from "expo-router";
 import { Image } from "expo-image";
+import React from "react";
 
 export default function ProfileScreen() {
   const { user, loading, setRefetch } = useUser();
@@ -105,35 +106,20 @@ export default function ProfileScreen() {
           <ScrollView>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <View style={{ position: "relative" }}>
-              {/* <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
-          <Image
-            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
+              
+                <Image
+                  source={{ uri: "https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
 
 
-            style={styles.image}
-          />
-        </TouchableOpacity>
-        <View>
-          <Text style={[styles.helloText, { fontFamily: "Raleway_700Bold" }]}>
-            Hello,
-          </Text>
-          <Text style={[styles.text, { fontFamily: "Raleway_700Bold" }]}>
-            {user?.name}
-          </Text>
-        </View> */}
-         <Image
-            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: 8,
+                    borderRadius: 100,
+                  }}
+                />
 
 
-            style={{
-                width: 100,
-                height: 100,
-                marginRight: 8,
-                borderRadius: 100,
-              }}
-          />
-
-            
               </View>
             </View>
             <Text
@@ -163,6 +149,9 @@ export default function ProfileScreen() {
                   justifyContent: "space-between",
                   marginBottom: 20,
                 }}
+                onPress={
+                  () => router.push("/(routes)/my-account/my-profile")
+                }
               >
                 <View
                   style={{
