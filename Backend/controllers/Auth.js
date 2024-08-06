@@ -7,6 +7,9 @@ require("dotenv").config();
 const mailSender = require("../utils/mailSender");
 const { passwordUpdated } = require("../mail/templates/passwordUpdate");
 const Profile = require("../models/Profile");
+const MAX_ATTEMPTS = 3;
+const BAN_DURATION = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+
 
 //otp verification by SENDING OTP
 exports.sendotp = async (req, res) => {
@@ -167,6 +170,7 @@ exports.signup = async (req, res) => {
 			accountType,
 			phoneNumber,
 			otp,
+            deviceData 
 		} = req.body;
 		// Check if All Details are there or not
 		if (
@@ -175,7 +179,8 @@ exports.signup = async (req, res) => {
             !accountType ||
             !phoneNumber ||
 			!password ||
-			!otp
+			!otp || 
+            !deviceData
 		) {
 			return res.status(403).send({
 				success: false,
@@ -192,6 +197,8 @@ exports.signup = async (req, res) => {
 				message: "User already exists. Please sign in to continue.",
 			});
 		}
+
+
 
 		// Find the most recent OTP for the email
 		const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
@@ -214,18 +221,21 @@ exports.signup = async (req, res) => {
 		// Hash the password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		const user = await User.create({
+		const newUser= await  User.create({
 			name,
 			email,
 			phoneNumber,
+            deviceData,
 			password: hashedPassword,
 			accountType: accountType,
 			image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
 		});
 
+
+
 		return res.status(200).json({
 			success: true,
-			user,
+			newUser,
 			message: "User registered successfully",
 		});
 	} catch (error) {
@@ -241,14 +251,27 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
     try{
         //fetching... data
+      
+    
         const{
             email,
             password,
+            deviceData
         } = req.body;
+
+        if (typeof deviceData !== 'object' || deviceData === null) {
+            return res.status(400).json({ error: 'Invalid device data' });
+        }
+        if (!email || !password || !deviceId) {
+            return res.status(403).json({
+                success: false,
+                message: "ALL FIELDS ARE REQUIRED",
+            });
+        }
 
         //validating... data
         if( !email || !password ){
-            return res.status(403).json({
+            return res.status(401).json({
                 success:false,
                 message:"ALL FIELDS ARE REQUIRED",
             });
@@ -260,6 +283,13 @@ exports.login = async (req, res) => {
             return res.status(401).json({
                 success:false,
                 message:"user is not registered !!",
+            });
+        }
+
+        if (user.isBanned && user.banExpires > new Date()) {
+            return res.status(403).json({
+                success: false,
+                message: "Account is banned. Try again later.",
             });
         }
 
@@ -309,8 +339,8 @@ exports.login = async (req, res) => {
 } 
 
 
-//changing.. password
-//TODO: HOMEWORK
+
+
 exports.changePassword = async (req, res) => {
     try{
         //get data from req body

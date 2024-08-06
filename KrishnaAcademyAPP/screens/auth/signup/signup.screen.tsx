@@ -37,6 +37,7 @@ import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
 import { Toast } from "react-native-toast-notifications";
 import React from "react";
+import { collectDeviceData } from "@/utils/device.data";
 
 export default function SignUpScreen() {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -106,9 +107,25 @@ export default function SignUpScreen() {
       setUserInfo({ ...userInfo, password: value });
     }
   };
+  const handleOtp = async () => {
+    console.log("called otp")
+    setButtonSpinner(true);
+    const res = await axios
+      .post(`${SERVER_URI}/api/v1/auth/sendotp`, {
+        email: userInfo.email,
+      })
+
+      console.log(res)
+      setButtonSpinner(false);
+  }
 
   const handleSignIn = async () => {
     setButtonSpinner(true);
+
+    const deviceData = await  collectDeviceData();
+    console.log("🚀 ~ handleSignIn ~ deviceData:", typeof deviceData)
+
+
     await axios
       .post(`${SERVER_URI}/auth/signup`, {
         name: userInfo.name,
@@ -116,7 +133,8 @@ export default function SignUpScreen() {
         password: userInfo.password,
         phoneNumber:userInfo.phoneNumber,
         otp:userInfo.otp,
-        accountType:"Student"
+        accountType:"Student",
+        deviceId: deviceData,
       })
       .then(async (res) => {
         await AsyncStorage.setItem(
@@ -145,17 +163,7 @@ export default function SignUpScreen() {
       });
   };
 
-  const handleOtp = async () => {
-    console.log("called otp")
-    setButtonSpinner(true);
-    const res = await axios
-      .post(`${SERVER_URI}/auth/otp`, {
-        email: userInfo.email,
-      })
-
-      console.log(res)
-      setButtonSpinner(false);
-  }
+ 
 
 
   return (

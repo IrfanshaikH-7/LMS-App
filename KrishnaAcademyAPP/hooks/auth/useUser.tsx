@@ -7,6 +7,7 @@ import * as Device from 'expo-device';
 import { Platform } from "react-native";
 
 import * as Cellular from 'expo-cellular';
+import { collectDeviceData } from "@/utils/device.data";
 
 
 export default function useUser() {
@@ -18,35 +19,10 @@ export default function useUser() {
 
 
 
-const collectDeviceData = async () => {
-  try {
-    var carrierName = await Cellular.getCarrierNameAsync();
 
-
-
-    const deviceData = {
-      // deviceId: Platform.OS === 'ios' ? Device.model : Device.androidId, // Be aware of Android ID limitations
-      deviceName: Device.modelName,
-      systemName: Device.osName,
-      systemVersion: Device.osVersion,
-      carrier  : carrierName,
-
-    };
-    console.log("🚀 ~ collectDeviceData ~ deviceData:", deviceData)
-    // Additional data points you might consider:
-    // deviceLocale: Device.locale,
-    // screenSize: `${Dimensions.get('window').width}x${Dimensions.get('window').height}`,
-    // ...
-
-    return deviceData;
-  } catch (error) {
-    console.error('Error collecting device data:', error);
-    return null;
-  }
-};
 
   useEffect(() => {
-collectDeviceData();
+    const deviceData = collectDeviceData();
 
 
 

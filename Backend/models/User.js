@@ -56,7 +56,37 @@ const userSchema = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:"CourseProgress",
         }
-    ]
+    ],
+    
+    deviceData: {
+        carrier: {
+            type: String,
+            required: true,
+        },
+        deviceName: {
+            type: String,
+            required: true,
+        },
+        systemName: {
+            type: String,
+            required: true,
+        },
+        systemVersion: {
+            type: String,
+            required: true,
+        },
+    },
+    loginAttempts: {
+        type: Number,
+        default: 0,
+    },
+    isBanned: {
+        type: Boolean,
+        default: false,
+    },
+    banExpires: {
+        type: Date,
+    }
 },
 // Add timestamps for when the document is created and last modified
 { timestamps: true }
