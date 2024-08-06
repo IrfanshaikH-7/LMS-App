@@ -16,10 +16,10 @@ exports.sendotp = async (req, res) => {
     try{
         //1st STEP => fetching... eamil from req.body
         console.log("REQ BODY => ", req.body);
-        const {email} = req.body;
+        const {phoneNumber} = req.body;
 
         //check if user already present..
-        const checkUserPresent = await User.findOne({email});
+        const checkUserPresent = await User.findOne({phoneNumber});
         //if user is already present
         if(checkUserPresent){
             return res.status(401).json({
@@ -62,10 +62,10 @@ exports.sendotp = async (req, res) => {
 		}
 
         //creating... otpPayload
-        console.log(email, otp);
-        const otpPayload = {email, otp};
+        console.log(phoneNumber, otp);
+        const otpPayload = {phoneNumber, otp};
         //creating... an entry in Database for OTP
-        const otpBody = await OTP.create(otpPayload);
+        const otpBody = await phoneOtp.create(otpPayload);
         console.log("otpBODY -> ", otpBody);
 
         //sending...final response
@@ -420,4 +420,36 @@ exports.changePassword = async (req, res) => {
 		});
     }
     
+};
+
+
+
+exports.updateAdditionalDetails = async (req, res) => {
+
+    const {id: userId} = req.params;
+    const { dob, state, city } = req.body;
+
+    try {
+        // Find the user by ID and update the additional details
+        const user = await User.findByIdAndUpdate(
+            userId,
+            {
+                $set: {
+                    'additionalDetails.dob': dob,
+                    'additionalDetails.state': state,
+                    'additionalDetails.city': city,
+                },
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'Additional details updated successfully', user });
+    } catch (error) {
+        console.error('Error updating additional details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };

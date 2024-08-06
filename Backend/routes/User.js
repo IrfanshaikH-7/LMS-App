@@ -10,6 +10,7 @@ const {
   changePassword,
   getUserById,
   updateUserById,
+  updateAdditionalDetails,
 } = require("../controllers/Auth")
 const {
   resetPasswordToken,
@@ -48,6 +49,8 @@ router.post("/reset-password-token", resetPasswordToken)
 
 // Route for resetting user's password after verification
 router.post("/reset-password", resetPassword)
+
+router.post("/additionalDetails/:id",updateAdditionalDetails)
 
 
 router.post("/buyQuiz/:id", buyQuiz)

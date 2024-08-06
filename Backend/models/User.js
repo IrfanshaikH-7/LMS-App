@@ -86,7 +86,21 @@ const userSchema = new mongoose.Schema({
     },
     banExpires: {
         type: Date,
-    }
+    },
+    additionalDetails: {
+        dob: {
+            type: Date,
+
+        },
+        state: {
+            type: String,
+
+        },
+        city: {
+            type: String,
+
+        },
+    },
 },
 // Add timestamps for when the document is created and last modified
 { timestamps: true }

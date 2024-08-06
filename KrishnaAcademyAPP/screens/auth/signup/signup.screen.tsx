@@ -112,7 +112,7 @@ export default function SignUpScreen() {
     setButtonSpinner(true);
     const res = await axios
       .post(`${SERVER_URI}/api/v1/auth/sendotp`, {
-        email: userInfo.email,
+        email: userInfo.phoneNumber,
       })
 
       console.log(res)
