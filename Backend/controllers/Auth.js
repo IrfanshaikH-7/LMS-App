@@ -242,7 +242,7 @@ exports.login = async (req, res) => {
       
     
         const{
-            email,
+            phoneNumber,
             password,
             deviceData
         } = req.body;
@@ -250,7 +250,7 @@ exports.login = async (req, res) => {
         if (typeof deviceData !== 'object' || deviceData === null) {
             return res.status(400).json({ error: 'Invalid device data' });
         }
-        if (!email || !password || !deviceId) {
+        if (!phoneNumber || !password || !deviceId) {
             return res.status(403).json({
                 success: false,
                 message: "ALL FIELDS ARE REQUIRED",
@@ -258,7 +258,7 @@ exports.login = async (req, res) => {
         }
 
         //validating... data
-        if( !email || !password ){
+        if( !phoneNumber || !password ){
             return res.status(401).json({
                 success:false,
                 message:"ALL FIELDS ARE REQUIRED",
@@ -266,7 +266,7 @@ exports.login = async (req, res) => {
         }
 
         //checking... user existence
-        const user = await User.findOne({email});
+    const user = await User.findOne({phoneNumber});
         if(!user){
             return res.status(401).json({
                 success:false,

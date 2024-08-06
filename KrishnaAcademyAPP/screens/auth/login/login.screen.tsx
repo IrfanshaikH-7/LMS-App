@@ -40,7 +40,7 @@ export default function LoginScreen() {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [buttonSpinner, setButtonSpinner] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    email: "mister.harshkumar@gmail.com",
+    phoneNumber: 7991168445,
     password: "password123",
   });
   const [required, setRequired] = useState("");
@@ -97,11 +97,11 @@ export default function LoginScreen() {
   const handleSignIn = async () => {
     await axios
       .post(`${SERVER_URI}/api/v1/auth/login`, {
-        email: userInfo.email,
+        phoneNumber : userInfo.phoneNumber,
         password: userInfo.password,
       })
       .then(async (res) => {
-        console.log(res.data)
+        console.log(res.data, "--")
         await AsyncStorage.setItem("token", res.data.token);
         await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
 
@@ -135,11 +135,11 @@ export default function LoginScreen() {
           <View>
             <TextInput
               style={[styles.input, { paddingLeft: 40 }]}
-              keyboardType="email-address"
-              value={userInfo.email}
-              placeholder="support@LMS.com"
+              keyboardType="phonenumber"
+              value={userInfo.phoneNumber}
+              placeholder="7991168445"
               onChangeText={(value) =>
-                setUserInfo({ ...userInfo, email: value })
+                setUserInfo({ ...userInfo, phoneNumber : value })
               }
             />
             <Fontisto
