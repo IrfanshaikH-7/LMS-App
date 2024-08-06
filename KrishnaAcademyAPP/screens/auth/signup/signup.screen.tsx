@@ -127,7 +127,7 @@ export default function SignUpScreen() {
 
 
     await axios
-      .post(`${SERVER_URI}/auth/signup`, {
+      .post(`${SERVER_URI}/api/v1/auth/signup`, {
         name: userInfo.name,
         email: userInfo.email,
         password: userInfo.password,
@@ -156,6 +156,8 @@ export default function SignUpScreen() {
         router.push("/(routes)/verifyAccount");
       })
       .catch((error) => {
+        console.log("🚀 ~ handleSignIn ~ error:", error)
+        
         setButtonSpinner(false);
         Toast.show("Email already exist!", {
           type: "danger",

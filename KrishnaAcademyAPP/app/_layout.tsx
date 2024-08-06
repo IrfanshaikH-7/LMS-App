@@ -150,6 +150,24 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
+
+        /// Quiz 
+        <Stack.Screen 
+          name="(routes)/quiz/quiz.result"
+          options={{
+            // headerShown: false,
+            title: "Quiz result Dashboard",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="(routes)/blogs/quiz.solutions"
+          options={{
+            // headerShown: false,
+            title: "Quiz solution",
+            headerBackTitle: "Back",
+          }}
+        />
       </Stack>
     </ToastProvider>
   );
