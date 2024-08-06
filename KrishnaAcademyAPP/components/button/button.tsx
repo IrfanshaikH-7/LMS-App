@@ -13,7 +13,7 @@ export default function Button({
   onPress,
 }: {
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
 }) {
   const { width } = Dimensions.get("window");
 
@@ -31,7 +31,7 @@ export default function Button({
       ]}
       onPress={() => onPress()}
     >
-      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "700" }}>
+      <Text style={{ color: "#fff", fontSize: 15, fontWeight: "700" }}>
         {title}
       </Text>
     </TouchableOpacity>
