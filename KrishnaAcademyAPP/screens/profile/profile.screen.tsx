@@ -106,22 +106,7 @@ export default function ProfileScreen() {
           <ScrollView>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <View style={{ position: "relative" }}>
-                {/* <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
-          <Image
-            source={{ uri:"https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
-
-
-            style={styles.image}
-          />
-        </TouchableOpacity>
-        <View>
-          <Text style={[styles.helloText, { fontFamily: "Raleway_700Bold" }]}>
-            Hello,
-          </Text>
-          <Text style={[styles.text, { fontFamily: "Raleway_700Bold" }]}>
-            {user?.name}
-          </Text>
-        </View> */}
+              
                 <Image
                   source={{ uri: "https://api.dicebear.com/5.x/initials/svg?seed=Harsh" }}
 
@@ -165,7 +150,7 @@ export default function ProfileScreen() {
                   marginBottom: 20,
                 }}
                 onPress={
-                  router.push("/(routes)/my-account/my-profile")
+                  () => router.push("/(routes)/my-account/my-profile")
                 }
               >
                 <View
