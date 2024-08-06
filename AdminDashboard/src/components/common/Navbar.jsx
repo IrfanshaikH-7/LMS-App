@@ -162,30 +162,20 @@ const Navbar = () => {
                             </Link>
                         )
                     }
-                    {
-                        token === null && (
-                            <Link to="/login">
-                                {/* <button className='border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100 rounded-md focus:outline-8 outline-yellow-50'> */}
-                                <button className={` px-[12px] py-[8px] text-richblack-100 rounded-md 
-                                 ${matchRoute('/login') ? 'border-[2.5px] border-yellow-50' : 'border border-richblack-700 bg-richblack-800'} `}
-                                >
-                                    Log in
-                                </button>
-                            </Link>
-                        )
-                    }
+{/*               
                     {
                         token === null && (
                             <Link to="/signup">
                                 {/* <button className='border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100 rounded-md'> */}
-                                <button className={` px-[12px] py-[8px] text-richblack-100 rounded-md 
+                                {/* <button className={` px-[12px] py-[8px] text-richblack-100 rounded-md 
                                  ${matchRoute('/signup') ? 'border-[2.5px] border-yellow-50' : 'border border-richblack-700 bg-richblack-800'} `}
                                 >
                                     Sign Up
                                 </button>
-                            </Link>
+                            </Link> */}
                         )
-                    }
+                    {/* } */} 
+                    {/* } */}
 
                     {/* for large devices */}
                     {token !== null && <ProfileDropDown />}
