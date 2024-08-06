@@ -1,49 +1,58 @@
 import HomeScreen from "@/screens/home/home.screen";
-import ProfileScreen from "@/screens/profile/profile.screen";
+
 import { Ionicons } from "@expo/vector-icons";
 import {
   createDrawerNavigator,
-  DrawerContent,
+
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { useEffect, useState } from "react";
+
 import { StyleSheet, Text, View } from "react-native";
 
 import React from "react";
 import { Image } from "expo-image";
 import useUser from "@/hooks/auth/useUser";
-import CourseDetailScreen from "@/screens/home/course/course.details.screen";
+
 import { router, useNavigation } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
+
+const UserInfoContent = () => {
+  const { user, loading, setRefetch } = useUser();
+
+  return (
+    <TouchableOpacity style={styles.userInfoWrapper}
+    onPress={() => router.navigate("/(routes)/my-account/my-profile")}
+    >
+      <Image
+        source={{
+          uri: `https://api.dicebear.com/5.x/initials/svg?seed=${user?.name}`,
+        }}
+        width={60}
+        height={60}
+        style={{ borderRadius: 40 }}
+      />
+      <View style={styles.userDetailsWrapper}>
+        <Text style={styles.userName}> {user?.name}</Text>
+        <Text style={styles.userEmail}>{user?.email}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 const CustomDrawerContent = (props) => {
   const { user, loading, setRefetch } = useUser();
 
   const navigation = useNavigation();
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
+<DrawerContentScrollView {...props}>
+      {/* User Info Section */}
+      <UserInfoContent />
+      {/* <DrawerItemList {...props} /> */}
 
-      <View style={styles.userInfoWrapper}>
-        <Image
-          source={{
-            uri: "https://api.dicebear.com/5.x/initials/svg?seed=Harsh",
-          }}
-          width={80}
-          height={80}
-          style={{
-            borderRadius: 40,
-            // margin: 10,
-          }}
-        />
-        <View style={styles.userDetailsWrapper}>
-          <Text style={styles.userName}> {user?.name}</Text>
-          <Text style={styles.userEmail}>{user?.email}</Text>
-        </View>
-      </View>
-
+     
       <View style={styles.section}>
         <Text style={styles.heading}>My Accounts</Text>
 
@@ -187,7 +196,9 @@ const CustomDrawerContent = (props) => {
           />
         </View>
       </View>
-      <View style={styles.section}>
+      <View style={[styles.section,{
+        marginBottom: 20,
+      }] }>
         {/* <Text style={styles.heading}>Account</Text> */}
         <DrawerItem
           label="Logout"
@@ -208,6 +219,7 @@ const CustomDrawerContent = (props) => {
               name="log-out"
               size={size}
               color={focused ? "blue" : "black"}
+              
             />
           )}
         />
@@ -220,38 +232,77 @@ export default function index() {
   const Drawer = createDrawerNavigator();
 
   return (
+    // <Drawer.Navigator
+    //   drawerContent={(props) => <CustomDrawerContent {...props} />}
+    // >
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-    >
-      <Drawer.Group
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Drawer.Screen
-          name="Home"
-          // children={
-          //   () => <HomeScreen />
-          // }
-          component={HomeScreen}
-          options={{
+    initialRouteName="Home" // Start with UserInfo screen
+    drawerContent={(props) => <CustomDrawerContent {...props} />}
+    drawerPosition="top" // Place the drawer content at the top
+  >
+      <Drawer.Screen name="UserInfo" component={UserInfoContent}
+
+        options={
+          {
             headerShown: false,
+          }
+        }
+       />
 
-            title: "Home",
+    <Drawer.Screen
+        name="Home"
 
-            drawerIcon: ({ focused, size }) => (
-              <Ionicons
-                name="back"
-                size={size}
-                color={focused ? "blue" : "black"}
-              />
-            ),
-          }}
+        component={HomeScreen} // Assuming you still want the Home screen
+        options={{
+          headerShown: false,
+          title: "Home",
+
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+            name="home" // Use appropriate icon for Home
+            size={size}
+            color={focused ? "blue" : "black"}
+            />
+          ),
+        }}
         />
-      </Drawer.Group>
-    </Drawer.Navigator>
-  );
+        </Drawer.Navigator>
+
+);
 }
+{/* Navigation Items Section */}
+{/* <View style={styles.navigationItems}>
+  <DrawerItemList {...props} />
+</View> */}
+      
+    //   <Drawer.Group
+    //     screenOptions={{
+    //       headerShown: false,
+    //     }}
+    //   >
+    //     <Drawer.Screen
+    //       name="Profile"
+    //       // children={
+    //       //   () => <HomeScreen />
+    //       // }
+    //       component={HomeScreen}
+    //       options={{
+    //         headerShown: false,
+
+    //         title: "Home",
+
+    //         drawerIcon: ({ focused, size }) => (
+    //           <Ionicons
+    //             name="back"
+    //             size={size}
+    //             color={focused ? "blue" : "black"}
+    //           />
+    //         ),
+    //       }}
+    //     />
+    //   </Drawer.Group>
+    // </Drawer.Navigator>
+
 const styles = StyleSheet.create({
   section: {
     marginTop: 20,
@@ -275,6 +326,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 10,
+
     // borderBottomColor: "#000",
     // borderBottomWidth: 1,
     // marginBottom: 10,

@@ -142,6 +142,10 @@ export default function ProfileScreen() {
               >
                 Account Details
               </Text>
+
+              
+
+
               <TouchableOpacity
                 style={{
                   flexDirection: "row",
@@ -197,6 +201,53 @@ export default function ProfileScreen() {
                   <AntDesign name="right" size={26} color={"#CBD5E0"} />
                 </TouchableOpacity>
               </TouchableOpacity>
+
+              <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 20,
+        }}
+        onPress={() => router.push('/(routes)/my-account/saved-questions')} // Adjust navigation path
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            columnGap: 30,
+          }}
+        >
+          <View
+            style={{
+              borderWidth: 2,
+              borderColor: '#dde2ec',
+              padding: 15,
+              borderRadius: 100,
+              width: 55,
+              height: 55,
+            }}
+          >
+            <FontAwesome
+              style={{ alignSelf: 'center' }}
+              name="bookmark" // Replace with appropriate icon
+              size={20}
+              color={'black'}
+            />
+          </View>
+          <View>
+            <Text style={{ fontSize: 16, fontFamily: 'Nunito_700Bold' }}>
+              Saved Questions
+            </Text>
+            <Text style={{ color: '#575757', fontFamily: 'Nunito_400Regular' }}>
+              Your saved questions
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity>
+          <AntDesign name="right" size={26} color={'#CBD5E0'} />
+        </TouchableOpacity>
+      </TouchableOpacity>
               <TouchableOpacity
                 style={{
                   flexDirection: "row",
