@@ -14,6 +14,7 @@ import { courseData } from "@/screens/search/quiz.screen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import QuizCard from "@/components/quiz/quiz.bundlecard";
+import StudyMaterialCard from "@/components/quiz/studymaterial";
 
 const { height, width } = Dimensions.get("window");
 
@@ -106,19 +107,19 @@ const InfoScreen = () => (
 );
 
 const ContentsScreen = () => (
-  <View style={styles.tabContent}>
+  <ScrollView style={styles.tabContent}>
 
     <View>
 
     <QuizCard quizzes={courseData[0].quizzes} />
-    {/* <StudyMaterialCard studyMaterials={course.studyMaterials} /> */}
+    <StudyMaterialCard studyMaterials={courseData[0].studyMaterials} />
 
 
 
 
     </View>
 
-  </View>
+  </ScrollView>
 );
 
 const Tab = createMaterialTopTabNavigator();
@@ -227,9 +228,10 @@ const styles = StyleSheet.create({
     // justifyContent: "flex-start",
     // alignItems: "center",
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 40,
     marginBottom: 50,
     // backgroundColor: "lightblue",
+
   },
   sectionTitle: {
     fontSize: 20,
