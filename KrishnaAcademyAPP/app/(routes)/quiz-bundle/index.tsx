@@ -1,11 +1,19 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, Dimensions, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { courseData } from "@/screens/search/quiz.screen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+import QuizCard from "@/components/quiz/quiz.bundlecard";
 
 const { height, width } = Dimensions.get("window");
 
@@ -33,70 +41,83 @@ By the end of the course, students will have a comprehensive understanding of In
 By the end of the course, students will have a comprehensive understanding of Indian law and will be well-prepared to pursue further studies or careers in the legal field.
 `;
 const InfoScreen = () => (
-    <ScrollView style={styles.tabContent}>
+  <ScrollView style={styles.tabContent}>
+    <View
+      style={{
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
 
-        <View style={{
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            
-            paddingVertical: 20,
-        }}>
+        paddingVertical: 20,
+      }}
+    >
+      <Text style={styles.sectionTitle}>What is in this course</Text>
 
-    <Text style={styles.sectionTitle}>What is in this course</Text>
-
-    <View style={{
-        paddingHorizontal: 20,
-    }}>
+      <View
+        style={{
+          paddingHorizontal: 20,
+        }}
+      >
         <View style={styles.itemContainer}>
-        <Ionicons name="extension-puzzle" size={24} color="black" />
-            <Text style={styles.itemText}>Indian Legal Mastery Quiz</Text>
+          <Ionicons name="extension-puzzle" size={24} color="black" />
+          <Text style={styles.itemText}>Indian Legal Mastery Quiz</Text>
         </View>
         <View style={styles.itemContainer}>
-        <Ionicons name="extension-puzzle" size={24} color="black" />
-            <Text style={styles.itemText}>Indian Legal Mastery Quiz2</Text>
+          <Ionicons name="extension-puzzle" size={24} color="black" />
+          <Text style={styles.itemText}>Indian Legal Mastery Quiz2</Text>
         </View>
         <View style={styles.itemContainer}>
-        <Ionicons name="extension-puzzle" size={24} color="black" />
-            <Text style={styles.itemText}>Indian Legal Mastery Quiz3</Text>
+          <Ionicons name="extension-puzzle" size={24} color="black" />
+          <Text style={styles.itemText}>Indian Legal Mastery Quiz3</Text>
         </View>
         <View style={styles.itemContainer}>
-        <Ionicons name="book-outline" size={24} color="black" />
-            <Text style={styles.itemText}>IPS</Text>
+          <Ionicons name="book-outline" size={24} color="black" />
+          <Text style={styles.itemText}>IPS</Text>
         </View>
         <View style={styles.itemContainer}>
-        <Ionicons name="book-outline" size={24} color="black" />
-            <Text style={styles.itemText}>CRPC</Text>
+          <Ionicons name="book-outline" size={24} color="black" />
+          <Text style={styles.itemText}>CRPC</Text>
         </View>
-
+      </View>
     </View>
-        </View>
-        
 
-        <View>
-
-  
-    <Text style={styles.sectionTitle}>About</Text>
-    <View style={styles.descriptionContainer}>
+    <View>
+      <Text style={styles.sectionTitle}>About</Text>
+      <View style={styles.descriptionContainer}>
         <Text style={styles.description}>
-        {description.split('\n').map((paragraph, index) => {
-            const isBulletPoint = paragraph.trim().startsWith('-');
+          {description.split("\n").map((paragraph, index) => {
+            const isBulletPoint = paragraph.trim().startsWith("-");
             return (
-              <Text key={index} style={isBulletPoint ? styles.bulletPoint : styles.paragraph}>
-                {isBulletPoint ? `• ${paragraph.trim().substring(1).trim()}` : paragraph.trim()}
-                {'\n'}
+              <Text
+                key={index}
+                style={isBulletPoint ? styles.bulletPoint : styles.paragraph}
+              >
+                {isBulletPoint
+                  ? `• ${paragraph.trim().substring(1).trim()}`
+                  : paragraph.trim()}
+                {"\n"}
               </Text>
             );
           })}
         </Text>
       </View>
-        </View>
+    </View>
   </ScrollView>
 );
 
 const ContentsScreen = () => (
   <View style={styles.tabContent}>
-    <Text>Contents Content</Text>
+
+    <View>
+
+    <QuizCard quizzes={courseData[0].quizzes} />
+    {/* <StudyMaterialCard studyMaterials={course.studyMaterials} /> */}
+
+
+
+
+    </View>
+
   </View>
 );
 
@@ -108,17 +129,16 @@ export default function index() {
       style={{
         flex: 1,
         // alignItems: 'center',
-        backgroundColor: "lightblue",
+        // backgroundColor: "lightblue",
         flexDirection: "column",
         justifyContent: "flex-start",
-
       }}
     >
       <View
         style={{
           height: height * 0.35,
-          flexDirection: "column",  
-            justifyContent: "flex-start",
+          flexDirection: "column",
+          justifyContent: "flex-start",
         }}
       >
         <Image source={{ uri: courseData[0].image }} style={styles.image} />
@@ -128,35 +148,30 @@ export default function index() {
       </View>
       <View style={styles.tabContainer}>
         <Tab.Navigator
-        initialRouteName="Home"
-        tabBarOptions={{
-            activeTintColor: 'red',
-            
+          initialRouteName="Home"
+          tabBarOptions={{
+            activeTintColor: "red",
+
             labelStyle: {
               fontSize: 16,
             },
 
-
             style: {
-
               borderTopLeftRadius: 15,
               borderTopRightRadius: 15,
               borderBottomLeftRadius: 15,
 
               borderBottomRightRadius: 15,
-              marginHorizontal: 20, 
-              overflow: 'hidden',
-
+              marginHorizontal: 20,
+              overflow: "hidden",
             },
             indicatorStyle: {
-              backgroundColor: 'red',
+              backgroundColor: "red",
               height: 2,
-            },}}
-        
+            },
+          }}
         >
-          <Tab.Screen name="About" component={InfoScreen} 
-          
-          />
+          <Tab.Screen name="About" component={InfoScreen} />
           <Tab.Screen name="Content" component={ContentsScreen} />
         </Tab.Navigator>
       </View>
@@ -174,13 +189,13 @@ const styles = StyleSheet.create({
     height: height * 0.4,
   },
   descriptionContainer: {
-    backgroundColor: '#f9f9f9', // Very light gray background for the description section
+    backgroundColor: "#f9f9f9", // Very light gray background for the description section
     padding: 15,
     borderRadius: 5,
   },
   description: {
     fontSize: 16,
-    color: '#444444', // Dark gray text color
+    color: "#444444", // Dark gray text color
   },
   drawerStyle: {
     width: width * 0.5,
@@ -214,17 +229,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     marginBottom: 50,
-    backgroundColor: "lightblue",
+    // backgroundColor: "lightblue",
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    textAlign:'left',
+    fontWeight: "bold",
+    textAlign: "left",
     marginVertical: 10,
   },
   itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 5,
   },
   itemText: {
@@ -236,7 +251,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 10,
     fontSize: 16,
-    color: '#333333', // Dark gray text color
+    color: "#333333", // Dark gray text color
   },
   tabContainer: {
     flex: 1,

@@ -96,6 +96,7 @@ export default function LoginScreen() {
   };
 
   const handleSignIn = async () => {
+    setButtonSpinner(true)
     const deviceData = await collectDeviceData();
 
     if (!deviceData) {
@@ -119,11 +120,13 @@ export default function LoginScreen() {
         router.push("/(tabs)");
       })
       .catch((error) => {
+        setButtonSpinner(false)
         console.log(error);
         Toast.show("Email or password is not correct!", {
           type: "danger",
         });
       });
+      setButtonSpinner(false)
   };
 
   return (
