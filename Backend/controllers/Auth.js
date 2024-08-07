@@ -227,6 +227,14 @@ exports.signup = async (req, res) => {
 };
 
 //login
+
+function isDeviceDataMatching(storedDeviceData, providedDeviceData) {
+
+  // TODO , may be 1 or 2 values might not match
+  // Implement your logic to compare device data with stored data
+  // Return true if matching, false otherwise
+  return JSON.stringify(storedDeviceData) === JSON.stringify(providedDeviceData);
+}
 exports.login = async (req, res) => {
   try {
     //fetching... data
@@ -249,6 +257,9 @@ exports.login = async (req, res) => {
 
     //validating... data
 
+
+
+
     //checking... user existence
     const user = await User.findOne({ phoneNumber });
     if (!user) {
@@ -258,6 +269,8 @@ exports.login = async (req, res) => {
       });
     }
 
+  
+
     if (user.isBanned && user.banExpires > new Date()) {
       console.log("257");
       return res.status(403).json({
@@ -265,6 +278,23 @@ exports.login = async (req, res) => {
         message: "Account is banned. Try again later.",
       });
     }
+
+    //match device data with stored data for user
+    const storedDeviceData = user.deviceData;
+
+    if (!isDeviceDataMatching(storedDeviceData, deviceData)) {
+      user.loginAttempts += 1;
+
+      if (user.loginAttempts >= MAX_ATTEMPTS) {
+          user.isBanned = true;
+          user.banExpires = new Date(Date.now() + BAN_DURATION);
+      }
+
+      await user.save();
+      throw new Error('Device data does not match. Login attempts: ' + user.loginAttempts);
+  }
+
+   
 
     //matching... password && //generating... JWT token
     if (await bcrypt.compare(password, user.password)) {
