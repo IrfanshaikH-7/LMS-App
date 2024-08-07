@@ -64,7 +64,7 @@ export default function TabsLayout() {
             } else if (route.name === "studymaterials/index") {
 
               iconName = require("@/assets/icons/information2.png");
-            } else if (route.name === "search/index") {
+            } else if (route.name === "quiz/index") {
               iconName = require("@/assets/icons/puzzle-piece.png");
             } else if (route.name === "courses/index") {
               iconName = require("@/assets/icons/more.png");
@@ -97,7 +97,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="index" />
       <Tabs.Screen name="studymaterials/index" />
       <Tabs.Screen name="courses/index" />
-      <Tabs.Screen name="search/index" />
+      <Tabs.Screen name="quiz/index" />
       <Tabs.Screen name="profile/index" />
     </Tabs>
   );

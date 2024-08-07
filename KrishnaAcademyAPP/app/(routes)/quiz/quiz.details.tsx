@@ -23,6 +23,7 @@ import { quizData } from "@/constants/quiz";
 import { useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomLoader from "@/components/CustomLoader";
+import { Toast } from "react-native-toast-notifications";
 
 const renderItem = ({ item }) => {
   console.log(item, "item");
@@ -277,6 +278,15 @@ export default function QuizScreen() {
     }).start();
   };
 
+  const handleSaveQuestion = async()=>{
+    try {
+        Toast.show("Saving question")
+    } catch (error) {
+      Toast.show("Error saving question")
+      
+    }
+
+  }
   if(loading){
     return <CustomLoader name="2-curves" color="red" />
 
@@ -403,29 +413,36 @@ export default function QuizScreen() {
           >
             {/* {left} */}
             <View style={{ flexDirection: "row", paddingVertical: 4 }}>
-              <Text style={{ fontWeight: "800" }}>{`Q.${count + 1}`}</Text>
-              <Text>/{"150"}</Text>
+              <Text style={{ fontWeight: "600" }}>{`Q.${count + 1}`}</Text>
+              <Text
+              style={{
+                fontSize: 18,
+                color: "black",
+                fontWeight: "800",
+                alignSelf: "center",
+                marginLeft: 4,
+              }}
+              >/ {questions.length}</Text>
             </View>
             {/* {right} */}
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
             >
-              <Ionicons
-                style={{ alignSelf: "center" }}
-                name="alert-circle-outline"
-                size={20}
-                color={"black"}
-              />
-              <MaterialCommunityIcons
-                style={{ alignSelf: "center" }}
-                name="timer"
-                size={20}
-                color="black"
-              />
-              <Text style={{ fontSize: 13 }}>{"40:02"}</Text>
+             
+             <TouchableOpacity onPress={handleSaveQuestion}>
+        <MaterialCommunityIcons
+          style={{ alignSelf: "center" }}
+          name={true ? "bookmark" : "bookmark-outline"}
+          size={35}
+          color="#d7f776"
+        />
+      </TouchableOpacity>
+
             </View>
           </View>
         </View>
+
+        
         <View style={{ flex: 1, marginTop: 20 }}>
           <Text style={{ fontWeight: "800" }}>
             {"SECTION A : ENGLISH LANGUAGE"}
@@ -513,6 +530,8 @@ export default function QuizScreen() {
                   padding: 16,
                   borderRadius: 20,
                   width: "66%",
+                  flexDirection: "column",
+
                 }}
               >
                 <Text
@@ -523,6 +542,17 @@ export default function QuizScreen() {
                   }}
                 >
                   Your score: {userScore}
+                </Text>
+                <Text
+                style={{
+
+                  fontSize: 15,
+                  color: "green",
+                  textAlign: "right",
+                  
+                }}
+                >
+                  View Result
                 </Text>
               </TouchableOpacity>
             </View>
