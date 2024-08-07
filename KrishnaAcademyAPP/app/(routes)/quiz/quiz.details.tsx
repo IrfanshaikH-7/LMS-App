@@ -167,6 +167,14 @@ const renderItem = ({ item }) => {
   );
 };
 
+function secondsToHms(seconds) {
+  const pad = (num, size) => ("00" + num).slice(-size);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secondsLeft = seconds % 60;
+
+  return `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(secondsLeft, 2)}`;
+}
 export default function QuizScreen() {
   const [language, setLanguage] = useState<"en" | "hin">("en");
   const [quizDetails, setQuizDetails] = React.useState<any>(null);
@@ -185,13 +193,16 @@ export default function QuizScreen() {
   const [timer, setTimer] = useState(0);
   const [scoreModalVisible, setScoreModalVisible] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState(0);
+
+  const [timeUp, setTimeUp] = useState(false);
+
   const toggleLanguage = () => {
     setLanguage(language === "english" ? "hindi" : "english");
   };
   const [quizzes, setQuizzes] = useState(quizData);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [loading , setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   console.log("hello");
   useEffect(() => {
@@ -202,12 +213,13 @@ export default function QuizScreen() {
 
       const quizData = res?.data?.data;
       setQuizDetails(quizData);
-      setRemainingTime(quizData.time);
+
+      setRemainingTime(quizData.timer);
 
       console.log("quizData.questions:", quizData);
       setQuestions(quizData.questions);
 
-      setLoading(false)
+      setLoading(false);
     };
 
     getQuizDetails();
@@ -278,20 +290,30 @@ export default function QuizScreen() {
     }).start();
   };
 
-  const handleSaveQuestion = async()=>{
+  const handleSaveQuestion = async () => {
     try {
-        Toast.show("Saving question")
+      Toast.show("Saving question");
     } catch (error) {
-      Toast.show("Error saving question")
-      
+      Toast.show("Error saving question");
+    }
+  };
+  if (loading) {
+    return <CustomLoader name="2-curves" color="red" />;
+  }
+
+  const handleTimeup = async() => {
+    try {
+      Toast.show("Time up");
+      setTimeUp(true)
+      setScoreModalVisible(true);
+
+    } catch (error) {
+      Toast.show("Error saving question");
     }
 
   }
-  if(loading){
-    return <CustomLoader name="2-curves" color="red" />
 
 
-  }
   return (
     <SafeAreaView
       style={{
@@ -300,7 +322,6 @@ export default function QuizScreen() {
         padding: 12,
       }}
     >
-
       <View>
         {/* {  -- top part including timer, submit, toggle and hambuger  --} */}
         <View
@@ -320,31 +341,65 @@ export default function QuizScreen() {
           >
             <CountdownCircleTimer
               isPlaying
-              duration={setRemainingTime}
+              duration={remainingTime}
               colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
               colorsTime={[7, 5, 2, 0]}
-              size={30}
-              strokeWidth={4}
+              size={70}
+              strokeWidth={2}
               onComplete={() => {
-                // Handle timer completion here
+                handleTimeup()
               }}
             >
-              {/* {({ remainingTime }) => <Text>{remainingTime}</Text>} */}
+              {({ remainingTime }) => (
+                <Text style={{}}> {secondsToHms(remainingTime)}</Text>
+              )}
             </CountdownCircleTimer>
-            <Text style={{ fontWeight: "800", fontSize: 14 }}>
-            {setRemainingTime}
-            </Text>
           </View>
-          <Button
-            onPress={() => setScoreModalVisible(true)}
-            title="submit"
-            color={"red"}
-          ></Button>
+
+          {/* //submit */}
+
+          <View
+            style={{
+              flexDirection: 'column',
+
+              justifyContent: 'center',
+              alignItems: 'center',
+
+
+
+            }}
+          >
+
+
+            <TouchableOpacity
+              onPress={() => setScoreModalVisible(true)}
+              style={{
+                borderRadius: 20,
+                backgroundColor: "red",
+                width: 80,
+                height: 40,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "600",
+                }}
+              >
+                Submit
+              </Text>
+            </TouchableOpacity>
+
+
+          </View>
         </View>
         <View
           style={{ width: "100%", height: 1, backgroundColor: "#D3D4DB" }}
         />
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -352,58 +407,18 @@ export default function QuizScreen() {
             position: "relative",
           }}
         >
-          <TouchableOpacity
-            style={{
-              paddingVertical: 6,
-              paddingHorizontal: 16,
-              backgroundColor: "red",
-              width: 80,
-              alignItems: "center",
-            }}
-            onPress={toggleLanguage}
-          >
-            <Text style={{ fontWeight: "800", fontSize: 12, color: "white" }}>
-              {language === "english" ? "English" : "Hindi"}
-            </Text>
-          </TouchableOpacity>
-          <Animated.View
-            style={{
-              position: "absolute",
-              flex: 1,
-              backgroundColor: "#e2e2e2",
-              zIndex: 99,
-              height: 740, //TODO: unjust to screen higth as screen-top part later on
-              width: 260,
-              top: 6,
-              right: -12,
-              transform: [{ translateX }],
-            }}
-          >
-            <TouchableOpacity onPress={handleMenuPress}>
-              <Ionicons
-                style={{
-                  alignSelf: "center",
-                  position: "absolute",
-                  left: -60,
-                  backgroundColor: "#e2e2e2",
-                  padding: 4,
-                }}
-                name="menu"
-                size={24}
-                color={"black"}
-                zIndex={999}
-              />
-            </TouchableOpacity>
-            <View></View>
-          </Animated.View>
-        </View>
+        
+
+         
+
+        </View> */}
       </View>
       <View style={{ width: "100%", height: 1, backgroundColor: "#D3D4DB" }} />
 
       {/* {  -- Questions mapping  --} */}
       <ScrollView
         stickyHeaderIndices={[0]}
-        style={{ flex: 1, marginTop: 12 , backgroundColor:'blue'}}
+        style={{ flex: 1, marginTop: 12 }}
         showsVerticalScrollIndicator={false}
       >
         {/* TODO: change bg white to defaul bg color */}
@@ -415,39 +430,100 @@ export default function QuizScreen() {
             <View style={{ flexDirection: "row", paddingVertical: 4 }}>
               <Text style={{ fontWeight: "600" }}>{`Q.${count + 1}`}</Text>
               <Text
-              style={{
-                fontSize: 18,
-                color: "black",
-                fontWeight: "800",
-                alignSelf: "center",
-                marginLeft: 4,
-              }}
-              >/ {questions.length}</Text>
+                style={{
+                  fontSize: 18,
+                  color: "black",
+                  fontWeight: "800",
+                  alignSelf: "center",
+                  marginLeft: 4,
+                }}
+              >
+                / {questions.length}
+              </Text>
             </View>
             {/* {right} */}
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
-            >
-             
-             <TouchableOpacity onPress={handleSaveQuestion}>
-        <MaterialCommunityIcons
-          style={{ alignSelf: "center" }}
-          name={false ? "bookmark" : "bookmark-outline"}
-          size={35}
-          color="#d7f776"
-        />
-      </TouchableOpacity>
+            <View style={{
+              flexDirection: 'row'
+            }}>
 
+
+
+              <View
+                style={{ flexDirection: "row-reverse", alignItems: "center", gap: 10 }}
+              >
+
+                <Animated.View
+                // style={{
+                //   // position: "absolute",
+                //   flex: 1,
+                //   backgroundColor: "#e2e2e2",
+                //   zIndex: 99,
+                //   height: 740, //TODO: unjust to screen higth as screen-top part later on
+                //   width: 260,
+                //   // top: 6,
+                //   // right: -12,
+                //   transform: [{ translateX }],
+                // }}
+                >
+                  <TouchableOpacity onPress={handleMenuPress}>
+                    <Ionicons
+                      style={{
+                        alignSelf: "center",
+                        // position: "absolute",
+                        // left: -60,
+                        backgroundColor: "#e2e2e2",
+                        padding: 4,
+                      }}
+                      name="menu"
+                      size={24}
+                      color={"black"}
+                      zIndex={999}
+                    />
+                  </TouchableOpacity>
+
+                  {/* <View><Text>dddd</Text></View> */}
+                </Animated.View>
+                <TouchableOpacity onPress={handleSaveQuestion}>
+                  <MaterialCommunityIcons
+                    style={{ alignSelf: "center" }}
+                    name={false ? "bookmark" : "bookmark-outline"}
+                    size={35}
+                    color="#d7f776"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
 
-        
-        <View style={{  marginTop: 20, backgroundColor:'red' , flex:1,}}>
-          <Text style={{ fontWeight: "800" }}>
-            {"SECTION A : ENGLISH LANGUAGE"}
-          </Text>
+        <View style={{ marginTop: 20, flex: 1 }}>
 
+          <View style={
+            {
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }
+          }>
+
+            <Text style={{ fontWeight: "800" }}>
+              {"SECTION A : ENGLISH LANGUAGE"}
+            </Text>
+
+            <TouchableOpacity
+              style={{
+                paddingVertical: 6,
+                paddingHorizontal: 16,
+                backgroundColor: "red",
+                width: 80,
+                alignItems: "center",
+              }}
+              onPress={toggleLanguage}
+            >
+              <Text style={{ fontWeight: "800", fontSize: 12, color: "white" }}>
+                {language === "english" ? "English" : "Hindi"}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <Text
             style={{
               marginTop: 16,
@@ -514,112 +590,107 @@ export default function QuizScreen() {
               </TouchableOpacity>
             ))}
           </View>
+
           <View
-          style={{
-            // position:'absolute',
-            marginTop:50
-          }}
+            style={{
+              // position:'absolute',
+              marginTop: 50,
+            }}
           >
-
-          
-          {getResultClicked ? (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => setScoreModalVisible(true)}
-                // disabled={true}
+            {getResultClicked ? (
+              <View
                 style={{
-                  backgroundColor: "#d1d5db",
-                  padding: 16,
-                  borderRadius: 20,
-                  width: "66%",
-                  flexDirection: "column",
-
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <Text
+                <TouchableOpacity
+                  onPress={() => setScoreModalVisible(true)}
+                  // disabled={true}
                   style={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    textAlign: "center",
+                    backgroundColor: "#d1d5db",
+                    padding: 16,
+                    borderRadius: 20,
+                    width: "66%",
+                    flexDirection: "column",
                   }}
                 >
-                  Your score: {userScore}
-                </Text>
-                <Text
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Your score: {userScore}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: "green",
+                      textAlign: "right",
+                    }}
+                  >
+                    View Result
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View
                 style={{
-
-                  fontSize: 15,
-                  color: "green",
-                  textAlign: "right",
-                  
-                }}
-                >
-                  View Result
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-           
-                marginTop: 12,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                // position: "absolute",
-                // bottom: 20,
-              }}
-            >
-              <TouchableOpacity
-                onPress={handleSkip}
-                style={{
-                  backgroundColor: "white",
-                  paddingVertical: 12,
-                  paddingHorizontal: 18,
-                  borderRadius: 8,
-                  width: "auto",
+                  marginTop: 12,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  // position: "absolute",
+                  // bottom: 20,
                 }}
               >
-                <Text
+                <TouchableOpacity
+                  onPress={handleSkip}
                   style={{
-                    fontWeight: "800",
-                    fontSize: 14,
-                    color: "black",
-                    textAlign: "center",
+                    backgroundColor: "white",
+                    paddingVertical: 12,
+                    paddingHorizontal: 18,
+                    borderRadius: 8,
+                    width: "auto",
                   }}
                 >
-                  {" << PREVIOUS"}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleSave}
-                style={{
-                  backgroundColor: "red",
-                  paddingVertical: 12,
-                  paddingHorizontal: 18,
-                  borderRadius: 8,
-                  width: "33%",
-                }}
-              >
-                <Text
+                  <Text
+                    style={{
+                      fontWeight: "800",
+                      fontSize: 14,
+                      color: "black",
+                      textAlign: "center",
+                    }}
+                  >
+                    {" << PREVIOUS"}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSave}
                   style={{
-                    fontWeight: "800",
-                    fontSize: 14,
-                    color: "white",
-                    textAlign: "center",
+                    backgroundColor: "red",
+                    paddingVertical: 12,
+                    paddingHorizontal: 18,
+                    borderRadius: 8,
+                    width: "33%",
                   }}
                 >
-                  {count === quizData.length - 1 ? "Get Result" : "NEXT >>"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
+                  <Text
+                    style={{
+                      fontWeight: "800",
+                      fontSize: 14,
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    {count === quizData.length - 1 ? "Get Result" : "NEXT >>"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -741,24 +812,31 @@ export default function QuizScreen() {
             <Text style={{ alignSelf: "center" }}>
               You are submitting the quiz
             </Text>
-            <View style={{ flexDirection: "row", gap: 8, alignSelf: "center" }}>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "white",
-                  borderWidth: 1,
-                  padding: 10,
-                  borderRadius: 4,
-                }}
-                onPress={() => setScoreModalVisible(false)}
-              >
-                <Text
-                  style={{
-                    color: "black",
-                  }}
-                >
-                  Cancel
-                </Text>
-              </TouchableOpacity>
+            <View style={{ flexDirection: "row", gap: 8, alignSelf: "center", justifyContent:"center" }}>
+
+              {timeUp && <Text style={{ color: "red" }}>Time up</Text> }
+
+              {!timeUp && (
+                   <TouchableOpacity
+                   style={{
+                     backgroundColor: "white",
+                     borderWidth: 1,
+                     padding: 10,
+                     borderRadius: 4,
+                   }}
+                   onPress={() => setScoreModalVisible(false)}
+                 >
+                   <Text
+                     style={{
+                       color: "black",
+                     }}
+                   >
+                     Cancel
+                   </Text>
+                 </TouchableOpacity>
+
+              )}
+           
 
               <TouchableOpacity
                 style={{
