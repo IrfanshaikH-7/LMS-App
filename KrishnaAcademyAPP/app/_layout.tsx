@@ -85,14 +85,7 @@ function RootLayoutNav() {
             headerBackTitle: "Back",
           }}
         />
-        <Stack.Screen
-          name="(routes)/cart/index"
-          options={{
-            headerShown: true,
-            title: "Cart Items",
-            headerBackTitle: "Back",
-          }}
-        />
+
         <Stack.Screen
           name="(routes)/profile-details/index"
           options={{

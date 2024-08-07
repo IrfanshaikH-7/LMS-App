@@ -4,6 +4,15 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 const QuizBundleCard = ({ quizzes }) => {
   return (
     <View style={styles.container}>
+      <Text
+      style={{
+        textAlign: 'left',
+        fontSize: 20,
+        fontWeight: 'bold',
+      }}
+      >
+        Quizzes
+      </Text>
       {quizzes.map((quiz) => (
         <View key={quiz.id} style={styles.quizCard}>
           <Image
@@ -47,9 +56,10 @@ const QuizBundleCard = ({ quizzes }) => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop:20,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 10,
   },
   quizCard: {

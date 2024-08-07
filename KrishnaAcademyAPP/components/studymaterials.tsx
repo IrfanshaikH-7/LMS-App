@@ -131,16 +131,15 @@ const StudyMaterialsList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-        <PaymentComponent
-          isVisible={isModalVisible}
-          onClose={onCloseMaterial}
-          onPaymentSuccess={() => onPaymentSuccess(selectedPdfUri)}
-          itemType="Study Material"
-          itemPrice="100"
-          handlePayment={() => console.log("Payment done")}
-          handleClose={closePdfModal}
-        />
-    
+      <PaymentComponent
+        isVisible={isModalVisible}
+        onClose={onCloseMaterial}
+        onPaymentSuccess={() => onPaymentSuccess(selectedPdfUri)}
+        itemType="Study Material"
+        itemPrice="100"
+        handlePayment={() => console.log("Payment done")}
+        handleClose={closePdfModal}
+      />
 
       <FlatList
         data={studyMaterials}
@@ -166,7 +165,7 @@ const StudyMaterialsList: React.FC = () => {
               style={{
                 position: "absolute",
                 top: 5,
-                left:5,
+                left: 5,
                 backgroundColor: "#2DC43E",
                 color: "white",
                 padding: 2,
@@ -183,19 +182,35 @@ const StudyMaterialsList: React.FC = () => {
                 height: 100,
               }}
             >
-              <Image
+              {/* <Image
                 style={{
-                  width: "50%",
-                  height: "80%",
+                  width: 100,
+                  height: 100,
                   borderRadius: 5,
                   alignSelf: "center",
                   objectFit: "cover",
                 }}
+                source={
+
+                  {
+                    uri: "https://img.freepik.com/free-vector/realistic-wooden-brown-judge-gavel_88138-139.jpg?size=626&ext=jpg&ga=GA1.1.1387862008.1722622005&semt=sph",
+                  }
+                }
+
+
+              /> */}
+              <Image
+               style={{
+                width: 100,
+                height: 100,
+                borderRadius: 5,
+                alignSelf: "center",
+                objectFit: "cover",
+              }}
                 source={{
-                  uri: "https://poainc.org/wp-content/uploads/2018/06/pdf-placeholder.png",
+                  uri: "https://img.freepik.com/free-vector/realistic-wooden-brown-judge-gavel_88138-139.jpg?size=626&ext=jpg&ga=GA1.1.1387862008.1722622005&semt=sph",
                 }}
               />
-
               <Text style={styles.title}>{item.title}</Text>
             </View>
           </TouchableOpacity>
@@ -241,8 +256,8 @@ const styles = StyleSheet.create({
 
 export default StudyMaterialsList;
 
-
-{/* <View
+{
+  /* <View
 style={{
   flexDirection: "row",
   justifyContent: "space-between",
@@ -269,4 +284,5 @@ style={{
 >
   <Ionicons name="arrow-forward" size={30} color="gray" />
 </TouchableOpacity>
-</View> */}
+</View> */
+}

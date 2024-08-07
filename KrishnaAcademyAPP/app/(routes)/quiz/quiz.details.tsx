@@ -403,7 +403,7 @@ export default function QuizScreen() {
       {/* {  -- Questions mapping  --} */}
       <ScrollView
         stickyHeaderIndices={[0]}
-        style={{ flex: 1, marginTop: 12 }}
+        style={{ flex: 1, marginTop: 12 , backgroundColor:'blue'}}
         showsVerticalScrollIndicator={false}
       >
         {/* TODO: change bg white to defaul bg color */}
@@ -432,7 +432,7 @@ export default function QuizScreen() {
              <TouchableOpacity onPress={handleSaveQuestion}>
         <MaterialCommunityIcons
           style={{ alignSelf: "center" }}
-          name={true ? "bookmark" : "bookmark-outline"}
+          name={false ? "bookmark" : "bookmark-outline"}
           size={35}
           color="#d7f776"
         />
@@ -443,7 +443,7 @@ export default function QuizScreen() {
         </View>
 
         
-        <View style={{ flex: 1, marginTop: 20 }}>
+        <View style={{  marginTop: 20, backgroundColor:'red' , flex:1,}}>
           <Text style={{ fontWeight: "800" }}>
             {"SECTION A : ENGLISH LANGUAGE"}
           </Text>
@@ -514,6 +514,14 @@ export default function QuizScreen() {
               </TouchableOpacity>
             ))}
           </View>
+          <View
+          style={{
+            // position:'absolute',
+            marginTop:50
+          }}
+          >
+
+          
           {getResultClicked ? (
             <View
               style={{
@@ -559,6 +567,7 @@ export default function QuizScreen() {
           ) : (
             <View
               style={{
+           
                 marginTop: 12,
                 flexDirection: "row",
                 alignItems: "center",
@@ -611,6 +620,7 @@ export default function QuizScreen() {
               </TouchableOpacity>
             </View>
           )}
+          </View>
         </View>
       </ScrollView>
       <Modal
