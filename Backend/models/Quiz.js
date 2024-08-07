@@ -25,6 +25,14 @@ const Quiz = new mongoose.Schema({
   price: {
     type:Number,
   },
+  isListed: {
+    type: Boolean,
+    default: false,
+  },
+  isPartOfBundle: {
+    type: Boolean,
+    default: false,
+  },
   questions: [
     {
       type: mongoose.Schema.Types.ObjectId,

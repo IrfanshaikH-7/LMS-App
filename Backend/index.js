@@ -9,6 +9,8 @@ const contactUsRoute = require("./routes/Contact");
 const quizRoutes = require("./routes/Quiz");
 const studymaterials = require("./routes/studymaterial");
 
+const CourseBundle = require("./routes/courseBundle")
+
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -52,7 +54,7 @@ app.use(cookieParser());
 // )
 app.use(cors({}));
 
-cloudinaryConnect();
+// cloudinaryConnect();
 
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
@@ -62,6 +64,8 @@ app.use("/api/v1/quiz", quizRoutes);
 app.use("/api/v1/study", studymaterials);
 // app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/reach", contactUsRoute);
+
+app.use("/api/v1/Bundle", CourseBundle)
 
 
 app.get("/", (req, res) => {
