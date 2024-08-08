@@ -38,6 +38,7 @@ import { HiArrowNarrowUp } from "react-icons/hi";
 import AddQuiz from "./pages/AddQuiz";
 import StudyMaterials from "./pages/StudyMaterials";
 import MyQuiz from "./pages/MyQuiz";
+import CourseBundleForm from "./components/core/Dashboard/BundleCourse/CreateBundle";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -153,7 +154,11 @@ function App() {
             <>
               <Route path="dashboard" element={<Instructor />} />
               <Route path="dashboard/my-courses" element={<MyCourses />} />
-              <Route path="dashboard/add-course" element={<AddCourse />} />
+
+              <Route path="dashboard/add-course" element={<CourseBundleForm />} />
+
+              //for video cources
+              <Route path="dashboard/course-video" element={<AddCourse />} />
               <Route
                 path="dashboard/edit-course/:courseId"
                 element={<EditCourse />}

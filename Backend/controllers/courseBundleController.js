@@ -98,16 +98,4 @@ exports.addQuizzesToBundle = async (req, res) => {
     }
   };
 // Add study materials to a course bundle
-exports.addStudyMaterialsToBundle = async (req, res) => {
-  try {
-    const bundle = await Bundle.findById(req.params.id);
-    if (!bundle) {
-      return res.status(404).json({ error: 'Course bundle not found' });
-    }
-    bundle.studyMaterials.push(...req.body.studyMaterials);
-    await bundle.save();
-    res.status(200).json(bundle);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+
