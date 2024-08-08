@@ -101,13 +101,23 @@ const userSchema = new mongoose.Schema({
 
         },
     },
-    quizResuls:{
-        type:[
-            {type:String}
-        ]
-    }
+    quizResults: [
+        {
+            quiz: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Quiz",
+            },
+            score: {
+                type: Number,
+            },
+            attemptDate: {
+                type: Date,
+                default: Date.now,
+            },
+        }
+    ]
 },
-// Add timestamps for when the document is created and last modified
+
 { timestamps: true }
 );
 

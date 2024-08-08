@@ -100,6 +100,22 @@ exports.getAllStudyMaterials = async (req, res) => {
   }
 };
 
+exports.getIsBundledMaterials = async (req, res) => {
+  try {
+    const studyMaterials = await StudyMaterial.find({isPartOfBundle : true}).sort({createdAt: -1});
+    return res.json({
+      success: true,
+      data: studyMaterials,
+    });
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 exports.getStudyMaterialById = async (req, res) => {
   const { id } = req.params;
 

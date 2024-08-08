@@ -40,6 +40,6 @@ const Quiz = new mongoose.Schema({
     },
   ],
   
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model("Quiz", Quiz);

@@ -176,6 +176,26 @@ exports.getAllQuiz = async (req, res) => {
         }) 
     }
 } 
+
+exports.getAllisBundleQuizes = async (req, res) => {
+  try{
+      const quiz = await Quiz.find({isPartOfBundle: true}).sort({createdAt: -1});
+          return res.status(201).json({
+              success:true,
+              message:"All bundle quizz are here!!",
+              
+              data: quiz,
+          });
+
+  } catch(error){
+      console.log(error);
+      return res.status(500).json({
+          success:false,
+          message:"user cannot LOGGED in, try again ",
+      }) 
+  }
+} 
+
 exports.editQuizbyId = async (req, res) => {
     try{
         const { id} = req.params;
