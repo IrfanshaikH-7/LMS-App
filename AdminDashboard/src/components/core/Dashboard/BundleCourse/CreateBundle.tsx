@@ -11,7 +11,7 @@ import Step2 from "./Steptwo";
 
 //NOW
 
-const Step3 = ({ register, errors }) => (
+const Step3 = ({ register, errors, courseBundleId }) => (
     <div>
         <h2>Step 3: Publish and Set Time</h2>
         {/* Add form fields for publishing and setting time */}
@@ -23,10 +23,10 @@ export default function CourseBundleForm() {
 
     const [step, setStep] = useState(1);
     const [bundleImage, setBundleImage] = useState(null);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue,getValues, formState: { errors } } = useForm();
     const dispatch = useDispatch();
-
-
+const valuesss = getValues()
+console.log(valuesss)
     const [courseBundleId, setCourseBundleId] = useState(null);
 
     //   const { token } = useSelector((state) => state.auth);
@@ -49,8 +49,8 @@ export default function CourseBundleForm() {
             toast.loading("Please wait...")
             const res = await axios.post(`${BASE_URL}/api/v1/bundle/course-bundle`, formData)
             console.log(res);
-            console.log("🚀 ~ handleStep1Submit ~ res:", es.data.data._id)
-            setCourseBundleId(res.data.data._id);
+            console.log("🚀 ~ handleStep1Submit ~ res:", res?.data?._id)
+            setCourseBundleId(res?.data?._id);
 
             toast.dismiss();
             toast.success("Step 1 completed successfully")
@@ -70,6 +70,7 @@ export default function CourseBundleForm() {
 
     const handleStep2Submit = async (data) => {
         const formData = new FormData();
+        console.log(data)
         // Add quizzes and study materials to formData
         // const result = await addQuizzesAndMaterials(formData, token);
         // if (result) {
@@ -102,7 +103,7 @@ export default function CourseBundleForm() {
             handleStep3Submit(data);
         }
     };
-
+console.log(courseBundleId)
     return (
         // <div className=" inset-0  !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 ">
         <div className="flex w-full gap-x-6 justify-center items-center overflow-y-auto">
@@ -117,9 +118,9 @@ export default function CourseBundleForm() {
                     </p>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 px-8 py-10">
-                    {step === 1 && <Step1 register={register} errors={errors} setValue={setValue} handleImageChange={handleImageChange} />}
-                    {step === 2 && <Step2 register={register} errors={errors} />}
-                    {step === 3 && <Step3 register={register} errors={errors} />}
+                    {step === 1 && <Step1 register={register}  errors={errors} setValue={setValue} handleImageChange={handleImageChange} />}
+                    {step === 2 && <Step2 register={register} getValues={getValues} courseBundleId={courseBundleId} errors={errors} />}
+                    {step === 3 && <Step3 register={register} courseBundleId={courseBundleId} errors={errors} />}
                     <div className="flex justify-end">
                         <IconBtn text={step === 3 ? "Submit" : "Next"} />
                     </div>

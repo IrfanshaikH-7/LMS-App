@@ -2,12 +2,16 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../../../../services/apis";
+import { useForm } from "react-hook-form";
 
-const Step2 = ({ register, errors, setValue }) => {
+const Step2 = ({ register, errors, courseBundleId }: any) => {
+    const { setValue,getValues} = useForm();
+
+    console.log(courseBundleId, 'step-2')
     const [courses, setCourses] = useState([]);
     const [studyMaterials, setstudyMaterials] = useState([]);
     const [quizzes, setQuizzes] = useState([]);
-    const [selectedItems, setSelectedItems] = useState([]);
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,8 +19,8 @@ const Step2 = ({ register, errors, setValue }) => {
 
                 toast.loading("fetching data...")
                 // const coursesRes = await axios.get(`${BASE_URL}/api/v1/courses`);
-                const studyRes = await axios.get(`${BASE_URL}/api/v1/study/getAllStudyMaterials`);
-                const quizzesRes = await axios.get(`${BASE_URL}/api/v1/quiz/getAllQuiz`);
+                const studyRes = await axios.get(`${BASE_URL}/api/v1/study/getIsBundledMaterials`);
+                const quizzesRes = await axios.get(`${BASE_URL}/api/v1/quiz/getAllisBundleQuizes`);
 
                 //TODO api to get only sBUndle quiz , study material , sort -1
                 // setCourses(coursesRes.data);
@@ -44,13 +48,23 @@ const Step2 = ({ register, errors, setValue }) => {
 
     const handleCheckboxChange = (e, item) => {
         if (e.target.checked) {
-            setSelectedItems([...selectedItems, item]);
+            console.log(item._id,'checked')
+            setSelectedItems((prev) => [...prev, item._id]);
         } else {
-            setSelectedItems(selectedItems.filter(i => i.id !== item.id));
+            console.log(item._id,'unchecked')
+            setSelectedItems(selectedItems.filter(i => i !== item._id));
+            
         }
-        setValue("selectedItems", selectedItems);
+        // formData.selectedItems = selectedItems;
+        setValue("selectQuizes", selectedItems);
     };
 
+
+    const formData = getValues();       
+    console.log(formData)
+    console.log(selectedItems)
+
+//yeh wali
     return (
         <div className="flex-1 h-full">
             <h2>Select Courses and Quizzes</h2>
@@ -58,16 +72,16 @@ const Step2 = ({ register, errors, setValue }) => {
             <div>
                 <h3>Courses</h3>
 
-                {/* {courses.map(course => (
-                    <div key={course.id}>
+                {studyMaterials.length > 0  && studyMaterials?.map(material => (
+                    <div key={material._id}>
                         <input
                             type="checkbox"
-                            id={`course-${course.id}`}
+                            id={`course-${material._id}`}
                             onChange={(e) => handleCheckboxChange(e, course)}
                         />
-                        <label htmlFor={`course-${course.id}`}>{course.name}</label>
+                        <label htmlFor={`course-${material.id}?`}>{material.title}</label>
                     </div>
-                ))} */}
+                ))}
             </div>
 
             <div>
@@ -88,13 +102,13 @@ const Step2 = ({ register, errors, setValue }) => {
             <div>
                 <h3>Quizzes</h3>
                 {quizzes.length > 0  && quizzes?.map(quiz => (
-                    <div key={quiz.id}>
+                    <div key={quiz?._id}>
                         <input
                             type="checkbox"
-                            id={`quiz-${quiz.id}`}
+                            id={`quiz-${quiz._id}`}
                             onChange={(e) => handleCheckboxChange(e, quiz)}
                         />
-                        <label htmlFor={`quiz-${quiz.id}`}>{quiz.name}</label>
+                        <label htmlFor={`quiz-${quiz._id}`}>{quiz.name}</label>
                     </div>
                 ))}
             </div>
