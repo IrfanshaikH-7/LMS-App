@@ -11,6 +11,9 @@ exports.createQuiz = async (req, res) => {
         isPaid,
         price,
         quizData,
+        testSeries,
+        isListed,
+        isPartOfBundle,
      } = req.body;
      const Quizimage = req.file ? req.file.path : 'https://picsum.photos/200';
 
@@ -95,6 +98,9 @@ exports.createQuiz = async (req, res) => {
       price,
       image:Quizimage,
       questions: questionIds,
+      testSeries,
+      isListed,
+      isPartOfBundle,
     });
   
     try {

@@ -55,16 +55,27 @@ exports.createCourseBundle = async (req, res) => {
 // Add quizzes to a course bundle
 exports.addQuizzesToBundle = async (req, res) => {
     try {
+
+
+
+
       const bundle = await Bundle.findById(req.params.id);
+
+
+
       if (!bundle) {
         return res.status(404).json({ error: 'Course bundle not found' });
       }
+
+
       bundle.quizes.push(...req.body.quizes);
-      if (bundle.quizes.length > 0 && bundle.studyMaterials.length > 0) {
-        bundle.status = "Published"; // Update status to Published if both quizzes and study materials are added
-      }
+     
       await bundle.save();
-      res.status(200).json(bundle);
+
+      res.status(200).json({
+        message: 'Quizzes added to course bundle successfully',
+        data: bundle,
+      });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -78,9 +89,9 @@ exports.addQuizzesToBundle = async (req, res) => {
         return res.status(404).json({ error: 'Course bundle not found' });
       }
       bundle.studyMaterials.push(...req.body.studyMaterials);
-      if (bundle.quizes.length > 0 && bundle.studyMaterials.length > 0) {
-        bundle.status = "Published"; // Update status to Published if both quizzes and study materials are added
-      }
+      // if (bundle.quizes.length > 0 && bundle.studyMaterials.length > 0) {
+      //   bundle.status = "Published"; // Update status to Published if both quizzes and study materials are added
+      // }
       await bundle.save();
       res.status(200).json(bundle);
     } catch (error) {

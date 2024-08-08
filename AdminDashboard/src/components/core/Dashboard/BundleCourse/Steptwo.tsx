@@ -17,9 +17,15 @@ const Step2 = ({ register, errors, setValue }) => {
                 // const coursesRes = await axios.get(`${BASE_URL}/api/v1/courses`);
                 const studyRes = await axios.get(`${BASE_URL}/api/v1/study/getAllStudyMaterials`);
                 const quizzesRes = await axios.get(`${BASE_URL}/api/v1/quiz/getAllQuiz`);
+
+                //TODO api to get only sBUndle quiz , study material , sort -1
                 // setCourses(coursesRes.data);
-                setQuizzes(quizzesRes.data);
-                setstudyMaterials(studyRes.data);
+                setQuizzes(quizzesRes.data.data);
+                setstudyMaterials(studyRes.data.data);
+
+
+                //TODO only which as isBundle
+
                 toast.dismiss();
 
                 console.log("🚀 ~ fetchData ~ studyRes:", studyRes)
@@ -46,8 +52,9 @@ const Step2 = ({ register, errors, setValue }) => {
     };
 
     return (
-        <div>
+        <div className="flex-1 h-full">
             <h2>Select Courses and Quizzes</h2>
+        <div className="flex flex-col gap-20 justify-center items-center">
             <div>
                 <h3>Courses</h3>
 
@@ -62,6 +69,22 @@ const Step2 = ({ register, errors, setValue }) => {
                     </div>
                 ))} */}
             </div>
+
+            <div>
+                <h3>Courses</h3>
+
+                {/* {courses.map(course => (
+                    <div key={course.id}>
+                        <input
+                            type="checkbox"
+                            id={`course-${course.id}`}
+                            onChange={(e) => handleCheckboxChange(e, course)}
+                        />
+                        <label htmlFor={`course-${course.id}`}>{course.name}</label>
+                    </div>
+                ))} */}
+            </div>
+
             <div>
                 <h3>Quizzes</h3>
                 {quizzes.length > 0  && quizzes?.map(quiz => (
@@ -80,6 +103,7 @@ const Step2 = ({ register, errors, setValue }) => {
                     Please select at least one item
                 </span>
             )}
+        </div>
         </div>
     );
 };

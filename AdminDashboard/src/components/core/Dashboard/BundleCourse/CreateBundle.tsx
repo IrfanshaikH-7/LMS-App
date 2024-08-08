@@ -9,7 +9,7 @@ import Step1 from "./Stepone";
 import Step2 from "./Steptwo";
 
 
-
+//NOW
 
 const Step3 = ({ register, errors }) => (
     <div>
@@ -21,10 +21,14 @@ const Step3 = ({ register, errors }) => (
 export default function CourseBundleForm() {
 
 
-    const [step, setStep] = useState(2);
+    const [step, setStep] = useState(1);
     const [bundleImage, setBundleImage] = useState(null);
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const dispatch = useDispatch();
+
+
+    const [courseBundleId, setCourseBundleId] = useState(null);
+
     //   const { token } = useSelector((state) => state.auth);
 
 
@@ -45,10 +49,13 @@ export default function CourseBundleForm() {
             toast.loading("Please wait...")
             const res = await axios.post(`${BASE_URL}/api/v1/bundle/course-bundle`, formData)
             console.log(res);
-
+            console.log("🚀 ~ handleStep1Submit ~ res:", es.data.data._id)
+            setCourseBundleId(res.data.data._id);
 
             toast.dismiss();
             toast.success("Step 1 completed successfully")
+
+
 
             setStep(2);
 
@@ -98,10 +105,10 @@ export default function CourseBundleForm() {
 
     return (
         // <div className=" inset-0  !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 ">
-        <div className="flex w-full gap-x-6 justify-center items-center h-full">
+        <div className="flex w-full gap-x-6 justify-center items-center overflow-y-auto">
 
 
-            <div className="my-10 w-11/12 max-w-[700px] rounded-lg border border-richblack-400 bg-richblack-800">
+            <div className="my-10 w-full h-full rounded-lg border border-richblack-400 bg-richblack-800">
                 <div className="flex items-center justify-between rounded-t-lg bg-richblack-700 p-5">
                     <p className="text-xl font-semibold text-richblack-5">
                         {step === 1 && "Step 1: Initial Data Collection"}

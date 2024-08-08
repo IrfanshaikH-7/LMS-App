@@ -29,10 +29,10 @@ const courseBundleController = require('../controllers/courseBundleController');
 router.post('/course-bundle', upload.single('image'), courseBundleController.createCourseBundle);
 
 // // Route to update an existing course bundle
-// router.post('/course-bundle/:id', courseBundleController.updateCourseBundle);
+router.post('/course-bundle/:id', courseBundleController.addQuizzesToBundle);
 
 // // Route to add quizzes to a course bundle
-// router.post('/course-bundle/:id/quizzes', courseBundleController.addQuizzesToBundle);
+router.post('/course-bundle/:id', courseBundleController.addStudyMaterialsToBundle);
 
 // // Route to add study materials to a course bundle
 // router.post('/course-bundle/:id/study-materials', courseBundleController.addStudyMaterialsToBundle);
