@@ -302,6 +302,9 @@ const AddQuiz = (props: Props) => {
     image: null,
     isPaid: false,
     price: 0,
+    testSeries:"",
+    isListed:false,
+    isPartOfBundle:false,
     questions: [
       {
         question: { en: "", hin: "" },
@@ -508,7 +511,41 @@ const AddQuiz = (props: Props) => {
               />
             </div>
           )}
-
+          {/* adding test series
+           */}
+           <div className="flex flex-row  items-start gap-10 mt-5 space-x-5">
+            <label htmlFor="" className="text-richblack-5 flex items-center">TestSeries</label>
+            <input
+            type="text"
+            placeholder="Test Series"
+            value={quiz.testSeries}
+            onChange={(e)=>handleChange(e,"testSeries")}
+            className="ml-2"
+            />
+           </div>
+           {/* isListed */}
+           <div className="flex flex-row  items-start gap-10 mt-5 space-x-5">
+            <label htmlFor="" className="text-richblack-5 flex items-center">isListed</label>
+            <input
+            type="checkbox"
+            placeholder="isListed"
+            className="ml-2"
+            checked={quiz.isListed}
+            onChange={(e)=>setQuiz({...quiz,isListed:e.target.checked})}
+            />
+           </div>
+           {/* ispartofBundle */}
+           <div className="flex flex-row  items-start gap-10 mt-5 space-x-5">
+            <label htmlFor="" className="text-richblack-5 flex items-center">isPartOfBundle</label>
+            <input
+            type="checkbox"
+            placeholder="isPartOfBundle"
+            className="ml-2"
+            checked={quiz.isPartOfBundle}
+            onChange={(e)=>setQuiz({...quiz,isPartOfBundle:e.target.checked})}
+            />
+           </div>
+           <div className="flex flex-col"></div>
           {quiz.questions.map((question, index) => (
             <div
               key={index}
