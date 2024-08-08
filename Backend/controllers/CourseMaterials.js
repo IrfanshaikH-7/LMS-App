@@ -37,7 +37,7 @@ const uploadFile = async (file) => {
 };
 
 exports.uploadStudyMaterials = async (req, res) => {
-  const { title, description, course, isPaid, price,  } = req.body;
+  const { title, description, course, isPaid, price,isListed,isPartOfBundle  } = req.body;
   const file = req.file; // Assuming you're using multer for file uploads
 
   try {
@@ -62,6 +62,8 @@ exports.uploadStudyMaterials = async (req, res) => {
       fileUrl,
       course,
       isPaid, price,
+      isListed,
+isPartOfBundle,
     });
 
     await newMaterial.save();
