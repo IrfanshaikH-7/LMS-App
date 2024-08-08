@@ -4,6 +4,7 @@ const { createQuiz, getQuizbyId, getAllQuiz, editQuizbyId, ping, updateQuestionO
 const router = express.Router()
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { getIsBundledMaterials } = require("../controllers/CourseMaterials");
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -32,6 +33,10 @@ router.post("/getQuizById/:id",getQuizbyId )
 router.post("/editQuiz/:id",editQuizbyId )
 router.get("/ping", ping)
 router.get("/update", updateQuestionOptions)
+
+router.get("/getAllisBundleQuizes", getIsBundledMaterials)
+
+
 
 
 module.exports = router 
