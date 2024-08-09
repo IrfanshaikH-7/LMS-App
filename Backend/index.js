@@ -18,26 +18,8 @@ const { cloudinaryConnect } = require("./config/cloudinary");
 
 const dotenv = require("dotenv");
 
-const {
-  S3Client,
-  PutObjectCommand,
-  CreateBucketCommand,
-  DeleteObjectCommand,
-  DeleteBucketCommand,
-  paginateListObjectsV2,
-  GetObjectCommand,
-} = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-const s3Client = new S3Client({
-  region: "ap-south-1",
-  credentials: {
-    accessKeyId: process.env.AWS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
-  },
-});
 
-const multer = require("multer");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 

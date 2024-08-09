@@ -8,8 +8,9 @@ const multer = require("multer");
 
 
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+// Configure Multer storage
+
+  const upload = multer({ storage: multer.memoryStorage() });
 
 
 router.post("/uploadStudyMaterials",upload.single('file'),  uploadStudyMaterials)
@@ -19,6 +20,8 @@ router.get("/getIsBundledMaterials",  getIsBundledMaterials)
 router.post("/buyStudyMaterial", buyStudyMaterial);
 
 router.post("/getAllBoughtStudyMaterials", getAllBoughtStudyMaterials);
+router.get("/getIsBundledMaterials", getAllBundleMaterial)
+// router.get("/getIsBundledMaterials", )
 // router.post("/verifyPayment", verifyPayment)
 // router.post("/sendPaymentSuccessEmail",  sendPaymentSuccessEmail);
 
