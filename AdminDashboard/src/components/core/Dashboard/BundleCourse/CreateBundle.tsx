@@ -149,9 +149,10 @@ export default function CourseBundleForm() {
             setCourseBundleId(res?.data?._id);
 
             toast.dismiss();
-            toast.success("Step 2 completed successfully")
+            toast.success("Step 3 completed successfully")
             setStep(3);
         } catch (error) {
+          toast.dismiss()
             toast.error("Failed to complete Step 2", {
                 duration: 2000,
             });

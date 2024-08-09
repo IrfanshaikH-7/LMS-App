@@ -85,7 +85,8 @@ const dateObject = new Date(req.body.date);
       console.log(dateObject)
       const bundle = await Bundle.findByIdAndUpdate({_id: req.params.id},{
         listed: req.params.isListed,
-        activeListing: dateObject
+        activeListing: dateObject,
+        status: "Published"
         
       });
 
@@ -127,13 +128,20 @@ const dateObject = new Date(req.body.date);
   };
   
   // List all course bundles
-  exports.listCourseBundles = async (req, res) => {
+ 
+
+
+  exports.getCourseBundle = async(req, res) => {
     try {
-      const bundles = await Bundle.find();
-      res.status(200).json(bundles);
+      const bundles = await Bundle.find({status:"Published"}).sort({created:-1}).populate('quizes').populate('studyMaterials');
+      res.status(200).json({
+        success:true,
+        message:'Cours ebundles',
+        data: bundles || [],
+      });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
 // Add study materials to a course bundle
 

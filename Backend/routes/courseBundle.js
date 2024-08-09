@@ -30,11 +30,14 @@ router.post('/course-bundle', upload.single('image'), courseBundleController.cre
 
 // // Route to update an existing course bundle
 router.post('/course-bundle/update/:id', courseBundleController.addQuizzesToBundle);
+
+// /step3
 router.post('/course-bundle/updateTime/:id', courseBundleController.updateTimenListing);
 
 // // Route to add quizzes to a course bundle
 router.post('/course-bundle/:id', courseBundleController.addStudyMaterialsToBundle);
-
+router.get('/course-bundle', courseBundleController.getCourseBundle);
+// router.get('/course-bundle/:id', courseBundleController.getCourseBundleById);
 // // Route to add study materials to a course bundle
 // router.post('/course-bundle/:id/study-materials', courseBundleController.addStudyMaterialsToBundle);
 
