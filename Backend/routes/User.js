@@ -11,6 +11,8 @@ const {
   getUserById,
   updateUserById,
   updateAdditionalDetails,
+  userLogin,
+  adminLogin,
 } = require("../controllers/Auth")
 const {
   resetPasswordToken,
@@ -27,7 +29,8 @@ const { buyQuiz, buyMaterials } = require("../controllers/BuyItem")
 // ********************************************************************************************************
 
 // Route for user login
-router.post("/login", login)
+router.post("/login", userLogin)
+router.post("/adminlogin", adminLogin)
 
 // Route for user signup
 router.post("/signup", signup)

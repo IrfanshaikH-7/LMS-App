@@ -214,28 +214,19 @@ exports.signup = async (req, res) => {
     });
   }
 };
-
-exports.login = async (req, res) => {
+exports.userLogin = async (req, res) => {
   try {
-    // Destructure fields from the request body
-    const { phoneNumber, password, deviceData, accountType } = req.body;
+    const { phoneNumber, password, deviceData } = req.body;
 
-    if (!password || !accountType) {
+    if (!phoneNumber || !password || !deviceData) {
       return res.status(403).json({
         success: false,
-        message: "Password and account type are required",
+        message: "Phone number, password, and device data are required",
       });
     }
 
-    if (accountType !== 'Admin' && (!phoneNumber || !deviceData)) {
-      return res.status(403).json({
-        success: false,
-        message: "Phone number and device data are required for non-Admin users",
-      });
-    }
+    const user = await User.findOne({ phoneNumber });
 
-    // Check if user exists
-    const user = await User.findOne({ phoneNumber: accountType !== 'Admin' ? phoneNumber : undefined, email: accountType === 'Admin' ? req.body.email : undefined });
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -250,8 +241,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Validate device data for non-Admin users
-    if (accountType !== 'Admin' && !isDeviceDataMatching(user.deviceData, deviceData)) {
+    if (!isDeviceDataMatching(user.deviceData, deviceData)) {
       user.loginAttempts += 1;
       if (user.loginAttempts >= MAX_ATTEMPTS) {
         user.isBanned = true;
@@ -261,7 +251,6 @@ exports.login = async (req, res) => {
       throw new Error('Device data does not match. Login attempts: ' + user.loginAttempts);
     }
 
-    // Compare passwords
     if (await bcrypt.compare(password, user.password)) {
       const payload = {
         email: user.email,
@@ -293,6 +282,68 @@ exports.login = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "User cannot log in, try again",
+    });
+  }
+};
+
+exports.adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(403).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Admin is not registered",
+      });
+    }
+
+    if (user.isBanned && user.banExpires > new Date()) {
+      return res.status(403).json({
+        success: false,
+        message: "Account is banned. Try again later.",
+      });
+    }
+
+    if (await bcrypt.compare(password, user.password)) {
+      const payload = {
+        email: user.email,
+        id: user._id,
+        accountType: user.accountType,
+      };
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '3d' });
+      user.token = token;
+      user.password = undefined;
+
+      const options = {
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+      };
+      res.cookie("token", token, options).status(200).json({
+        success: true,
+        token,
+        user,
+        message: "Logged in successfully",
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Password does not match",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Admin cannot log in, try again",
     });
   }
 };

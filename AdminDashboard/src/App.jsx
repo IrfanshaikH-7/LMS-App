@@ -11,7 +11,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import PageNotFound from "./pages/PageNotFound";
 import CourseDetails from "./pages/CourseDetails";
-import Catalog from "./pages/Catalog";
+
 
 import Navbar from "./components/common/Navbar";
 

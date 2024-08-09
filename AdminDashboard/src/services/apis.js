@@ -6,7 +6,7 @@ export const BASE_URL ="https://lms-app-wqwt.onrender.com"
 export const endpoints = {
   SENDOTP_API: BASE_URL + "api/v1/auth/sendotp",      
   SIGNUP_API: BASE_URL + "/auth/signup",
-  LOGIN_API: BASE_URL + "/api/v1/auth/login",
+  LOGIN_API: BASE_URL + "/api/v1/auth/adminlogin",
   RESETPASSTOKEN_API: BASE_URL + "/auth/reset-password-token",
   RESETPASSWORD_API: BASE_URL + "/auth/reset-password",
 }

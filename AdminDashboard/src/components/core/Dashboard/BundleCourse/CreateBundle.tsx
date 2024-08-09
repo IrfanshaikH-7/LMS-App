@@ -7,6 +7,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../../services/apis";
 import Step1 from "./Stepone";
 import Step2 from "./Steptwo";
+import { Link, Router } from "react-router-dom";
 
 
 //NOW
@@ -58,6 +59,7 @@ const Step3 = ({ register, setValue, errors, courseBundleId }) => {
   };
 
 export default function CourseBundleForm() {
+
 
 
     const [step, setStep] = useState(1);
@@ -150,7 +152,9 @@ export default function CourseBundleForm() {
 
             toast.dismiss();
             toast.success("Step 3 completed successfully")
-            setStep(3);
+
+            Router.apply("/dashboard")
+            
         } catch (error) {
           toast.dismiss()
             toast.error("Failed to complete Step 2", {

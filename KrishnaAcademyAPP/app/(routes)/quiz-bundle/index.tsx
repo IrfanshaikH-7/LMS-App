@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { courseData } from "@/screens/search/quiz.screen";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+
 import { Ionicons } from "@expo/vector-icons";
 import QuizCard from "@/components/quiz/quiz.bundlecard";
 import StudyMaterialCard from "@/components/quiz/studymaterial";

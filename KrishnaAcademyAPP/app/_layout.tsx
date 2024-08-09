@@ -8,10 +8,9 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { LogBox } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+
 import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
-import index from "./(tabs)";
-import Header from "@/components/header/header";
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
