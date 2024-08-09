@@ -214,14 +214,16 @@ exports.signup = async (req, res) => {
 };
 exports.userLogin = async (req, res) => {
   try {
-    //fetching... data
+    const { phoneNumber, password, deviceData } = req.body;
 
-    const { email, password, deviceData } = req.body;
-
-    // if (typeof deviceData !== "object" || deviceData === null) {
-    //   return res.status(400).json({ error: "Invalid device data" });
-    // }
-    if (!email || !password || !deviceData) {
+    if (typeof deviceData !== "object" || deviceData === null) {
+      return res.status(400).json({
+        message: "Deivce Data error ",
+        error: "Invalid device data",
+      });
+    }
+    if (!phoneNumber || !password || !deviceData) {
+      //   console.log("239");
       return res.status(403).json({
         success: false,
         message: "ALL FIELDS ARE REQUIRED",
@@ -229,15 +231,9 @@ exports.userLogin = async (req, res) => {
     }
 
     //validating... data
-    if (!email || !password) {
-      return res.status(401).json({
-        success: false,
-        message: "ALL FIELDS ARE REQUIRED",
-      });
-    }
 
     //checking... user existence
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ phoneNumber });
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -246,19 +242,24 @@ exports.userLogin = async (req, res) => {
     }
 
     if (user.isBanned && user.banExpires > new Date()) {
+      console.log("257");
       return res.status(403).json({
         success: false,
         message: "Account is banned. Try again later.",
       });
     }
 
-    // Validate device data for non-Admin users
-    if (!isDeviceDataMatching(user.deviceData, deviceData)) {
+    //match device data with stored data for user
+    const storedDeviceData = user.deviceData;
+
+    if (!isDeviceDataMatching(storedDeviceData, deviceData)) {
       user.loginAttempts += 1;
+
       if (user.loginAttempts >= MAX_ATTEMPTS) {
         user.isBanned = true;
         user.banExpires = new Date(Date.now() + BAN_DURATION);
       }
+
       await user.save();
       throw new Error(
         "Device data does not match. Login attempts: " + user.loginAttempts
@@ -267,9 +268,10 @@ exports.userLogin = async (req, res) => {
 
     //matching... password && //generating... JWT token
     if (await bcrypt.compare(password, user.password)) {
+      console.log(password, user.password);
       //creating.. payload
       const payload = {
-        email: user.email,
+        email: user.phoneNumber,
         id: user._id,
         accountType: user.accountType,
       };
