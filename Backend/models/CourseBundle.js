@@ -36,7 +36,7 @@ const bundleSchema = new mongoose.Schema({
   },
   activeListing: {
     type: Date,
-    default: Date.now
+    default: () => new Date().toISOString()
   },
   status: {
 		type: String,

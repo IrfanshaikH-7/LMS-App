@@ -11,12 +11,51 @@ import Step2 from "./Steptwo";
 
 //NOW
 
-const Step3 = ({ register, errors, courseBundleId }) => (
-    <div>
-        <h2>Step 3: Publish and Set Time</h2>
-        {/* Add form fields for publishing and setting time */}
-    </div>
-);
+
+const Step3 = ({ register, setValue, errors, courseBundleId }) => {
+    const [startDate, setStartDate] = React.useState('');
+    const [isListed, setIsListed] = React.useState(false);
+  
+    const handleDateChange = (event) => {
+      const date = event.target.value;
+      setStartDate(date);
+      setValue('date', date);
+    };
+  
+    const handleListedChange = (event) => {
+      const checked = event.target.checked;
+      setIsListed(checked);
+      setValue('isListed', checked);
+    };
+  useEffect(() => {
+    console.log(startDate, isListed)
+  },[startDate,isListed])
+    return (
+      <div>
+        <form className="space-y-8">
+          <div className="flex gap-3">
+            <label className="text-white">Publish Date:</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={handleDateChange}
+              className="form-control"
+            />
+            {errors.publishDate && <div className="error">{errors.publishDate.message}</div>}
+          </div>
+          <div className="flex gap-3">
+            <label className="text-white"> Listed:</label>
+            <input
+              type="checkbox"
+              checked={isListed}
+              onChange={handleListedChange}
+            />
+            {errors.isListed && <div className="error">{errors.isListed.message}</div>}
+          </div>
+        </form>
+      </div>
+    );
+  };
 
 export default function CourseBundleForm() {
 
@@ -74,6 +113,13 @@ export default function CourseBundleForm() {
             toast.loading("Please wait...")
             const res = await axios.post(`${BASE_URL}/api/v1/bundle/course-bundle/update/${courseBundleId}`,{quizzes:  formData.quizzes})
             console.log(res);
+
+            if(res.status != 200 ){
+              toast.dismiss();
+              toast.error("Update failed");
+              return;
+              
+            }
             console.log("🚀 ~ handleStep2Submit ~ res:", res?.data?._id)
             setCourseBundleId(res?.data?._id);
 
@@ -92,7 +138,30 @@ export default function CourseBundleForm() {
 
 
     const handleStep3Submit = async (data) => {
-        const formData = new FormData();
+        const formData = getValues()
+        console.log(formData.date, formData.isListed, courseBundleId)
+        try {
+            toast.loading("Please wait...")
+            const res = await axios.post(`${BASE_URL}/api/v1/bundle/course-bundle/updateTime/${courseBundleId}`,{date:  formData.date,isListed : formData.isListed})
+            console.log(res);
+
+            if(res.status != 200 )
+            console.log("🚀 ~ handleStep2Submit ~ res:", res?.data?._id)
+            setCourseBundleId(res?.data?._id);
+
+            toast.dismiss();
+            toast.success("Step 2 completed successfully")
+            setStep(3);
+        } catch (error) {
+            toast.error("Failed to complete Step 2", {
+                duration: 2000,
+            });
+            console.log(error);
+
+        }
+
+        
+        
         // Add publish and set time data to formData
         // const result = await publishCourseBundle(formData, token);
         // if (result) {
@@ -129,7 +198,7 @@ export default function CourseBundleForm() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 px-8 py-10">
                     {step === 1 && <Step1 register={register} errors={errors} setValue={setValue} handleImageChange={handleImageChange} />}
                     {step === 2 && <Step2 {...register} register={register} getValues={getValues} setValue={setValue} courseBundleId={courseBundleId} errors={errors} />}
-                    {step === 3 && <Step3 register={register} courseBundleId={courseBundleId} errors={errors} />}
+                    {step === 3 && <Step3 register={register} setValue={setValue}  courseBundleId={courseBundleId} errors={errors} />}
                     <div className="flex justify-end">
                         <IconBtn text={step === 3 ? "Submit" : "Next"} />
                     </div>

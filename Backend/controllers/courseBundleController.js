@@ -57,7 +57,7 @@ exports.addQuizzesToBundle = async (req, res) => {
     try {
 
       const bundle = await Bundle.findById(req.params.id);
-
+console.log(req.params.id, "----60")
 
 
       if (!bundle) {
@@ -66,6 +66,36 @@ exports.addQuizzesToBundle = async (req, res) => {
 
 
       bundle.quizes.push(...req.body.quizzes);
+     
+      await bundle.save();
+
+      res.status(200).json({
+        message: 'Quizzes added to course bundle successfully',
+        data: bundle,
+      });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  exports.updateTimenListing = async (req, res) => {
+    try {
+      console.log(req.params)
+const dateObject = new Date(req.body.date);
+      console.log(dateObject)
+      const bundle = await Bundle.findByIdAndUpdate({_id: req.params.id},{
+        listed: req.params.id,
+        activeListing: dateObject
+        
+      });
+
+
+
+      if (!bundle) {
+        return res.status(404).json({ error: 'Course bundle not found' });
+      }
+
+
      
       await bundle.save();
 
