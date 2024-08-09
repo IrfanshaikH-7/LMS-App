@@ -64,8 +64,8 @@ export default function CourseBundleForm() {
     const [bundleImage, setBundleImage] = useState(null);
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm();
     const dispatch = useDispatch();
-  
     const [courseBundleId, setCourseBundleId] = useState(null);
+    console.log(courseBundleId,"-------------------bundleIds")
 
     //   const { token } = useSelector((state) => state.auth);
 
@@ -121,7 +121,6 @@ export default function CourseBundleForm() {
               
             }
             console.log("🚀 ~ handleStep2Submit ~ res:", res?.data?._id)
-            setCourseBundleId(res?.data?._id);
 
             toast.dismiss();
             toast.success("Step 2 completed successfully")

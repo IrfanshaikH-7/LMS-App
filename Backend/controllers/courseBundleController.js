@@ -84,7 +84,7 @@ console.log(req.params.id, "----60")
 const dateObject = new Date(req.body.date);
       console.log(dateObject)
       const bundle = await Bundle.findByIdAndUpdate({_id: req.params.id},{
-        listed: req.params.id,
+        listed: req.params.isListed,
         activeListing: dateObject
         
       });
