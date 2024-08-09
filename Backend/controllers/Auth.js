@@ -217,6 +217,9 @@ exports.signup = async (req, res) => {
 exports.userLogin = async (req, res) => {
   try {
     const { phoneNumber, password, deviceData } = req.body;
+    console.log("🚀 ~ exports.userLogin= ~ deviceData:", deviceData)
+    console.log("🚀 ~ exports.userLogin= ~ password:", password)
+    console.log("🚀 ~ exports.userLogin= ~ phoneNumber:", phoneNumber)
 
     if (!phoneNumber || !password || !deviceData) {
       return res.status(403).json({
@@ -241,6 +244,8 @@ exports.userLogin = async (req, res) => {
       });
     }
 
+    console.log("🚀 ~ exports.userLogin= ~ deviceData:", user.deviceData)
+    console.log("🚀 ~ exports.userLogin= ~ deviceData:", deviceData)
     if (!isDeviceDataMatching(user.deviceData, deviceData)) {
       user.loginAttempts += 1;
       if (user.loginAttempts >= MAX_ATTEMPTS) {
