@@ -14,3 +14,8 @@ Admin
 
 indianshahishere@gmail.com
 password123
+
+
+irfan:
+backend: https://9qhxqfjg-4000.inc1.devtunnels.ms/
+frontend: https://9qhxqfjg-5173.inc1.devtunnels.ms/
