@@ -133,7 +133,8 @@ const dateObject = new Date(req.body.date);
 
   exports.getCourseBundle = async(req, res) => {
     try {
-      const bundles = await Bundle.find({status:"Published"}).sort({created:-1}).populate('quizes').populate('studyMaterials');
+      const bundles = await Bundle.find({status:"Published"}).sort({created:-1})
+      // const bundles = await Bundle.find({status:"Published"}).sort({created:-1}).populate('quizes').populate('studyMaterials');
       res.status(200).json({
         success:true,
         message:'Cours ebundles',
@@ -143,5 +144,22 @@ const dateObject = new Date(req.body.date);
       res.status(400).json({ error: error.message });
     }
   }
-// Add study materials to a course bundle
+  
+  
+  exports.getCourseBundleById = async(req, res) => {
+    try {
+
+      const bundle = await Bundle.findById(req.params.id).populate('quizes').populate('studyMaterials');
+
+
+      res.status(200).json({
+        success:true,
+        message:`CourseBundle ${req.params.id}`,
+        data: bundle || [],
+      });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
 
