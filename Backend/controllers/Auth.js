@@ -7,7 +7,7 @@ require("dotenv").config();
 const mailSender = require("../utils/mailSender");
 const { passwordUpdated } = require("../mail/templates/passwordUpdate");
 const Profile = require("../models/Profile");
-const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 30;
 const BAN_DURATION = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
 //otp verification by SENDING OTP
@@ -68,42 +68,38 @@ exports.sendotp = async (req, res) => {
   }
 };
 exports.getUserById = async (req, res) => {
-    try {
-		// Destructure fields from the request body
-		const {
-            id
-		} = req.body;
-		// Check if All Details are there or not
-		if (
-			!id
-		) {
-			return res.status(403).send({
-				success: false,
-				message: "Required ID",
-			});
-		}
+  try {
+    // Destructure fields from the request body
+    const { id } = req.body;
+    // Check if All Details are there or not
+    if (!id) {
+      return res.status(403).send({
+        success: false,
+        message: "Required ID",
+      });
+    }
 
-		// Check if user already exists
-		const user = await User.findOne({ _id: id });
-		if (!user) {
-			return res.status(400).json({
-				success: false,
-				message: "User not found",
-			});
-		}
+    // Check if user already exists
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-		return res.status(200).json({
-			success: true,
-			user,
-		});
-	} catch (error) {
-		console.error(error);
-		return res.status(500).json({
-			success: false,
-			message: "User cannot be registered. Please try again.",
-		});
-	}
-}
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "User cannot be registered. Please try again.",
+    });
+  }
+};
 
 exports.updateUserById = async (req, res) => {
   try {
@@ -145,13 +141,12 @@ exports.updateUserById = async (req, res) => {
   }
 };
 
-
-
 //login
 exports.signup = async (req, res) => {
   try {
     // Destructure fields from the request body
-    const { name, email, password, accountType, phoneNumber, otp, deviceData } = req.body;
+    const { name, email, password, accountType, phoneNumber, otp, deviceData } =
+      req.body;
 
     // Check if All Details are there or not
     if (!name || !email || !password || !accountType) {
@@ -161,10 +156,11 @@ exports.signup = async (req, res) => {
       });
     }
 
-    if (accountType !== 'Admin' && (!phoneNumber || !otp || !deviceData)) {
+    if (accountType !== "Admin" && (!phoneNumber || !otp || !deviceData)) {
       return res.status(403).send({
         success: false,
-        message: "Phone number, OTP, and device data are required for non-Admin users",
+        message:
+          "Phone number, OTP, and device data are required for non-Admin users",
       });
     }
 
@@ -178,8 +174,10 @@ exports.signup = async (req, res) => {
     }
 
     // Validate OTP for non-Admin users
-    if (accountType !== 'Admin') {
-      const response = await OTP.find({ phoneNumber }).sort({ createdAt: -1 }).limit(1);
+    if (accountType !== "Admin") {
+      const response = await OTP.find({ phoneNumber })
+        .sort({ createdAt: -1 })
+        .limit(1);
       if (response.length === 0 || otp !== response[0].otp) {
         return res.status(400).json({
           success: false,
@@ -194,8 +192,8 @@ exports.signup = async (req, res) => {
     const newUser = await User.create({
       name,
       email,
-      phoneNumber: accountType !== 'Admin' ? phoneNumber : undefined,
-      deviceData: accountType !== 'Admin' ? deviceData : undefined,
+      phoneNumber: accountType !== "Admin" ? phoneNumber : undefined,
+      deviceData: accountType !== "Admin" ? deviceData : undefined,
       password: hashedPassword,
       accountType,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
@@ -216,24 +214,34 @@ exports.signup = async (req, res) => {
 };
 exports.userLogin = async (req, res) => {
   try {
-    const { phoneNumber, password, deviceData } = req.body;
-    console.log("🚀 ~ exports.userLogin= ~ deviceData:", deviceData)
-    console.log("🚀 ~ exports.userLogin= ~ password:", password)
-    console.log("🚀 ~ exports.userLogin= ~ phoneNumber:", phoneNumber)
+    //fetching... data
 
-    if (!phoneNumber || !password || !deviceData) {
+    const { email, password, deviceData } = req.body;
+
+    // if (typeof deviceData !== "object" || deviceData === null) {
+    //   return res.status(400).json({ error: "Invalid device data" });
+    // }
+    if (!email || !password || !deviceData) {
       return res.status(403).json({
         success: false,
-        message: "Phone number, password, and device data are required",
+        message: "ALL FIELDS ARE REQUIRED",
       });
     }
 
-    const user = await User.findOne({ phoneNumber });
+    //validating... data
+    if (!email || !password) {
+      return res.status(401).json({
+        success: false,
+        message: "ALL FIELDS ARE REQUIRED",
+      });
+    }
 
+    //checking... user existence
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User is not registered",
+        message: "user is not registered !!",
       });
     }
 
@@ -244,8 +252,7 @@ exports.userLogin = async (req, res) => {
       });
     }
 
-    console.log("🚀 ~ exports.userLogin= ~ deviceData:", user.deviceData)
-    console.log("🚀 ~ exports.userLogin= ~ deviceData:", deviceData)
+    // Validate device data for non-Admin users
     if (!isDeviceDataMatching(user.deviceData, deviceData)) {
       user.loginAttempts += 1;
       if (user.loginAttempts >= MAX_ATTEMPTS) {
@@ -253,19 +260,28 @@ exports.userLogin = async (req, res) => {
         user.banExpires = new Date(Date.now() + BAN_DURATION);
       }
       await user.save();
-      throw new Error('Device data does not match. Login attempts: ' + user.loginAttempts);
+      throw new Error(
+        "Device data does not match. Login attempts: " + user.loginAttempts
+      );
     }
 
+    //matching... password && //generating... JWT token
     if (await bcrypt.compare(password, user.password)) {
+      //creating.. payload
       const payload = {
         email: user.email,
         id: user._id,
         accountType: user.accountType,
       };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '3d' });
+      //generating... jwt token
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        // expiresIn:"24h",
+        // expiresIn:"365d"
+      });
       user.token = token;
       user.password = undefined;
 
+      //creating... cookie && //sending...  final RESPONSE
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         httpOnly: true,
@@ -274,22 +290,24 @@ exports.userLogin = async (req, res) => {
         success: true,
         token,
         user,
-        message: "Logged in successfully",
+        message: "LOGGED IN SUCCESSFULLY",
       });
     } else {
       return res.status(401).json({
         success: false,
-        message: "Password does not match",
+        message: "password doesnt matched !!",
       });
     }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "User cannot log in, try again",
+      message: "user cannot LOGGED in, try again ",
     });
   }
 };
+
+// Compare passwords
 
 exports.adminLogin = async (req, res) => {
   try {
@@ -324,7 +342,9 @@ exports.adminLogin = async (req, res) => {
         id: user._id,
         accountType: user.accountType,
       };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '3d' });
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "3d",
+      });
       user.token = token;
       user.password = undefined;
 
@@ -353,12 +373,31 @@ exports.adminLogin = async (req, res) => {
   }
 };
 
-function isDeviceDataMatching(storedDeviceData, providedDeviceData) {
+function isDeviceDataMatching(
+  storedDeviceData,
+  providedDeviceData,
+  tolerance = 2
+) {
+  console.log("---");
+  let mismatches = 0;
 
-  // TODO , may be 1 or 2 values might not match
-  // Implement your logic to compare device data with stored data
-  // Return true if matching, false otherwise
-  return JSON.stringify(storedDeviceData) === JSON.stringify(providedDeviceData);
+  // Get all keys from both objects
+  const allKeys = new Set([
+    ...Object.keys(storedDeviceData),
+    ...Object.keys(providedDeviceData),
+  ]);
+
+  // Compare values for each key
+  for (let key of allKeys) {
+    if (storedDeviceData[key] !== providedDeviceData[key]) {
+      mismatches++;
+      if (mismatches > tolerance) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
 
 exports.changePassword = async (req, res) => {
