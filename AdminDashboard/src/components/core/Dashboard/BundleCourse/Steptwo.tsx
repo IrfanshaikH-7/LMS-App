@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 import { BASE_URL } from "../../../../services/apis";
 import { useForm } from "react-hook-form";
 
-const Step2 = ({ register, errors, courseBundleId }: any) => {
-    const { setValue,getValues} = useForm();
+const Step2 = ({ register, errors,setValue  ,getValues, courseBundleId,...props }: any) => {
+    // const { setValue,getValues} = useForm();
 
     console.log(courseBundleId, 'step-2')
     const [courses, setCourses] = useState([]);
@@ -46,22 +46,19 @@ const Step2 = ({ register, errors, courseBundleId }: any) => {
     }, []);
 
     const handleCheckboxChange = (e, item) => {
+        const quizId = item._id;
+        const existingQuizzes = getValues("quizzes");
+      
         if (e.target.checked) {
-            console.log(item._id,'checked')
-            setSelectedItems((prev) => [...prev, item._id]);
+          // Add quiz ID to form data
+          setValue("quizzes", existingQuizzes ? [...existingQuizzes, quizId] : [quizId]);
         } else {
-            console.log(item._id,'unchecked')
-            setSelectedItems(selectedItems.filter(i => i !== item._id));
-            
+          // Remove quiz ID from form data
+          setValue("quizzes", existingQuizzes.filter((id) => id !== quizId));
         }
-        // formData.selectedItems = selectedItems;
-        setValue("selectQuizes", selectedItems);
-    };
+      };
 
 
-    const formData = getValues();       
-    console.log(formData)
-    console.log(selectedItems)
 
 //yeh wali
     return (

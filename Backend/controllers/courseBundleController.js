@@ -56,9 +56,6 @@ exports.createCourseBundle = async (req, res) => {
 exports.addQuizzesToBundle = async (req, res) => {
     try {
 
-
-
-
       const bundle = await Bundle.findById(req.params.id);
 
 
@@ -68,7 +65,7 @@ exports.addQuizzesToBundle = async (req, res) => {
       }
 
 
-      bundle.quizes.push(...req.body.quizes);
+      bundle.quizes.push(...req.body.quizzes);
      
       await bundle.save();
 
