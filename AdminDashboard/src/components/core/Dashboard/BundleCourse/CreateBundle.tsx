@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import IconBtn from "../../../common/IconBtn";
 import axios from "axios";
 import { BASE_URL } from "../../../../services/apis";
-import Step1 from "./Stepone.tsx";
-import Step2 from "./Steptwo.tsx";
+
 import { Link, Router } from "react-router-dom";
+import Step1 from "./Stepone";
+import Step2 from "./Steptwo";
 
 
 
