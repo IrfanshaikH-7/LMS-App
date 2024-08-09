@@ -7,8 +7,8 @@ import axios from "axios";
 import { BASE_URL } from "../../../../services/apis";
 
 import { Link, Router } from "react-router-dom";
-import Step1 from "./Stepone";
-import Step2 from "./Steptwo";
+import Step1 from "./Stepone.tsx";
+import Step2 from "./Steptwo.tsx";
 
 
 
