@@ -8,13 +8,6 @@ const AWS = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
 const { adminId } = require("../utils/env");
 
-// Configure AWS SDK
-AWS.config.update({
-  accessKeyId: process.env.AWS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-  region: "ap-south-1",
-});
-// AWS_S3_BUCKET_NAME
 
 const s3 = new AWS.S3();
 const cloudFrontUrl = process.env.CLOUDFRONT_URL;
@@ -37,18 +30,11 @@ const uploadFile = async (file) => {
 };
 
 exports.uploadStudyMaterials = async (req, res) => {
-  const { title, description, course, isPaid, price,  } = req.body;
+  const { title, description, course, isPaid, price,isListed,isPartOfBundle  } = req.body;
   const file = req.file; // Assuming you're using multer for file uploads
 
   try {
-    const user = await User.findById(adminId);
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    // Upload file to S3 and get the CloudFront URL
+ 
     const fileUrl = await uploadFile(file);
 
     // Upload file to S3 and get the CloudFront URL
@@ -62,6 +48,8 @@ exports.uploadStudyMaterials = async (req, res) => {
       fileUrl,
       course,
       isPaid, price,
+      isListed,
+isPartOfBundle,
     });
 
     await newMaterial.save();
@@ -85,8 +73,37 @@ exports.uploadStudyMaterials = async (req, res) => {
 
 exports.getAllStudyMaterials = async (req, res) => {
   try {
-    const studyMaterials = await StudyMaterial.find();
+    const studyMaterials = await StudyMaterial.find({isPartOfBundle: false});
+    if (studyMaterials.length === 0) {
+      return res.status(200).json({
+        success: false,
+        data:[],
+        message: "No study materials found",
+      });
+    }
+    return res.json({
+      success: true,
+      data: studyMaterials,
+    });
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
 
+exports.getAllBundleMaterial= async (req, res) => {
+  try {
+    const studyMaterials = await StudyMaterial.find({isPartOfBundle: true}).sort({createdAt: -1});
+    if (studyMaterials.length === 0) {
+      return res.json({
+        success: false,
+        message: 'No study materials found',
+        data: []
+      });
+    }
     return res.json({
       success: true,
       data: studyMaterials,
@@ -189,3 +206,31 @@ exports.getAllBoughtStudyMaterials = async (req, res) => {
 
 
 }}
+
+exports.getIsBundledMaterials = async (req, res) => {
+
+  try {
+    const studyMaterials = await StudyMaterial.find({isPartOfBundle: true}).sort({createdAt: -1});
+    console.log("🚀 ~ exports.getIsBundledMaterials= ~ studyMaterials:", studyMaterials)
+
+     
+    if (studyMaterials.length === 0) {
+      return res.json({
+        success: false,
+        message: 'No study materials found',
+        data: []
+      });
+    }
+    return res.json({
+      success: true,
+      data: studyMaterials,
+    });
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+
+}

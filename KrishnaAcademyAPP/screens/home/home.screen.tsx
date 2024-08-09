@@ -52,7 +52,7 @@ export default function HomeScreen() {
         {/* <StudyMaterialsList /> */}
 
         <View
-          style={{ height: 400, marginHorizontal: 0, paddingHorizontal: 0 }}
+          style={{ height: 'auto', marginHorizontal: 0, paddingHorizontal: 0, gap:5 }}
         >
           <View
             style={{

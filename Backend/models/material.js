@@ -9,7 +9,15 @@ const StudyMaterialSchema = new mongoose.Schema({
   fileType: { type: String, required:false },
   fileUrl: { type: String, required: true },
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: false },
-  createdAt: { type: Date, default: Date.now }
-});
+  createdAt: { type: Date, default: Date.now },
+  isListed: {
+    type: Boolean,
+    default: false
+  },
+  isPartOfBundle: {
+    type: Boolean,
+    default: false
+  }
+}, {timestamps: true});
 
 module.exports = mongoose.model('StudyMaterial', StudyMaterialSchema);

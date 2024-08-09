@@ -93,6 +93,7 @@ export function login(email, password, navigate) {
       const response = await apiConnector("POST", LOGIN_API, {
         email,
         password,
+        accountType: "Admin",
       })
 
       console.log("LOGIN API RESPONSE............", response);

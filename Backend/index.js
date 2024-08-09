@@ -9,6 +9,8 @@ const contactUsRoute = require("./routes/Contact");
 const quizRoutes = require("./routes/Quiz");
 const studymaterials = require("./routes/studymaterial");
 
+const CourseBundle = require("./routes/courseBundle")
+
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -16,26 +18,8 @@ const { cloudinaryConnect } = require("./config/cloudinary");
 
 const dotenv = require("dotenv");
 
-const {
-  S3Client,
-  PutObjectCommand,
-  CreateBucketCommand,
-  DeleteObjectCommand,
-  DeleteBucketCommand,
-  paginateListObjectsV2,
-  GetObjectCommand,
-} = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-const s3Client = new S3Client({
-  region: "ap-south-1",
-  credentials: {
-    accessKeyId: process.env.AWS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
-  },
-});
 
-const multer = require("multer");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
@@ -52,7 +36,7 @@ app.use(cookieParser());
 // )
 app.use(cors({}));
 
-cloudinaryConnect();
+// cloudinaryConnect();
 
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
@@ -62,6 +46,8 @@ app.use("/api/v1/quiz", quizRoutes);
 app.use("/api/v1/study", studymaterials);
 // app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/reach", contactUsRoute);
+
+app.use("/api/v1/Bundle", CourseBundle)
 
 
 app.get("/", (req, res) => {

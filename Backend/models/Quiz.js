@@ -25,6 +25,14 @@ const Quiz = new mongoose.Schema({
   price: {
     type:Number,
   },
+  isListed: {
+    type: Boolean,
+    default: false,
+  },
+  isPartOfBundle: {
+    type: Boolean,
+    default: false,
+  },
   questions: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +40,6 @@ const Quiz = new mongoose.Schema({
     },
   ],
   
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model("Quiz", Quiz);

@@ -35,13 +35,14 @@ import { SERVER_URI } from "@/utils/uri";
 import { Toast } from "react-native-toast-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
+import { collectDeviceData } from "@/utils/device.data";
 
 export default function LoginScreen() {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [buttonSpinner, setButtonSpinner] = useState(false);
   const [userInfo, setUserInfo] = useState({
     phoneNumber: 7991168445,
-    password: "password123",
+    password: "Password123*",
   });
   const [required, setRequired] = useState("");
   const [error, setError] = useState({
@@ -95,24 +96,37 @@ export default function LoginScreen() {
   };
 
   const handleSignIn = async () => {
+    setButtonSpinner(true)
+    const deviceData = await collectDeviceData();
+
+    if (!deviceData) {
+      Toast.show("Error in collecting device data", {
+        type: "danger",
+        message: "Error in collecting device data",
+      });
+    }
+
     await axios
       .post(`${SERVER_URI}/api/v1/auth/login`, {
-        phoneNumber : userInfo.phoneNumber,
+        phoneNumber: userInfo.phoneNumber,
         password: userInfo.password,
+        deviceData: deviceData,
       })
       .then(async (res) => {
-        console.log(res.data, "--")
+        console.log(res.data, "--");
         await AsyncStorage.setItem("token", res.data.token);
         await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
 
         router.push("/(tabs)");
       })
       .catch((error) => {
+        setButtonSpinner(false)
         console.log(error);
         Toast.show("Email or password is not correct!", {
           type: "danger",
         });
       });
+      setButtonSpinner(false)
   };
 
   return (
@@ -139,7 +153,7 @@ export default function LoginScreen() {
               value={userInfo.phoneNumber}
               placeholder="7991168445"
               onChangeText={(value) =>
-                setUserInfo({ ...userInfo, phoneNumber : value })
+                setUserInfo({ ...userInfo, phoneNumber: value })
               }
             />
             <Fontisto
@@ -229,8 +243,6 @@ export default function LoginScreen() {
                 </Text>
               )}
             </TouchableOpacity>
-
-
 
             <View style={styles.signupRedirect}>
               <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>

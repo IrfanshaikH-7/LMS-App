@@ -2,15 +2,12 @@ import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
-  RefreshControl,
-  Button,
   ScrollView,
   Animated,
   Modal,
 } from "react-native";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
@@ -19,9 +16,11 @@ import React from "react";
 import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { quizData } from "@/constants/quiz";
+
 import { useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import CustomLoader from "@/components/CustomLoader";
+import { Toast } from "react-native-toast-notifications";
 
 const renderItem = ({ item }) => {
   console.log(item, "item");
@@ -42,7 +41,6 @@ const renderItem = ({ item }) => {
         alignItems: "center",
         gap: 4,
 
-
         padding: 4,
         borderRadius: 20,
         overflow: "hidden", // Ensure the borderRadius effect applies to children
@@ -56,7 +54,6 @@ const renderItem = ({ item }) => {
     >
       <View
         style={{
-
           position: "absolute",
           top: 12,
           left: 12,
@@ -121,7 +118,7 @@ const renderItem = ({ item }) => {
       </View>
       <View
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
           // marginTop: -15,
           width: "100%",
           marginVertical: 10,
@@ -151,7 +148,6 @@ const renderItem = ({ item }) => {
           }}
         >
           {item.name}
-
         </Text>
         <Text
           style={{
@@ -168,9 +164,14 @@ const renderItem = ({ item }) => {
   );
 };
 
+function secondsToHms(seconds) {
+  const pad = (num, size) => ("00" + num).slice(-size);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secondsLeft = seconds % 60;
 
-
-
+  return `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(secondsLeft, 2)}`;
+}
 export default function QuizScreen() {
   const [language, setLanguage] = useState<"en" | "hin">("en");
   const [quizDetails, setQuizDetails] = React.useState<any>(null);
@@ -180,8 +181,8 @@ export default function QuizScreen() {
   const { quizId } = route.params;
   // const quizId = 1
 
-
   const [questions, setQuestions] = useState<any[]>([]);
+  // const [quizData, setQuizData] = useState<any[]>([]);
   // const [time, setTime] = useState<number>(20);
   const [userScore, setUserScore] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<string>("");
@@ -189,11 +190,18 @@ export default function QuizScreen() {
   const [getResultClicked, setGetResultClicked] = useState<boolean>(false);
   const [timer, setTimer] = useState(0);
   const [scoreModalVisible, setScoreModalVisible] = useState<boolean>(false);
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const translateX = useRef(new Animated.Value(280)).current;
+  const [timeUp, setTimeUp] = useState(false);
+
   const toggleLanguage = () => {
-    setLanguage(language === 'english' ? 'hindi' : 'english');
+    setLanguage(language === "en" ? "hin" : "en");
   };
-  const [quizzes, setQuizzes] = useState(quizData);
+  const [quizzes, setQuizzes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  const [loading, setLoading] = useState(true);
 
   console.log("hello");
   useEffect(() => {
@@ -205,22 +213,25 @@ export default function QuizScreen() {
       const quizData = res?.data?.data;
       setQuizDetails(quizData);
 
-      console.log("quizData.questions:", quizData);
+
+      setRemainingTime(quizData.timer);
+
+
       setQuestions(quizData.questions);
+
+      setLoading(false);
+
+      // console.log(quizData);
+
     };
 
     getQuizDetails();
   }, [quizId]);
 
   const handleSave = () => {
-    // console.log(
-    //   "questions[count].correctAnswer[language]",
-    //   questions[count].correctAnswer[language],
-    //   userAnswer
-    // );
-
-    if (count < quizData.length - 1) {
-      if (quizData[count].correctAnswer[language] === userAnswer) {
+  
+    if (count < questions.length - 1) {
+      if (questions[count].correctAnswer[language] === userAnswer) {
         setUserScore((userScore) => userScore + 1);
       }
       setCount((count) => count + 1);
@@ -234,10 +245,8 @@ export default function QuizScreen() {
     console.log("userScore", userScore, count);
   };
 
-
-
   const toggleColor = (index: number | null) => {
-    const optionsArray = Object.values(quizData[count]?.options);
+    const optionsArray = Object.values(questions[count]?.options);
     console.log(optionsArray[index][language], "----l", index);
     if (index === null) return;
     setSelectedBox(index);
@@ -245,16 +254,15 @@ export default function QuizScreen() {
   };
 
   const handleSkip = () => {
-    if (count <= 1) {
+    console.log("skip", count);
+    if (count > 1) {
       setCount((count) => count - 1);
       setSelectedBox(null);
       // setTime(15);
     }
   };
 
-  // console.log("quizDetails---",questions, count);
 
-  // console.log("questions-------->", questions[count]);
   const getOptionsArray = (quizData, language) => {
     if (!quizData || !quizData.options) {
       return [];
@@ -265,10 +273,12 @@ export default function QuizScreen() {
     }));
   };
 
-  const currentQuestion = quizData[count];
-  const currentOptions = getOptionsArray(currentQuestion, language);
-  const [isOpen, setIsOpen] = useState(false);
-  const translateX = useRef(new Animated.Value(280)).current;
+  console.log(questions[count + 1]?.question[language], "quizDetails", quizDetails?.questions[0].options);
+  // return (<></>)correctAnswer[language]
+  const currentQuestion = questions[count]?.question[language];
+  const currentOptions = getOptionsArray(quizDetails?.questions[count], language);
+
+  console.log("currentOptions", currentOptions);
 
   const handleMenuPress = () => {
     setIsOpen((prev) => !prev);
@@ -278,333 +288,617 @@ export default function QuizScreen() {
       useNativeDriver: true,
     }).start();
   };
+
+  const handleSaveQuestion = async () => {
+    try {
+      Toast.show("Saving question");
+    } catch (error) {
+      Toast.show("Error saving question");
+    }
+  };
+
+  if (loading) {
+    return <CustomLoader name="2-curves" color="red" />;
+  }
+
+  const handleTimeup = async () => {
+    try {
+      Toast.show("Time up");
+      // setTimeUp(true);
+      setScoreModalVisible(true);
+    } catch (error) {
+      Toast.show("Error saving question");
+    }
+  };
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
         // backgroundColor:'red',
-        padding: 12
-
+        padding: 12,
       }}
     >
-      <View>
-
+      <View 
+      style={{
+        //  backgroundColor:'red',
+      }}
+      >
         {/* {  -- top part including timer, submit, toggle and hambuger  --} */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-            <Ionicons
-              style={{ alignSelf: "center", }}
-              name="pause-circle-outline"
-              size={24}
-              color={"black"}
-
-            />
-            <Text style={{ fontWeight: '800', fontSize: 14 }} >{"01:23:50"}</Text>
-          </View>
-          <Button onPress={() => setScoreModalVisible(true)} title="submit" color={'red'}></Button>
-        </View>
-        <View style={{ width: "100%", height: 1, backgroundColor: '#D3D4DB' }} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, position: 'relative' }}>
-          <TouchableOpacity style={{ paddingVertical: 6, paddingHorizontal: 16, backgroundColor: 'red', width: 80, alignItems: 'center', }} onPress={toggleLanguage}>
-            <Text style={{ fontWeight: '800', fontSize: 12, color: 'white' }}>{language === 'english' ? 'English' : 'Hindi'}</Text>
-          </TouchableOpacity>
-          <Animated.View
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingVertical: 8,
+          }}
+        >
+          <View
             style={{
-              position: 'absolute',
-              flex: 1,
-              backgroundColor: '#e2e2e2',
-              zIndex: 99,
-              height: 740,//TODO: unjust to screen higth as screen-top part later on
-              width: 260,
-              top: 6,
-              right: -12,
-              transform: [{ translateX }],
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 4,
             }}
           >
-            <TouchableOpacity onPress={handleMenuPress}>
-              {/* TODO: change to default bg color */}
-              <Ionicons
-                style={{ alignSelf: 'center', position: 'absolute', left: -60, backgroundColor: '#e2e2e2', padding: 4 }}
-                name="menu"
-                size={24}
-                color={'black'}
-                zIndex={999}
-              />
-            </TouchableOpacity>
-            <View >
+            <CountdownCircleTimer
+              isPlaying
+              duration={remainingTime}
+              colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+              colorsTime={[7, 5, 2, 0]}
+              size={70}
+              strokeWidth={2}
+              onComplete={() => {
+                handleTimeup();
+              }}
+            >
+              {({ remainingTime }) => (
+                <Text style={{}}> {secondsToHms(remainingTime)}</Text>
+              )}
+            </CountdownCircleTimer>
+          </View>
 
-            </View>
-          </Animated.View>
+          {/* //submit */}
+
+          <View
+            style={{
+              flexDirection: "column",
+
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setScoreModalVisible(true)}
+              style={{
+                borderRadius: 20,
+                backgroundColor: "red",
+                width: 80,
+                height: 40,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "600",
+                }}
+              >
+                Submit
+              </Text>
+            </TouchableOpacity>
+          </View>
 
         </View>
+        {/* <View
+          style={{ width: "100%", height: 1, backgroundColor: "#D3D4DB" }}
+        /> */}
+
       </View>
-      <View style={{ width: "100%", height: 1, backgroundColor: '#D3D4DB' }} />
+
+      <View style={{ width: "100%", height: 1, backgroundColor: "#D3D4DB" }} />
 
       {/* {  -- Questions mapping  --} */}
-      <ScrollView stickyHeaderIndices={[0]} style={{ flex: 1, marginTop: 12 }} showsVerticalScrollIndicator={false}>
-        {/* TODO: change bg white to defaul bg color */}
-        <View style={{ backgroundColor: 'white' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+      <View
+        // stickyHeaderIndices={[0]}
+        style={{ flex: 1, marginTop: 12 
+
+          // justifyContent: "flex-end",
+        }}
+      // showsVerticalScrollIndicator={false}
+      >
+
+        <View style={{ backgroundColor: "white" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             {/* {left} */}
-            <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
-              <Text style={{ fontWeight: '800' }}>{`Q.${count + 1}`}</Text>
-              <Text>/{'150'}</Text>
+            <View style={{ flexDirection: "row", paddingVertical: 4 }}>
+              <Text style={{ fontWeight: "600" }}>{`Q.${count + 1}`}</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "black",
+                  fontWeight: "800",
+                  alignSelf: "center",
+                  marginLeft: 4,
+                }}
+              >
+                / {questions.length}
+              </Text>
             </View>
             {/* {right} */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              <Ionicons style={{ alignSelf: 'center' }} name="alert-circle-outline" size={20} color={'black'} />
-              <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="timer" size={20} color="black" />
-              <Text style={{ fontSize: 13 }}>{'40:02'}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row-reverse",
+                  alignItems: "center",
+                  gap: 10,
+                }}
+              >
+                <Animated.View
+                // style={{
+                //   // position: "absolute",
+                //   flex: 1,
+                //   backgroundColor: "#e2e2e2",
+                //   zIndex: 99,
+                //   height: 740, //TODO: unjust to screen higth as screen-top part later on
+                //   width: 260,
+                //   // top: 6,
+                //   // right: -12,
+                //   transform: [{ translateX }],
+                // }}
+                >
+                  <TouchableOpacity onPress={handleMenuPress}>
+                    <Ionicons
+                      style={{
+                        alignSelf: "center",
+                        // position: "absolute",
+                        // left: -60,
+                        backgroundColor: "#e2e2e2",
+                        padding: 4,
+                      }}
+                      name="menu"
+                      size={24}
+                      color={"black"}
+                      zIndex={999}
+                    />
+                  </TouchableOpacity>
+
+                  {/* <View><Text>dddd</Text></View> */}
+                </Animated.View>
+                <TouchableOpacity onPress={handleSaveQuestion}>
+                  <MaterialCommunityIcons
+                    style={{ alignSelf: "center" }}
+                    name={false ? "bookmark" : "bookmark-outline"}
+                    size={35}
+                    color="#d7f776"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <Text style={{ fontWeight: '800' }}>{"SECTION A : ENGLISH LANGUAGE"}</Text>
 
-          <Text
+        <View style={{ marginTop: 20, flex: 1 , 
+
+
+          flexDirection: "column",
+
+        }}>
+          <View
             style={{
-              marginTop: 16,
-              fontSize: 15,
-              textAlign: "left",
-              fontWeight: "bold",
-              color: 'gray'
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
-            {quizData[count]?.question[language]}
-          </Text>
+            {/* //TODO */}
+            <Text style={{ fontWeight: "800" }}>
+              {"SECTION A : ENGLISH LANGUAGE"}
+            </Text>
 
-          <View style={{ alignItems: "center", marginTop: 12, padding: 12 }}>
-            {currentOptions.map((option, index) => (
-              <TouchableOpacity
+            <TouchableOpacity
+              style={{
+                paddingVertical: 6,
+                paddingHorizontal: 16,
+                backgroundColor: "red",
+                width: 80,
+                alignItems: "center",
+              }}
+              onPress={toggleLanguage}
+            >
+              <Text style={{ fontWeight: "800", fontSize: 12, color: "white" }}>
+                {language === "english" ? "English" : "Hindi"}
+              </Text>
+            </TouchableOpacity>
+
+
+          </View>
+
+          <View
+          style={{
+            flex:1,
+            // backgroundColor:'red',
+            flexDirection: "column",  
+            justifyContent: "space-between",
+            paddingBottom: 15,
+          }}
+          >
+
+            <ScrollView
+              style={{
+
+                minHeight: 250,
+                maxHeight: 250,
+              }}
+            >
+
+
+              <Text
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 5,
-                  backgroundColor: "#ffffff",
-                  paddingVertical: 12,
-                  paddingHorizontal: 12,
-                  borderRadius: 8,
-                  marginBottom: 8,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedBox === index ? "#f97316" : "#e2e2e2",
-                  width: "100%",
+                  marginTop: 16,
+                  fontSize: 15,
+                  textAlign: "left",
+                  fontWeight: "bold",
+                  color: "gray",
                 }}
-                key={index}
-                onPress={() => toggleColor(index)}
               >
-                <Text
-                  style={{
-                    fontWeight: "500",
-                    fontSize: 16,
-                    textAlign: "left",
-                  }}
+
+                {currentQuestion}
+               
+              </Text>
+            </ScrollView>
+
+                <View
+                style={{
+
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
                 >
-                  {option.value}
-                </Text>
+
+                
+            <View style={{ alignItems: "center", marginTop: 12, padding: 12, }}>
+              {currentOptions.map((option, index) => (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 5,
+                    backgroundColor: "#ffffff",
+                    paddingVertical: 12,
+                    paddingHorizontal: 12,
+                    borderRadius: 8,
+                    marginBottom: 8,
+                    borderWidth: 1,
+                    borderColor: selectedBox === index ? "#f97316" : "#e2e2e2",
+                    width: "100%",
+                  }}
+                  key={index}
+                  onPress={() => toggleColor(index)}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "500",
+                      fontSize: 16,
+                      textAlign: "left",
+                    }}
+                  >
+                    {option.value}
+                  </Text>
+                  <View
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: 12,
+                      borderWidth: 2,
+                      borderColor: selectedBox === index ? "black" : "gray",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {selectedBox === index ? (
+                      <View
+                        style={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: 6,
+                          backgroundColor: "black",
+                        }}
+                      />
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <View
+              style={{
+                // flex: 1, justifyContent: 'flex-end', marginTop: 50
+              }}
+            >
+              {getResultClicked ? (
                 <View
                   style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: 12,
-                    borderWidth: 2,
-                    borderColor: selectedBox === index ? "black" : "gray",
+                    flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  {selectedBox === index ? (
-                    <View
+                  <TouchableOpacity
+                    onPress={() => setScoreModalVisible(true)}
+                    // disabled={true}
+                    style={{
+                      backgroundColor: "#d1d5db",
+                      padding: 16,
+                      borderRadius: 20,
+                      width: "66%",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Text
                       style={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: 6,
-                        backgroundColor: "black",
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        textAlign: "center",
                       }}
-                    />
-                  ) : null}
+                    >
+                      Your score: {userScore}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: "green",
+                        textAlign: "right",
+                      }}
+                    >
+                      View Result
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-            ))}
+              ) : (
+                <View
+                  style={{
+                    marginTop: 12,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    // position: "absolute",
+                    // bottom: 20,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={handleSkip}
+                    style={{
+                      backgroundColor: "white",
+                      paddingVertical: 12,
+                      paddingHorizontal: 18,
+                      borderRadius: 8,
+                      width: "auto",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "800",
+                        fontSize: 14,
+                        color: "black",
+                        textAlign: "center",
+                      }}
+                    >
+                      {" << PREVIOUS"}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleSave}
+                    style={{
+                      backgroundColor: "red",
+                      paddingVertical: 12,
+                      paddingHorizontal: 18,
+                      borderRadius: 8,
+                      width: "33%",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "800",
+                        fontSize: 14,
+                        color: "white",
+                        textAlign: "center",
+                      }}
+                    >
+                      {count === questions.length - 1 ? "Get Result" : "NEXT >>"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+            </View>
+
+
+
+
           </View>
-          {getResultClicked ? (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => setScoreModalVisible(true)}
-                // disabled={true}
-                style={{
-                  backgroundColor: "#d1d5db",
-                  padding: 16,
-                  borderRadius: 20,
-                  width: "66%",
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    textAlign: "center",
-                  }}
-                >
-                  Your score: {userScore}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                marginTop: 12,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                // position: "absolute",
-                // bottom: 20,
-              }}
-            >
-              <TouchableOpacity
-                onPress={handleSkip}
-                style={{
-                  backgroundColor: "white",
-                  paddingVertical: 12,
-                  paddingHorizontal: 18,
-                  borderRadius: 8,
-                  width: "auto",
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "800",
-                    fontSize: 14,
-                    color: "black",
-                    textAlign: "center",
-                  }}
-                >
-                  {" << PREVIOUS"}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleSave}
-                style={{
-                  backgroundColor: "red",
-                  paddingVertical: 12,
-                  paddingHorizontal: 18,
-                  borderRadius: 8,
-                  width: "33%",
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "800",
-                    fontSize: 14,
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                >
-                  {count === quizData.length - 1 ? "Get Result" : "NEXT >>"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
+
         </View>
-      </ScrollView>
+
+      </View>
+
       <Modal
         transparent={true}
         visible={scoreModalVisible}
         animationType="fade"
       >
-        <View style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}>
-          <View style={{
-            width: 300,
-            paddingHorizontal: 12,
-            paddingVertical: 18,
-            backgroundColor: "white",
-            borderRadius: 8,
-            gap:24,
-            alignItems: "flex-start",
-          }}>
-            <Text style={{ fontSize: 16, fontWeight: '800', textAlign: 'left' }}>Score Card</Text>
-            <View style={{paddingHorizontal:24, gap:8}}>
-              <View style={{flexDirection:'row', justifyContent:'space-between',borderBottomColor:'#e2e2e2', borderBottomWidth:1,width:'100%',}}>
-                <View style={{flexDirection:'row', gap:3}}>
-                <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="timer" size={20} color="black" />
-                <Text style={{fontSize: 14,color:'gray'}}>Time left</Text>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <View
+            style={{
+              width: 300,
+              paddingHorizontal: 12,
+              paddingVertical: 18,
+              backgroundColor: "white",
+              borderRadius: 8,
+              gap: 24,
+              alignItems: "flex-start",
+            }}
+          >
+            <Text
+              style={{ fontSize: 16, fontWeight: "800", textAlign: "left" }}
+            >
+              Score Card
+            </Text>
+            <View style={{ paddingHorizontal: 24, gap: 8 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottomColor: "#e2e2e2",
+                  borderBottomWidth: 1,
+                  width: "100%",
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 3 }}>
+                  <MaterialCommunityIcons
+                    style={{ alignSelf: "center" }}
+                    name="timer"
+                    size={20}
+                    color="black"
+                  />
+                  <Text style={{ fontSize: 14, color: "gray" }}>Time left</Text>
                 </View>
-                <Text style={{fontSize: 14,color:'gray'}}>{"00:28:31"}</Text>
-
+                <Text style={{ fontSize: 14, color: "gray" }}>
+                  {"00:28:31"}
+                </Text>
               </View>
-              <View style={{flexDirection:'row', justifyContent:'space-between',borderBottomColor:'#e2e2e2', borderBottomWidth:1,width:'100%',}}>
-                <View style={{flexDirection:'row', gap:3}}>
-                <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="timer" size={20} color="black" />
-                <Text style={{fontSize: 14,color:'gray'}}>Answered</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottomColor: "#e2e2e2",
+                  borderBottomWidth: 1,
+                  width: "100%",
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 3 }}>
+                  <MaterialCommunityIcons
+                    style={{ alignSelf: "center" }}
+                    name="timer"
+                    size={20}
+                    color="black"
+                  />
+                  <Text style={{ fontSize: 14, color: "gray" }}>Answered</Text>
                 </View>
-                <Text style={{fontSize: 14,color:'gray'}}>{"7"}</Text>
-
+                <Text style={{ fontSize: 14, color: "gray" }}>{"7"}</Text>
               </View>
-              <View style={{flexDirection:'row', justifyContent:'space-between',borderBottomColor:'#e2e2e2', borderBottomWidth:1,width:'100%',}}>
-                <View style={{flexDirection:'row', gap:3}}>
-                <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="timer" size={20} color="black" />
-                <Text style={{fontSize: 14,color:'gray'}}>Unanswered</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottomColor: "#e2e2e2",
+                  borderBottomWidth: 1,
+                  width: "100%",
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 3 }}>
+                  <MaterialCommunityIcons
+                    style={{ alignSelf: "center" }}
+                    name="timer"
+                    size={20}
+                    color="black"
+                  />
+                  <Text style={{ fontSize: 14, color: "gray" }}>
+                    Unanswered
+                  </Text>
                 </View>
-                <Text style={{fontSize: 14,color:'gray'}}>{"2"}</Text>
-
+                <Text style={{ fontSize: 14, color: "gray" }}>{"2"}</Text>
               </View>
-              <View style={{flexDirection:'row', justifyContent:'space-between',borderBottomColor:'#e2e2e2', borderBottomWidth:1,width:'100%',}}>
-                <View style={{flexDirection:'row', gap:3}}>
-                <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="timer" size={20} color="black" />
-                <Text style={{fontSize: 14,color:'gray'}}>Saved</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottomColor: "#e2e2e2",
+                  borderBottomWidth: 1,
+                  width: "100%",
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 3 }}>
+                  <MaterialCommunityIcons
+                    style={{ alignSelf: "center" }}
+                    name="timer"
+                    size={20}
+                    color="black"
+                  />
+                  <Text style={{ fontSize: 14, color: "gray" }}>Saved</Text>
                 </View>
-                <Text style={{fontSize: 14,color:'gray'}}>{"5"}</Text>
-
+                <Text style={{ fontSize: 14, color: "gray" }}>{"5"}</Text>
               </View>
-          
             </View>
-            <Text style={{alignSelf: 'center'}}>You are submitting the quiz</Text>
-          <View style={{flexDirection:'row', gap:8, alignSelf: 'center'}}>
-          <TouchableOpacity
+            <Text style={{ alignSelf: "center" }}>
+              You are submitting the quiz
+            </Text>
+            <View
               style={{
-                backgroundColor: "white",
-                borderWidth: 1,
-                padding: 10,
-                borderRadius: 4,
+                flexDirection: "row",
+                gap: 8,
+                alignSelf: "center",
+                justifyContent: "center",
               }}
-              onPress={() => setScoreModalVisible(false)}
             >
-              <Text style={{
-                
-                color: "black",
-              }}>Cancel</Text>
-            </TouchableOpacity>
+              {timeUp && <Text style={{ color: "red" }}>Time up</Text>}
 
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#f44336",
-                padding: 10,
-                borderRadius: 4,
-              }}
-              onPress={() =>  router.push({
-                pathname: "/(routes)/quiz/quiz.result",
-                // params: { quizId: item._id },
-              })}
-            >
-              <Text style={{
-                
-                color: "white",
-              }}>Yes, submit</Text>
-            </TouchableOpacity>
-          </View>
-       
+              {!timeUp && (
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "white",
+                    borderWidth: 1,
+                    padding: 10,
+                    borderRadius: 4,
+                  }}
+                  onPress={() => setScoreModalVisible(false)}
+                >
+                  <Text
+                    style={{
+                      color: "black",
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#f44336",
+                  padding: 10,
+                  borderRadius: 4,
+                }}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(routes)/quiz/quiz.result",
+                    // params: { quizId: item._id },
+                  })
+                }
+              >
+                <Text
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  Yes, submit
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

@@ -1,9 +1,10 @@
 // Import the required modules
 const express = require("express")
-const { createQuiz, getQuizbyId, getAllQuiz, editQuizbyId, ping, updateQuestionOptions } = require("../controllers/Quiz")
+const { createQuiz, getQuizbyId, getAllQuiz, editQuizbyId, ping, updateQuestionOptions, getAllBundleQuiz } = require("../controllers/Quiz")
 const router = express.Router()
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { getIsBundledMaterials } = require("../controllers/CourseMaterials");
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -28,10 +29,15 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Define the routes with the upload middleware and controllers
 router.post("/createQuiz",upload.single('image'), createQuiz);
 router.get("/getAllQuiz", getAllQuiz)
+router.get("/getAllisBundleQuizes", getAllBundleQuiz)
 router.post("/getQuizById/:id",getQuizbyId )
 router.post("/editQuiz/:id",editQuizbyId )
 router.get("/ping", ping)
 router.get("/update", updateQuestionOptions)
+
+router.get("/getAllisBundleQuizes", getIsBundledMaterials)
+
+
 
 
 module.exports = router 
