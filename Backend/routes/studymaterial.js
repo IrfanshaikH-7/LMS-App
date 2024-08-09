@@ -3,7 +3,7 @@ const express = require("express")
 const router = express.Router()
 
 const { capturePayment, verifyPayment, sendPaymentSuccessEmail } = require("../controllers/Payments")
-const { uploadStudyMaterials,getAllStudyMaterials, getStudyMaterialById, buyStudyMaterial, getAllBoughtStudyMaterials, getIsBundledMaterials } = require("../controllers/CourseMaterials")
+const { uploadStudyMaterials,getAllStudyMaterials, getStudyMaterialById, buyStudyMaterial, getAllBoughtStudyMaterials, getAllBundleMaterial } = require("../controllers/CourseMaterials")
 const multer = require("multer");
 
 
@@ -16,7 +16,7 @@ const multer = require("multer");
 router.post("/uploadStudyMaterials",upload.single('file'),  uploadStudyMaterials)
 router.get("/getAllStudyMaterials",  getAllStudyMaterials)
 router.get("/getStudyMaterialbyId/:id",  getStudyMaterialById)
-router.get("/getIsBundledMaterials",  getIsBundledMaterials)
+router.get("/getIsBundledMaterials",  getAllBundleMaterial)
 router.post("/buyStudyMaterial", buyStudyMaterial);
 
 router.post("/getAllBoughtStudyMaterials", getAllBoughtStudyMaterials);

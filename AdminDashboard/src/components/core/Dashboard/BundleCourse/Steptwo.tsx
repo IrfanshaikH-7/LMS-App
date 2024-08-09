@@ -22,7 +22,6 @@ const Step2 = ({ register, errors, courseBundleId }: any) => {
                 const studyRes = await axios.get(`${BASE_URL}/api/v1/study/getIsBundledMaterials`);
                 const quizzesRes = await axios.get(`${BASE_URL}/api/v1/quiz/getAllisBundleQuizes`);
 
-                //TODO api to get only sBUndle quiz , study material , sort -1
                 // setCourses(coursesRes.data);
                 setQuizzes(quizzesRes.data.data);
                 setstudyMaterials(studyRes.data.data);
